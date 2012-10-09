@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<style xmlns="http://sweatygarlic.hp.infoseek.co.jp/ns/style-xml">
+	<head>
+		<set id="compile_rule">.d<get id="obj_ext"/> :</set  >
+		<set id="resource_compile_command">rc -R $&lt;</set>
+		<set id="make_name">make</set>
+
+		<ifdef id="nmake">
+			<set id="compile_rule">.d<get id="obj_ext"/> ::</set>
+			<set id="resource_compile_command">rc $&lt;</set>
+			<set id="make_name">nmake</set>
+		</ifdef>
+
+		<set id="compile_command">
+			dmd -c -g -op -debug $(COMPILE_FLAG) $(FLAG) $&lt;
+		</set>
+		<set id="link_command">
+			dmd -g $(LINK_FLAG) $(FLAG) -of$@ $**
+		</set>
+		<set id="debug_all_command">
+			dmd -g -debug -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
+		</set>
+		<set id="release_command">
+			dmd -release -O -inline -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
+		</set>
+		<ifndef id="lib"><ifndef id="dll">
+				<set id="run_command">$(TARGET) $(FLAG)</set>
+		</ifndef></ifndef>
+
+		<ifdef id="gui">
+			<add id="compile_flag">-version=Unicode -version=WindowsVista</add>
+			<set id="release_command">
+				dmd -release -O -inline -L/exet:nt/su:windows:6.0 -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
+			</set>
+		</ifdef>
+
+		<ifdef id="dll">
+			<set id="gui">defined</set>
+			<add id="compile_flag">-version=Unicode -version=WindowsVista</add>
+			<set id="exe_ext">dll</set>
+			<set id="compile_command">
+				dmd -c -g -op $(COMPILE_FLAG) $(FLAG) $&lt;
+			</set>
+			<set id="link_command">
+				dmd -g -map -L/IMPLIB -of$(TARGET) $(LINK_FLAG)  $(EXT_LIB) $(TO_LINK) $(DEF_FILE) $(FLAG)
+			</set>
+			<set id="release_command">
+				dmd -op -release -O -inline -map -L/IMPLIB -of$(TARGET) $(LINK_FLAG) $(EXT_LIB) $(COMPILE_FLAG) $(TO_COMPILE) $(FLAG)
+			</set>
+		</ifdef>
+
+		<ifdef id="lib">
+			<set id="exe_ext">lib</set>
+			<set id="compile_command">
+				dmd -c -g -op $(COMPILE_FLAG) $(FLAG) $&lt;
+			</set>
+			<set id="link_command">lib -c $@ $**</set>
+			<set id="release_command">
+				dmd -c -op -release -O -inline $(COMPILE_FLAG) $(FLAG) $(TO_COMPILE) $(EXT_LIB)<br/>
+				<tab/>lib -c $(TARGET) $(TO_LINK)
+			</set>
+		</ifdef>
+
+		<ifdef id="gmake">
+			<set id="make_name">gmake</set>
+			<set id="compile_rule">%.<get id="obj_ext"/> : %.d</set>
+			<set id="link_command">
+				dmd -of$@ $(LINK_FLAG) $(TO_LINK) $(EXT_LIB)
+			</set>
+		</ifdef>
+	</head>
+
+	<environment compiler="dmd" id="make">
+		<body>
+			<ifdef id="nmake">
+				## for nmake of WindowsSDK<br/>
+				## DOT DIRECTIVE<br />
+				.SUFFIXES : .d<br />
+			</ifdef>
+			<ifdef id="gmake">
+				## for gnu make<br/>
+				## DOT DIRECTIVE<br />
+				.PHONY : release clean show remake install run edit clean_obj vwrite<br />
+				
+			</ifdef>
+			## MACRO<br/>
+			TARGET = <get id="target" /><br />
+			MAKE = <get id="make_name" /><br />
+			MAKEFILE = <get id="makefile" /><br />
+			TO_COMPILE = <get id="to_compile" /><br />
+			TO_LINK = <get id="to_link" /><br />
+			<ifdef id="gui">
+				<ifdef id="rc_file">
+					RC_FILE = <get id="rc_file"/><br/>
+				</ifdef>
+				<ifdef id="res_file">
+					RES_FILE = <get id="res_file"/><br/>
+				</ifdef>
+			</ifdef>
+			COMPILE_FLAG = <get id="compile_flag" /><br />
+			LINK_FLAG = <get id="link_flag" /><br />
+			EXT_LIB = <get id="ext_lib" /><br />
+			<ifdef id="dll">
+				DEF_FILE = <get id="def_file"/><br/>
+			</ifdef>
+			DDOC_FILE = <get id="ddoc_file"/><br/>
+			FLAG = <br/>
+			<br/>
+			## LINK COMMAND<br />
+			$(TARGET) : $(TO_LINK) $(EXT_LIB)<br />
+			<tab /><get id="link_command"/><br />
+			<br />
+			## COMPILE RULE<br />
+			<get id="compile_rule"/><br />
+			<tab /><get id="compile_command"/><br />
+
+			<ifdef id="gui"><ifdef id="rc_file">
+					.rc.res :<br/>
+					<tab/><get id="resource_compile_command"/><br/>
+			</ifdef></ifdef>
+
+			<br />
+
+			## DEPENDENCE<br />
+			$(TO_LINK) : $(MAKEFILE) $(EXT_LIB)<br />
+			<get id="dependencies" /><br/>
+			<br />
+
+			## PHONY TARGET<br />
+			<ifdef id="debug_all_command">
+				debug-all : <ifdef id="res_file">$(RES_FILE)</ifdef><br />
+				<tab /><get id="debug_all_command" /> <ifdef id="res_file">$(RES_FILE)</ifdef> $(FLAG)<br />
+			</ifdef>
+			<ifdef id="release_command">
+				release : <ifdef id="res_file">$(RES_FILE)</ifdef><br />
+				<tab /><get id="release_command"/> <ifdef id="res_file">$(RES_FILE)</ifdef> $(FLAG)<br />
+			</ifdef>
+
+			clean : <br />
+			<tab />del $(TARGET) $(TO_LINK)<br />
+
+			clean_obj :<br/>
+			<tab/>del $(TO_LINK)<br/>
+
+			vwrite :<br/>
+			<tab/>vwrite -ver=&quot;<get id="vwrite"/>&quot; -prj=$(TARGET) $(TO_COMPILE)<br/>
+
+			ddoc :<br/>
+			<tab/>dmd -c -o- -op -D -Dd<get id="ddoc_directory"/> $(COMPILE_FLAG) $(DDOC_FILE) $(TO_COMPILE) $(FLAG)<br/>
+
+			show :<br />
+			<tab />@echo ROOT = <get id="root_file"/><br/>
+			<tab />@echo TARGET = $(TARGET)<br />
+			<tab />@echo VERSION = <get id="vwrite"/><br/>
+
+			<ifndef id="lib">
+				run :<br/>
+				<tab/>$(TARGET) $(FLAG)<br/>
+			</ifndef>
+
+			edit :<br/>
+			<tab/>emacs $(TO_COMPILE) <ifdef id="rc_file">$(RC_FILE)</ifdef> <get id="makefile"/><br/>
+
+			remake :<br />
+			<tab /><get id="remake_command" /> $(FLAG)<br />
+			<br/>
+			debug :<br />
+			<tab />ddbg $(TARGET)<br />
+			<br />
+		<get id="footer"/></body>
+	</environment>
+
+</style>
