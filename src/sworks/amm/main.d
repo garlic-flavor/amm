@@ -1,6 +1,6 @@
 /**
- * Version:      0.161(dmd2.060)
- * Date:         2012-Oct-11 16:37:46
+ * Version:      0.162(dmd2.060)
+ * Date:         2012-Oct-11 22:36:15
  * Authors:      KUMA
  * License:      CC0
  */
@@ -17,7 +17,7 @@ import sworks.amm.deps_data;
 debug import std.stdio : writeln;
 
 string header =
-"Automatic Makefile Maker v0.161(dmd2.060)
+"Automatic Makefile Maker v0.162(dmd2.060)
 ";
 
 // コマンドラインに表示するヘルプメッセージ

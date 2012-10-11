@@ -1,6 +1,6 @@
 /** dmd に依存関係を解決させる為の下準備.
- * Version:      0.161(dmd2.060)
- * Date:         2012-Oct-11 16:37:46
+ * Version:      0.162(dmd2.060)
+ * Date:         2012-Oct-11 22:36:15
  * Authors:      KUMA
  * License:      CC0
  */
@@ -37,14 +37,15 @@ void ready_data(alias MACROKEY)(Macros data, Output output)
 	}
 
 	// ディレクトリ型の探索
-	auto result = appender!(string[])();
 	foreach( one ; __traits( allMembers, MACROKEY ) )
 	{
-		if( !one.endsWith( "_DIRECTORY" ) || !data.have( one ) ) continue;
-		auto item = data.get( one );
+		if( !one.endsWith( "_DIRECTORY" ) ) continue;
+		auto macro_name = __traits( getMember, MACROKEY, one );
+		auto item = data.get( macro_name );
+		if( null is item || item.isEmpty ) continue;
 		auto isM = item.isMutable;
 		item.isMutable = true;
-		result.clear;
+		auto result = appender!(string[])();
 		foreach( val ; item.toArray )
 		{
 			foreach( o ; val.splitter( ";" ) )

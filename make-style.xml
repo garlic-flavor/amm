@@ -55,8 +55,7 @@
 			</set>
 			<set id="link_command">lib -c $@ $**</set>
 			<set id="release_command">
-				dmd -c -op -release -O -inline $(COMPILE_FLAG) $(FLAG) $(TO_COMPILE)<br/>
-				<tab/>lib -c $(TARGET) $(TO_LINK) $(EXT_LIB)
+				dmd -c -op -release -O -inline -lib -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(EXT_LIB) $(TO_COMPILE) $(FLAG)
 			</set>
 		</ifdef>
 
@@ -87,15 +86,15 @@
 			MAKE = <get id="make_name" /><br />
 			MAKEFILE = <get id="m" /><br />
 			TO_COMPILE = <get id="to_compile" /><br />
-			<ifdef id="rc_file">
-				TO_LINK = <get id="to_link" /> <get id="rc_file" from=".rc" to=".res" /><br />
+			<ifdef id="rc">
+				TO_LINK = <get id="to_link" /> <get id="rc" from=".rc" to=".res" /><br />
 			</ifdef>
-			<ifndef id="rc_file">
+			<ifndef id="rc">
 				TO_LINK = <get id="to_link" /><br />
 			</ifndef>
-			<ifdef id="rc_file">
-				RC_FILE = <get id="rc_file" /><br />
-				RES_FILE = <get id="rc_file" from=".rc" to=".res" /><br />
+			<ifdef id="rc">
+				RC_FILE = <get id="rc" /><br />
+				RES_FILE = <get id="rc" from=".rc" to=".res" /><br />
 			</ifdef>
 			COMPILE_FLAG = <get id="compile_flag" /><br />
 			LINK_FLAG = <get id="link_flag" /><br />
@@ -114,7 +113,7 @@
 			<get id="compile_rule"/><br />
 			<tab /><get id="compile_command"/><br />
 
-			<ifdef id="gui"><ifdef id="rc_file">
+			<ifdef id="gui"><ifdef id="rc">
 					.rc.res :<br/>
 					<tab/><get id="resource_compile_command"/><br/>
 			</ifdef></ifdef>
@@ -128,12 +127,12 @@
 
 			## PHONY TARGET<br />
 			<ifdef id="debug_all_command">
-				debug-all : <ifdef id="rc_file">$(RES_FILE)</ifdef><br />
-				<tab /><get id="debug_all_command" /> <ifdef id="rc_file">$(RES_FILE)</ifdef> $(FLAG)<br />
+				debug-all : <ifdef id="rc">$(RES_FILE)</ifdef><br />
+				<tab /><get id="debug_all_command" /> <ifdef id="rc">$(RES_FILE)</ifdef> $(FLAG)<br />
 			</ifdef>
 			<ifdef id="release_command">
-				release : <ifdef id="rc_file">$(RES_FILE)</ifdef><br />
-				<tab /><get id="release_command"/> <ifdef id="rc_file">$(RES_FILE)</ifdef> $(FLAG)<br />
+				release : <ifdef id="rc">$(RES_FILE)</ifdef><br />
+				<tab /><get id="release_command"/> <ifdef id="rc">$(RES_FILE)</ifdef> $(FLAG)<br />
 			</ifdef>
 
 			clean : <br />
@@ -149,9 +148,9 @@
 			<tab/>dmd -c -o- -op -D -Dd<get id="dd"/> $(COMPILE_FLAG) $(DDOC_FILE) $(TO_COMPILE) $(FLAG)<br/>
 
 			show :<br />
-			<tab />@echo ROOT = <get id="root_file"/><br/>
+			<tab />@echo ROOT = <get id="root"/><br/>
 			<tab />@echo TARGET = $(TARGET)<br />
-			<tab />@echo VERSION = <get id="vwrite"/><br/>
+			<tab />@echo VERSION = <get id="v"/><br/>
 
 			<ifndef id="lib">
 				run :<br/>
@@ -159,7 +158,7 @@
 			</ifndef>
 
 			edit :<br/>
-			<tab/>emacs $(TO_COMPILE) <ifdef id="rc_file">$(RC_FILE)</ifdef> <get id="makefile"/><br/>
+			<tab/>emacs $(TO_COMPILE) <ifdef id="rc">$(RC_FILE)</ifdef> <get id="makefile"/><br/>
 
 			remake :<br />
 			<tab /><get id="remake_command" /> $(FLAG)<br />

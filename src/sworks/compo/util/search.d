@@ -1,6 +1,6 @@
 /** \file search.d 入力されたディレクトリの順にファイルを検索します。
- * Version:      0.161(dmd2.060)
- * Date:         2012-Oct-11 16:37:46
+ * Version:      0.162(dmd2.060)
+ * Date:         2012-Oct-11 22:36:15
  * Authors:      KUMA
  * License:      CC0
  */
