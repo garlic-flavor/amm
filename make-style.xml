@@ -2,12 +2,12 @@
 
 <style xmlns="http://sweatygarlic.hp.infoseek.co.jp/ns/style-xml">
 	<head>
-		<set id="compile_rule">.d<get id="obj_ext"/> :</set  >
+		<set id="compile_rule"><get id="src_ext" /><get id="obj_ext" /> :</set>
 		<set id="resource_compile_command">rc -R $&lt;</set>
 		<set id="make_name">make</set>
 
 		<ifdef id="nmake">
-			<set id="compile_rule">.d<get id="obj_ext"/> ::</set>
+			<set id="compile_rule"><get id="src_ext" /><get id="obj_ext" /> ::</set>
 			<set id="resource_compile_command">rc $&lt;</set>
 			<set id="make_name">nmake</set>
 		</ifdef>
@@ -16,7 +16,7 @@
 			dmd -c -g -op -debug $(COMPILE_FLAG) $(FLAG) $&lt;
 		</set>
 		<set id="link_command">
-			dmd -g $(LINK_FLAG) $(FLAG) -of$@ $**
+			dmd -g $(LINK_FLAG) $(FLAG) $(EXT_LIB) -of$@ $**
 		</set>
 		<set id="debug_all_command">
 			dmd -g -debug -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
@@ -24,7 +24,7 @@
 		<set id="release_command">
 			dmd -release -O -inline -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
 		</set>
-		<ifndef id="lib"><ifndef id="dll">
+		<ifndef id="is_lib"><ifndef id="is_dll">
 				<set id="run_command">$(TARGET) $(FLAG)</set>
 		</ifndef></ifndef>
 
@@ -35,10 +35,9 @@
 			</set>
 		</ifdef>
 
-		<ifdef id="dll">
+		<ifdef id="is_dll">
 			<set id="gui">defined</set>
 			<add id="compile_flag">-version=Unicode -version=WindowsVista</add>
-			<set id="exe_ext">dll</set>
 			<set id="compile_command">
 				dmd -c -g -op $(COMPILE_FLAG) $(FLAG) $&lt;
 			</set>
@@ -50,21 +49,20 @@
 			</set>
 		</ifdef>
 
-		<ifdef id="lib">
-			<set id="exe_ext">lib</set>
+		<ifdef id="is_lib">
 			<set id="compile_command">
 				dmd -c -g -op $(COMPILE_FLAG) $(FLAG) $&lt;
 			</set>
 			<set id="link_command">lib -c $@ $**</set>
 			<set id="release_command">
-				dmd -c -op -release -O -inline $(COMPILE_FLAG) $(FLAG) $(TO_COMPILE) $(EXT_LIB)<br/>
-				<tab/>lib -c $(TARGET) $(TO_LINK)
+				dmd -c -op -release -O -inline $(COMPILE_FLAG) $(FLAG) $(TO_COMPILE)<br/>
+				<tab/>lib -c $(TARGET) $(TO_LINK) $(EXT_LIB)
 			</set>
 		</ifdef>
 
 		<ifdef id="gmake">
 			<set id="make_name">gmake</set>
-			<set id="compile_rule">%.<get id="obj_ext"/> : %.d</set>
+			<set id="compile_rule">%.<get id="obj_ext"/> : %<get id="src_ext" /></set>
 			<set id="link_command">
 				dmd -of$@ $(LINK_FLAG) $(TO_LINK) $(EXT_LIB)
 			</set>
@@ -87,21 +85,22 @@
 			## MACRO<br/>
 			TARGET = <get id="target" /><br />
 			MAKE = <get id="make_name" /><br />
-			MAKEFILE = <get id="makefile" /><br />
+			MAKEFILE = <get id="m" /><br />
 			TO_COMPILE = <get id="to_compile" /><br />
-			TO_LINK = <get id="to_link" /><br />
-			<ifdef id="gui">
-				<ifdef id="rc_file">
-					RC_FILE = <get id="rc_file"/><br/>
-				</ifdef>
-				<ifdef id="res_file">
-					RES_FILE = <get id="res_file"/><br/>
-				</ifdef>
+			<ifdef id="rc_file">
+				TO_LINK = <get id="to_link" /> <get id="rc_file" from=".rc" to=".res" /><br />
+			</ifdef>
+			<ifndef id="rc_file">
+				TO_LINK = <get id="to_link" /><br />
+			</ifndef>
+			<ifdef id="rc_file">
+				RC_FILE = <get id="rc_file" /><br />
+				RES_FILE = <get id="rc_file" from=".rc" to=".res" /><br />
 			</ifdef>
 			COMPILE_FLAG = <get id="compile_flag" /><br />
 			LINK_FLAG = <get id="link_flag" /><br />
-			EXT_LIB = <get id="ext_lib" /><br />
-			<ifdef id="dll">
+			EXT_LIB = <get id="libs" /><br />
+			<ifdef id="is_dll">
 				DEF_FILE = <get id="def_file"/><br/>
 			</ifdef>
 			DDOC_FILE = <get id="ddoc_file"/><br/>
@@ -129,12 +128,12 @@
 
 			## PHONY TARGET<br />
 			<ifdef id="debug_all_command">
-				debug-all : <ifdef id="res_file">$(RES_FILE)</ifdef><br />
-				<tab /><get id="debug_all_command" /> <ifdef id="res_file">$(RES_FILE)</ifdef> $(FLAG)<br />
+				debug-all : <ifdef id="rc_file">$(RES_FILE)</ifdef><br />
+				<tab /><get id="debug_all_command" /> <ifdef id="rc_file">$(RES_FILE)</ifdef> $(FLAG)<br />
 			</ifdef>
 			<ifdef id="release_command">
-				release : <ifdef id="res_file">$(RES_FILE)</ifdef><br />
-				<tab /><get id="release_command"/> <ifdef id="res_file">$(RES_FILE)</ifdef> $(FLAG)<br />
+				release : <ifdef id="rc_file">$(RES_FILE)</ifdef><br />
+				<tab /><get id="release_command"/> <ifdef id="rc_file">$(RES_FILE)</ifdef> $(FLAG)<br />
 			</ifdef>
 
 			clean : <br />
@@ -144,10 +143,10 @@
 			<tab/>del $(TO_LINK)<br/>
 
 			vwrite :<br/>
-			<tab/>vwrite -ver=&quot;<get id="vwrite"/>&quot; -prj=$(TARGET) $(TO_COMPILE)<br/>
+			<tab/>vwrite -ver=&quot;<get id="v"/>&quot; -prj=$(TARGET) $(TO_COMPILE)<br/>
 
 			ddoc :<br/>
-			<tab/>dmd -c -o- -op -D -Dd<get id="ddoc_directory"/> $(COMPILE_FLAG) $(DDOC_FILE) $(TO_COMPILE) $(FLAG)<br/>
+			<tab/>dmd -c -o- -op -D -Dd<get id="dd"/> $(COMPILE_FLAG) $(DDOC_FILE) $(TO_COMPILE) $(FLAG)<br/>
 
 			show :<br />
 			<tab />@echo ROOT = <get id="root_file"/><br/>

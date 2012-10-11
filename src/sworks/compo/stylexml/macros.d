@@ -1,6 +1,6 @@
 /** macros.d マクロの実装
- * Version:      0.160(dmd2.060)
- * Date:         2012-Oct-09 22:25:03
+ * Version:      0.161(dmd2.060)
+ * Date:         2012-Oct-11 16:37:46
  * Authors:      KUMA
  * License:      CC0
  */
@@ -147,7 +147,14 @@ class Macros
 			return new_item;
 		}
 	}
+
+	void forEach( scope bool delegate( string, string ) prog )
+	{
+		foreach( key, val ; _data ) if( !prog( key, val.toString ) ) break;
+	}
 }
+
+
 
 debug(macros)
 {

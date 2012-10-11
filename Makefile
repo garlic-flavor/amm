@@ -4,7 +4,7 @@ MAKE = make
 MAKEFILE = Makefile
 TO_COMPILE = src\sworks\compo\util\output.d src\sworks\compo\util\strutil.d src\sworks\amm\ready_data.d src\sworks\compo\stylexml\macro_item.d src\sworks\compo\stylexml\macros.d src\sworks\compo\stylexml\parser.d src\sworks\compo\stylexml\writer.d src\sworks\compo\util\array.d src\sworks\amm\default_data.d src\sworks\amm\args_data.d src\sworks\amm\main.d src\sworks\compo\util\search.d src\sworks\amm\deps_data.d
 TO_LINK = src\sworks\compo\util\output.obj src\sworks\compo\util\strutil.obj src\sworks\amm\ready_data.obj src\sworks\compo\stylexml\macro_item.obj src\sworks\compo\stylexml\macros.obj src\sworks\compo\stylexml\parser.obj src\sworks\compo\stylexml\writer.obj src\sworks\compo\util\array.obj src\sworks\amm\default_data.obj src\sworks\amm\args_data.obj src\sworks\amm\main.obj src\sworks\compo\util\search.obj src\sworks\amm\deps_data.obj
-COMPILE_FLAG = -Isrc
+COMPILE_FLAG = -Isrc;import
 LINK_FLAG =
 EXT_LIB =
 DDOC_FILE =
@@ -12,7 +12,7 @@ FLAG =
 
 ## LINK COMMAND
 $(TARGET) : $(TO_LINK) $(EXT_LIB)
-	dmd -g $(LINK_FLAG) $(FLAG) -of$@ $**
+	dmd -g $(LINK_FLAG) $(FLAG) $(EXT_LIB) -of$@ $**
 
 ## COMPILE RULE
 .d.obj :
@@ -38,25 +38,23 @@ src\sworks\amm\deps_data.obj : src\sworks\compo\util\output.d src\sworks\compo\s
 debug-all :
 	dmd -g -debug -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)  $(FLAG)
 release :
-	dmd -release -O -inline -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)  $(FLAG)
+	dmd -release -O -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)  $(FLAG)
 clean :
 	del $(TARGET) $(TO_LINK)
 clean_obj :
 	del $(TO_LINK)
 vwrite :
-	vwrite -ver="0.160(dmd2.060)" -prj=$(TARGET) $(TO_COMPILE)
+	vwrite -ver="0.161(dmd2.060)" -prj=$(TARGET) $(TO_COMPILE)
 ddoc :
 	dmd -c -o- -op -D -Dddoc $(COMPILE_FLAG) $(DDOC_FILE) $(TO_COMPILE) $(FLAG)
 show :
-	@echo ROOT = src\sworks\amm\main.d
+	@echo ROOT =
 	@echo TARGET = $(TARGET)
-	@echo VERSION = 0.160(dmd2.060)
-run :
-	$(TARGET) $(FLAG)
+	@echo VERSION =
 edit :
-	emacs $(TO_COMPILE)  Makefile
+	emacs $(TO_COMPILE)
 remake :
-	amm vwrite=0.160(dmd2.060) src/sworks/amm/main.d $(FLAG)
+	amm v=0.161(dmd2.060) amm.exe src/sworks/amm/main.d $(FLAG)
 
 debug :
 	ddbg $(TARGET)

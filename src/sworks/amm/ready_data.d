@@ -1,11 +1,12 @@
 /** dmd に依存関係を解決させる為の下準備.
- * Version:      0.160(dmd2.060)
- * Date:         2012-Oct-09 22:25:03
+ * Version:      0.161(dmd2.060)
+ * Date:         2012-Oct-11 16:37:46
  * Authors:      KUMA
  * License:      CC0
  */
 module sworks.amm.ready_data;
-import std.exception, std.path, std.file, std.string;
+import std.array : appender;
+import std.algorithm, std.exception, std.path, std.file, std.string;
 import sworks.compo.util.search;
 import sworks.compo.util.output;
 import sworks.compo.stylexml.macros;
@@ -15,35 +16,52 @@ void ready_data(alias MACROKEY)(Macros data, Output output)
 	// ターゲット名の決定
 	if( !data.have(MACROKEY.TARGET) )
 	{
-		if( data.have(MACROKEY.PROJECT_DIRECTORY) )
-			data[MACROKEY.TARGET] = setExt( data[MACROKEY.PROJECT_DIRECTORY].absolutePath.buildNormalizedPath.baseName
-			                              , data[MACROKEY.EXE_EXT] );
-		else
-			data[MACROKEY.TARGET] = setExt( (data.get(MACROKEY.ROOT_FILE).toArray[0]).baseName
-			                              , data[MACROKEY.EXE_EXT] );
+		assert( data.have(MACROKEY.ROOT_FILE) );
+		string target_ext;
+		if     ( data.have( MACROKEY.TARGET_IS_DLL ) ) target_ext = data[MACROKEY.DLL_EXT];
+		else if( data.have( MACROKEY.TARGET_IS_LIB ) ) target_ext = data[MACROKEY.LIB_EXT];
+		else target_ext = data[MACROKEY.EXE_EXT];
+
+		data[MACROKEY.TARGET] = (data.get(MACROKEY.ROOT_FILE).toArray[0]).baseName.setExt( target_ext );
 	}
 	output.logln( "target name is " ~ data[MACROKEY.TARGET] );
 
-	// ソースファイルを含むディレクトリの決定
-	auto src_dir = data.get(MACROKEY.SRC_DIRECTORY).toArray;
-	data[MACROKEY.SRC_DIRECTORY] = "";
-	foreach( one ; src_dir ) // 存在するものだけを残す。
+	// def ファイルの決定
+	if( data.have( MACROKEY.TARGET_IS_DLL ) && !data.have(MACROKEY.DEF_FILE) )
 	{
-		if( one.exists ) data[MACROKEY.SRC_DIRECTORY] ~= one;
+		assert( data.have(MACROKEY.ROOT_FILE) );
+		// 一つ目のルートファイルの basename が .def のファイル名として使われる。
+		auto deffile = data.get(MACROKEY.ROOT_FILE).toArray[0].setExt( data[MACROKEY.DEF_FILE] );
+		enforce( deffile.exists, " def file for dll is not found." );
+		data[MACROKEY.DEF_FILE] = deffile;
 	}
-	if( !data.have(MACROKEY.SRC_DIRECTORY) ) data[MACROKEY.SRC_DIRECTORY] = ".";
-	else data[MACROKEY.DMD_DIRECTORY] ~= data[MACROKEY.SRC_DIRECTORY];
-	output.logln( "source file directories are " ~ data[MACROKEY.SRC_DIRECTORY] );
 
-	// インポートファイルを含むディレクトリの決定
-	auto imp_dir = data.get(MACROKEY.IMPORT_DIRECTORY).toArray;
-	data[MACROKEY.IMPORT_DIRECTORY] = "";
-	foreach( one ; imp_dir ) // 存在するものだけを残す。
+	// ディレクトリ型の探索
+	auto result = appender!(string[])();
+	foreach( one ; __traits( allMembers, MACROKEY ) )
 	{
-		if( one.exists ) data[MACROKEY.IMPORT_DIRECTORY] ~= one;
+		if( !one.endsWith( "_DIRECTORY" ) || !data.have( one ) ) continue;
+		auto item = data.get( one );
+		auto isM = item.isMutable;
+		item.isMutable = true;
+		result.clear;
+		foreach( val ; item.toArray )
+		{
+			foreach( o ; val.splitter( ";" ) )
+			{
+				if( !o.exists ) continue;
+				result.put( o.buildNormalizedPath );
+			}
+		}
+		item = result.data;
+		item.isMutable = isM;
 	}
-	if( data.have(MACROKEY.IMPORT_DIRECTORY) ) data[MACROKEY.DMD_DIRECTORY] ~= data[MACROKEY.IMPORT_DIRECTORY];
-	output.logln( "import file directories are " ~ data[MACROKEY.IMPORT_DIRECTORY] );
+
+	// ソースファイルを含むディレクトリの決定
+	auto src_dir = data.get(MACROKEY.SRC_DIRECTORY);
+	foreach( one ; data.get(MACROKEY.IMPORT_DIRECTORY ).toArray ) src_dir ~= one;
+
+	output.logln( "source file directories are " ~ data[MACROKEY.SRC_DIRECTORY] );
 
 	// 外部ライブラリの決定
 	foreach( one ; data.get(MACROKEY.EXT_LIB_DIRECTORY).toArray )
@@ -52,25 +70,17 @@ void ready_data(alias MACROKEY)(Macros data, Output output)
 
 		foreach( string name ; one.dirEntries( std.file.SpanMode.depth ) )
 		{
-			if( 0 == data[MACROKEY.LIB_EXT].icmp( name.extension ) ) data[MACROKEY.EXT_LIB] ~= name.relativePath;
+			if( 0 == data[MACROKEY.LIB_EXT].icmp( name.extension ) ) data[MACROKEY.LIB_FILE] ~= name.relativePath;
 		}
-	}
-	output.logln( "external libraries are " ~ data[MACROKEY.EXT_LIB] );
-
-	// リソースファイルの決定
-	if( data.have(MACROKEY.RC_FILE) )
-	{
-		data[MACROKEY.RES_FILE] = setExtension(data[MACROKEY.RC_FILE],"res");
-		data[MACROKEY.TO_LINK] ~= data[MACROKEY.RES_FILE];
 	}
 
 	// dmd の '-I' オプションを準備
-	if( data.have(MACROKEY.DMD_DIRECTORY) ) data[MACROKEY.COMPILE_FLAG] ~= "-I" ~ data[MACROKEY.DMD_DIRECTORY];
-
-	// インストールディレクトリの決定
-	data[MACROKEY.TARGET] = buildPath( data[MACROKEY.INSTALL_DIRECTORY].relativePath.buildNormalizedPath
-	                                  , data[MACROKEY.TARGET]);
+	if( data.have(MACROKEY.SRC_DIRECTORY) ) data[MACROKEY.COMPILE_FLAG] ~= "-I" ~ data[MACROKEY.SRC_DIRECTORY];
 
 	// この時点で Makefile の名前は決定されていなければならない。
 	enforce( data.have(MACROKEY.MAKEFILE),"please specify Makefile's name." );
 }
+
+
+
+

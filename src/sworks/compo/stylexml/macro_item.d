@@ -1,6 +1,6 @@
-/** \file macro_item.d 追記の可不可を変更できる文字列
- * Version:      0.160(dmd2.060)
- * Date:         2012-Oct-09 22:25:03
+/** 追記の可不可を変更できる文字列
+ * Version:      0.161(dmd2.060)
+ * Date:         2012-Oct-11 16:37:46
  * Authors:      KUMA
  * License:      CC0
  */
@@ -40,6 +40,12 @@ class MacroItem
 		if( !isMutable ) return this;
 		if( 0 == v.length ) _value = null;
 		else _value = [ v ];
+		return this;
+	}
+
+	public MacroItem opAssign( string[] v )
+	{
+		if( isMutable ) _value = v;
 		return this;
 	}
 

@@ -1,6 +1,6 @@
 /** dmd を呼び出し、プロジェクトの依存関係を解決する.
- * Version:      0.160(dmd2.060)
- * Date:         2012-Oct-09 22:25:03
+ * Version:      0.161(dmd2.060)
+ * Date:         2012-Oct-11 16:37:46
  * Authors:      KUMA
  * License:      CC0
  */
@@ -51,7 +51,8 @@ void set_deps_data(alias MACROKEY)(Macros data, Output output)
 
 
 	// リソースファイルがある場合はそれも追加しておく。
-	if(data.have(MACROKEY.RC_FILE)) depslines ~= data[MACROKEY.RES_FILE] ~ " : " ~ data[MACROKEY.RC_FILE];
+	if(data.have(MACROKEY.RC_FILE)) depslines ~= data[MACROKEY.RC_FILE].setExtension( "res" ) ~ " : "
+	                                             ~ data[MACROKEY.RC_FILE];
 
 	data[MACROKEY.DEPENDENCE] = depslines.join(data[MACROKEY.BRACKET]);
 }
@@ -135,7 +136,8 @@ void set_deps_of(alias MACROKEY)( string root_file, Macros data, ref DepsLink[st
 	// 終了時に dmd に生成させたファイルを削除する。
 	scope(exit) if( deps_file.exists ) deps_file.remove;
 
-	auto command = data[MACROKEY.GENERATE_DEPS] ~ " " ~ data[MACROKEY.COMPILE_FLAG] ~ " " ~ root_file;
+	auto command = data[MACROKEY.GENERATE_DEPS] ~ " -deps=" ~ deps_file ~ " "
+	               ~ data[MACROKEY.COMPILE_FLAG] ~ " " ~ root_file;
 	output.logln( "generation command is>", command );
 	// dmd を実行
 	enforce( 0 == system( command ) && std.file.exists(deps_file), "fail to generate " ~ deps_file );
