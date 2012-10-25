@@ -17,7 +17,7 @@ import sworks.amm.deps_data;
 debug import std.stdio : writeln;
 
 string header =
-"Automatic Makefile Maker v0.162(dmd2.060)
+"Automatic Makefile Maker v0.163(dmd2.060)
 ";
 
 // コマンドラインに表示するヘルプメッセージ
@@ -60,6 +60,7 @@ struct MACROKEY
 	enum LIB_EXT = "lib_ext";
 	enum SRC_EXT = "src_ext";
 	enum RC_EXT = "rc_ext";
+	enum IS_GMAKE = "gmake";
 
 	// amm が用意する。
 	enum DEPENDENCE = "dependencies";
@@ -112,6 +113,7 @@ struct DEFAULT_VALUE
 		enum EXE_EXT = "";
 		enum OBJ_EXT = ".o";
 		enum LIB_EXT = ".a";
+		enum IS_GMAKE = "defined";
 	}
 
 	enum GENERATE_DEPS = "dmd -c -op -o- -debug";
@@ -209,6 +211,11 @@ EXP";
 	enum RC_EXT = q"EXP
 リソースファイルの拡張子。
 この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "RC" の値としてファイルが登録される。
+EXP";
+
+	enum IS_GMAKE = q"EXP
+出力する Makefile が GNU Make 向けであるかどうか。
+linux では初期値で "defined"。
 EXP";
 
 	// amm が用意する。

@@ -13,16 +13,16 @@
 		</ifdef>
 
 		<set id="compile_command">
-			dmd -c -g -op -debug $(COMPILE_FLAG) $(FLAG) $&lt;
+			$(DC) -c -g -op -debug $(COMPILE_FLAG) $(FLAG) $&lt;
 		</set>
 		<set id="link_command">
-			dmd -g $(LINK_FLAG) $(FLAG) $(EXT_LIB) -of$@ $**
+			$(DC) -g $(LINK_FLAG) $(FLAG) $(EXT_LIB) -of$@ $**
 		</set>
 		<set id="debug_all_command">
-			dmd -g -debug -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
+			$(DC) -g -debug -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
 		</set>
 		<set id="release_command">
-			dmd -release -O -inline -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
+			$(DC) -release -O -inline -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
 		</set>
 		<ifndef id="is_lib"><ifndef id="is_dll">
 				<set id="run_command">$(TARGET) $(FLAG)</set>
@@ -31,7 +31,7 @@
 		<ifdef id="gui">
 			<add id="compile_flag">-version=Unicode -version=WindowsVista</add>
 			<set id="release_command">
-				dmd -release -O -inline -L/exet:nt/su:windows:6.0 -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
+				$(DC) -release -O -inline -L/exet:nt/su:windows:6.0 -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
 			</set>
 		</ifdef>
 
@@ -39,31 +39,31 @@
 			<set id="gui">defined</set>
 			<add id="compile_flag">-version=Unicode -version=WindowsVista</add>
 			<set id="compile_command">
-				dmd -c -g -op $(COMPILE_FLAG) $(FLAG) $&lt;
+				$(DC) -c -g -op $(COMPILE_FLAG) $(FLAG) $&lt;
 			</set>
 			<set id="link_command">
-				dmd -g -map -L/IMPLIB -of$(TARGET) $(LINK_FLAG)  $(EXT_LIB) $(TO_LINK) $(DEF_FILE) $(FLAG)
+				$(DC) -g -map -L/IMPLIB -of$(TARGET) $(LINK_FLAG)  $(EXT_LIB) $(TO_LINK) $(DEF_FILE) $(FLAG)
 			</set>
 			<set id="release_command">
-				dmd -op -release -O -inline -map -L/IMPLIB -of$(TARGET) $(LINK_FLAG) $(EXT_LIB) $(COMPILE_FLAG) $(TO_COMPILE) $(FLAG)
+				$(DC) -op -release -O -inline -map -L/IMPLIB -of$(TARGET) $(LINK_FLAG) $(EXT_LIB) $(COMPILE_FLAG) $(TO_COMPILE) $(FLAG)
 			</set>
 		</ifdef>
 
 		<ifdef id="is_lib">
 			<set id="compile_command">
-				dmd -c -g -op $(COMPILE_FLAG) $(FLAG) $&lt;
+				$(DC) -c -g -op $(COMPILE_FLAG) $(FLAG) $&lt;
 			</set>
 			<set id="link_command">lib -c $@ $**</set>
 			<set id="release_command">
-				dmd -c -op -release -O -inline -lib -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(EXT_LIB) $(TO_COMPILE) $(FLAG)
+				$(DC) -c -op -release -O -inline -lib -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(EXT_LIB) $(TO_COMPILE) $(FLAG)
 			</set>
 		</ifdef>
 
 		<ifdef id="gmake">
 			<set id="make_name">gmake</set>
-			<set id="compile_rule">%.<get id="obj_ext"/> : %<get id="src_ext" /></set>
+			<set id="compile_rule">%<get id="obj_ext"/> : %<get id="src_ext" /></set>
 			<set id="link_command">
-				dmd -of$@ $(LINK_FLAG) $(TO_LINK) $(EXT_LIB)
+				$(DC) -of$@ $(LINK_FLAG) $(TO_LINK) $(EXT_LIB)
 			</set>
 		</ifdef>
 	</head>
@@ -78,11 +78,12 @@
 			<ifdef id="gmake">
 				## for gnu make<br/>
 				## DOT DIRECTIVE<br />
-				.PHONY : release clean show remake install run edit clean_obj vwrite<br />
+				.PHONY : release clean show remake install run edit clean_obj vwrite debug-all ddoc <br />
 				
 			</ifdef>
 			## MACRO<br/>
 			TARGET = <get id="target" /><br />
+			DC = dmd<br />
 			MAKE = <get id="make_name" /><br />
 			MAKEFILE = <get id="m" /><br />
 			TO_COMPILE = <get id="to_compile" /><br />
@@ -145,7 +146,7 @@
 			<tab/>vwrite -ver=&quot;<get id="v"/>&quot; -prj=$(TARGET) $(TO_COMPILE)<br/>
 
 			ddoc :<br/>
-			<tab/>dmd -c -o- -op -D -Dd<get id="dd"/> $(COMPILE_FLAG) $(DDOC_FILE) $(TO_COMPILE) $(FLAG)<br/>
+			<tab/>$(DC) -c -o- -op -D -Dd<get id="dd"/> $(COMPILE_FLAG) $(DDOC_FILE) $(TO_COMPILE) $(FLAG)<br/>
 
 			show :<br />
 			<tab />@echo ROOT = <get id="root"/><br/>
