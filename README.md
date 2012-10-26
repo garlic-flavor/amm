@@ -9,6 +9,7 @@
 
 の組み合わせで実行を確認しています。
 
+付属の amm.exe は x86 Windows 用のバイナリです。
 
 !!! BUG !!!
 ------------------------------
@@ -109,7 +110,7 @@
 
   ファイル名として解釈されます。
 
-  + `.d`
+  + '.d'
     >ソースコードのルートとなるファイルとして扱われます。
     >複数のファイルを渡すこともできます。
 
@@ -549,6 +550,23 @@ Makefile を作り直しても残ります。
   プロジェクトのバージョン情報。
 
 
+ビルド
+------------------------------
+- Windows(x86)
+
+  dmd にパスを通して下を実行して下さい。make は dmd に付属の make.exe を想定しています。
+
+		>make -f win32.mak release
+		>make -f win32.mak install INSTALL=\where\you\install\to
+
+- Linux(x86)
+
+  dmd および、gcc が正しくインストールされていることが前提です。
+  make は GNU Make を想定しています。
+
+		>make -f linux32.mak release
+		>make -f linux32.mak install INSTALL=/where/you/install/to
+
 
 ライセンス
 ------------------------------
@@ -557,8 +575,8 @@ Makefile を作り直しても残ります。
 
 ToDo
 ------------------------------
-- GNU make に対応する。
-- Linux に対応する。
+- <del>GNU make に対応する。</del>( 2012/10/25 ver. 0.163 にて対応)
+- <del>Linux に対応する。</del>( 2012/10/25 ver. 0.163 にて対応)
 
 
 履歴
