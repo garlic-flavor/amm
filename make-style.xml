@@ -146,7 +146,7 @@
 			<tab/>del $(TO_LINK)<br/>
 
 			vwrite :<br/>
-			<tab/>vwrite -ver=&quot;<get id="v"/>&quot; -prj=$(TARGET) $(TO_COMPILE)<br/>
+			<tab/>vwrite -ver=&quot;<get id="v"/>&quot; -prj=$(TARGET) -target=$(TARGET) $(TO_COMPILE)<br/>
 
 			ddoc :<br/>
 			<tab/>$(DC) -c -o- -op -D -Dd<get id="dd"/> $(COMPILE_FLAG) $(DDOC_FILE) $(TO_COMPILE) $(FLAG)<br/>

@@ -40,7 +40,7 @@ src\sworks\amm\deps_data.obj : src\sworks\compo\util\output.d src\sworks\compo\s
 debug-all :
 	$(DC) -g -debug -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)  $(FLAG)
 release :
-	$(DC) -release -O -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)  $(FLAG)
+	$(DC) -release -O -inline -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)  $(FLAG)
 run :
 	$(TARGET) $(FLAG)
 clean :
@@ -48,7 +48,7 @@ clean :
 clean_obj :
 	del $(TO_LINK)
 vwrite :
-	vwrite -ver="0.164(dmd2.060)" -prj=$(TARGET) $(TO_COMPILE)
+	vwrite -ver="0.164(dmd2.060)" -prj=$(TARGET) -target=$(TARGET) $(TO_COMPILE)
 ddoc :
 	$(DC) -c -o- -op -D -Dd $(COMPILE_FLAG) $(DDOC_FILE) $(TO_COMPILE) $(FLAG)
 show :
