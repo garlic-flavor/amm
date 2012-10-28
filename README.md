@@ -4,8 +4,8 @@
 
 現在、
 
-- Windows x dmd x (dmdに付属の)make
-- Lubuntu 12.10 x gcc 4.7.2 x dmd x GNU Make
+- Windows Vista(WoW64) x dmd x (dmdに付属の)make
+- Lubuntu 12.10(x86) x gcc 4.7.2 x dmd x GNU Make
 
 の組み合わせで実行を確認しています。
 
@@ -568,6 +568,13 @@ Makefile を作り直しても残ります。
 		>make -f linux32.mak install INSTALL=/where/you/install/to
 
 
+謝辞
+------------------------------
+amm は D言語で書かれています。
+
+[Digital Mars D Programming Language](http://dlang.org/ "D PROGRAMMING LANGUAGE")
+
+
 ライセンス
 ------------------------------
 [CC0](http://creativecommons.org/publicdomain/zero/1.0/ "Creative Commons Zero License")
@@ -581,6 +588,11 @@ ToDo
 
 履歴
 ------------------------------
+- 2012/10/28 ver. 0.164(dmd2.60)
+
+  コンソールへの出力まわりを若干変更
+
+
 - 2012/10/25 ver. 0.163(dmd2.60)
 
   linux になんとなく対応。

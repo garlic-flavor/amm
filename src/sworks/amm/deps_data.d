@@ -1,6 +1,6 @@
 /** dmd を呼び出し、プロジェクトの依存関係を解決する.
- * Version:      0.163(dmd2.060)
- * Date:         2012-Oct-26 23:56:49
+ * Version:      0.164(dmd2.060)
+ * Date:         2012-Oct-28 23:54:38
  * Authors:      KUMA
  * License:      CC0
  */
@@ -11,10 +11,9 @@ import sworks.compo.util.output;
 import sworks.compo.stylexml.macros;
 import sworks.compo.stylexml.macro_item;;
 alias std.string.join join;
-debug import std.stdio;
 
 // dmd を呼び出し、 data の["dependencies"] に依存関係を記述する。
-void set_deps_data(alias MACROKEY)(Macros data, Output output)
+void set_deps_data(alias MACROKEY)(Macros data )
 {
 	auto src_search = new Search;
 	enforce( data.have(MACROKEY.SRC_DIRECTORY), "src directory is not detected." );
@@ -22,7 +21,7 @@ void set_deps_data(alias MACROKEY)(Macros data, Output output)
 	auto imp_search = new Search;
 	if( data.have(MACROKEY.IMPORT_DIRECTORY) )
 		foreach( one ; data.get(MACROKEY.IMPORT_DIRECTORY).toArray ) imp_search.entry(one);
-	output.logln( "file filters are ready" );
+	Output.logln( "file filters are ready" );
 
 	DepsLink[string] depslink;
 	string obj_ext = data[MACROKEY.OBJ_EXT];
@@ -34,7 +33,7 @@ void set_deps_data(alias MACROKEY)(Macros data, Output output)
 		auto abs = one.absolutePath.buildNormalizedPath;
 		set_deps_of!MACROKEY( one, data, depslink
 		                    , ( fn ){ return fn == abs || src_search.contain( fn ) && !imp_search.contain( fn ); }
-		                    , deps_file, obj_ext, output );
+		                    , deps_file, obj_ext );
 	}
 	auto dependencies = depslink.resolve_public_deps;
 
@@ -131,14 +130,14 @@ bool[string][string] resolve_public_deps( DepsLink[string] dls )
 /// 一つのファイルの依存関係を解決する。
 void set_deps_of(alias MACROKEY)( string root_file, Macros data, ref DepsLink[string] depslink
                                 , bool delegate(string) isMemberFile
-                                , string deps_file, string obj_ext, Output output )
+                                , string deps_file, string obj_ext )
 {
 	// 終了時に dmd に生成させたファイルを削除する。
 	scope(exit) if( deps_file.exists ) deps_file.remove;
 
 	auto command = data[MACROKEY.GENERATE_DEPS] ~ " -deps=" ~ deps_file ~ " "
 	               ~ data[MACROKEY.COMPILE_FLAG] ~ " " ~ root_file;
-	output.logln( "generation command is>", command );
+	Output.logln( "generation command is>", command );
 	// dmd を実行
 	enforce( 0 == system( command ) && std.file.exists(deps_file), "fail to generate " ~ deps_file );
 

@@ -1,6 +1,6 @@
 /** コマンドライン引数を解析します.
- * Version:      0.163(dmd2.060)
- * Date:         2012-Oct-26 23:56:49
+ * Version:      0.164(dmd2.060)
+ * Date:         2012-Oct-28 23:54:38
  * Authors:      KUMA
  * License:      CC0
  */
@@ -11,7 +11,7 @@ import sworks.compo.util.output;
 import sworks.compo.stylexml.macros;
 
 //
-void set_args_data(alias MACROKEY)(Macros data, string[] args, Output output)
+void set_args_data(alias MACROKEY)(Macros data, string[] args )
 {
 	auto remake = appender("amm");
 	foreach( one ; args[ 1 .. $ ] )
@@ -65,7 +65,7 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args, Output output)
 
 	// この時点で root_file は指定されていなければならない。
 	enforce(data.have(MACROKEY.ROOT_FILE), " please input root files of the project.");
-	output.debln("root file detected.");
+	Output.debln("root file detected.");
 
 	// ターゲットが lib や、dll かどうか。
 	if( data.have( MACROKEY.TARGET ) )
@@ -80,10 +80,10 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args, Output output)
 	style_search.entry(".");
 	style_search.entry(getenv("HOME"));
 	style_search.entry(dirName(args[0]));
-	output.debln("search is ready");
+	Output.debln("search is ready");
 
 	data.rewrite(MACROKEY.STYLE_FILE, enforce(style_search.abs(data[MACROKEY.STYLE_FILE])
 	                                ,data[MACROKEY.STYLE_FILE] ~ " is not found"));
 
-	output.logln(data[MACROKEY.STYLE_FILE] ~ " is detected.");
+	Output.logln(data[MACROKEY.STYLE_FILE] ~ " is detected.");
 }

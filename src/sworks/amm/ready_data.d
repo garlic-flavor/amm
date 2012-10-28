@@ -1,6 +1,6 @@
 /** dmd に依存関係を解決させる為の下準備.
- * Version:      0.163(dmd2.060)
- * Date:         2012-Oct-26 23:56:49
+ * Version:      0.164(dmd2.060)
+ * Date:         2012-Oct-28 23:54:38
  * Authors:      KUMA
  * License:      CC0
  */
@@ -11,7 +11,7 @@ import sworks.compo.util.search;
 import sworks.compo.util.output;
 import sworks.compo.stylexml.macros;
 
-void ready_data(alias MACROKEY)(Macros data, Output output)
+void ready_data(alias MACROKEY)(Macros data )
 {
 	// ターゲット名の決定
 	if( !data.have(MACROKEY.TARGET) )
@@ -24,7 +24,7 @@ void ready_data(alias MACROKEY)(Macros data, Output output)
 
 		data[MACROKEY.TARGET] = (data.get(MACROKEY.ROOT_FILE).toArray[0]).baseName.setExt( target_ext );
 	}
-	output.logln( "target name is " ~ data[MACROKEY.TARGET] );
+	Output.logln( "target name is " ~ data[MACROKEY.TARGET] );
 
 	// def ファイルの決定
 	if( data.have( MACROKEY.TARGET_IS_DLL ) && !data.have(MACROKEY.DEF_FILE) )
@@ -62,7 +62,7 @@ void ready_data(alias MACROKEY)(Macros data, Output output)
 	auto src_dir = data.get(MACROKEY.SRC_DIRECTORY);
 	foreach( one ; data.get(MACROKEY.IMPORT_DIRECTORY ).toArray ) src_dir ~= one;
 
-	output.logln( "source file directories are " ~ data[MACROKEY.SRC_DIRECTORY] );
+	Output.logln( "source file directories are " ~ data[MACROKEY.SRC_DIRECTORY] );
 
 	// 外部ライブラリの決定
 	foreach( one ; data.get(MACROKEY.EXT_LIB_DIRECTORY).toArray )

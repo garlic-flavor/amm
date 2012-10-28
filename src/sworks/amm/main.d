@@ -1,6 +1,6 @@
 /**
- * Version:      0.163(dmd2.060)
- * Date:         2012-Oct-26 23:56:49
+ * Version:      0.164(dmd2.060)
+ * Date:         2012-Oct-28 23:54:38
  * Authors:      KUMA
  * License:      CC0
  */
@@ -17,7 +17,7 @@ import sworks.amm.deps_data;
 debug import std.stdio : writeln;
 
 string header =
-"Automatic Makefile Maker v0.163(dmd2.060)
+"Automatic Makefile Maker v0.164(dmd2.060)
 ";
 
 // コマンドラインに表示するヘルプメッセージ
@@ -314,34 +314,32 @@ EXP";
 
 }
 
-void output_macro_help( Output output )
+void output_macro_help( )
 {
-	output.ln( "定義済みマクロ一覧" );
-	output.ln( "--------------------" );
+	Output.ln( "定義済みマクロ一覧" );
+	Output.ln( "--------------------" );
 	foreach( KEY ; __traits( allMembers, MACROKEY ) )
 	{
-		output.ln( "マクロ名 : '", __traits( getMember, MACROKEY, KEY ), "'" );
+		Output.ln( "マクロ名 : '", __traits( getMember, MACROKEY, KEY ), "'" );
 		static if( __traits( hasMember, DEFAULT_VALUE, KEY ) )
-			output.ln( "初期値 : '", __traits( getMember, DEFAULT_VALUE, KEY ), "'" );
+			Output.ln( "初期値 : '", __traits( getMember, DEFAULT_VALUE, KEY ), "'" );
 		static if( __traits( hasMember, EXPLANATION, KEY ) )
 		{
-			output.ln( "説明 :" );
-			output.ln( __traits( getMember, EXPLANATION, KEY ) );
+			Output.ln( "説明 :" );
+			Output.ln( __traits( getMember, EXPLANATION, KEY ) );
 		}
-		output.ln();
+		Output.ln();
 	}
 
 }
 
 void main(string[] args)
 {
-	Output output = new Output;
-
 	// 引数がない場合はヘルプを出力して終了
-	if( args.length <= 1 ){ output.ln( header, help ); return; }
+	if( args.length <= 1 ){ Output.ln( header, help ); return; }
 	auto tempargs = args;
 	args.length = 0;
-	debug{ output.mode = Output.MODE.VERBOSE; }
+	debug{ Output.mode = Output.MODE.VERBOSE; }
 	// ヘルプが必要か、と、出力の冗長性に関しては先に調べておく。
 	foreach( i, one ; tempargs )
 	{
@@ -349,13 +347,13 @@ void main(string[] args)
 		if     ( ("h" == one) || ("help" == one) || ("?" == one) || ("-h" == one) || ("-help" == one)
 					 || ("--help" == one) || "/?" == one )
 		{
-			if( i+1 < tempargs.length && tempargs[i+1] == "macro" ) output_macro_help( output );
-			else output.ln( header, help );
+			if( i+1 < tempargs.length && tempargs[i+1] == "macro" ) output_macro_help( );
+			else Output.ln( header, help );
 			return;
 		}
 		// 出力の冗長性の制御
-		else if( "verbose" == one ) output.mode = Output.MODE.VERBOSE;
-		else if( "q" == one || "quiet" == one ) output.mode = Output.MODE.QUIET;
+		else if( "verbose" == one ) Output.mode = Output.MODE.VERBOSE;
+		else if( "q" == one || "quiet" == one ) Output.mode = Output.MODE.QUIET;
 		else if( 0 < one.length ) args ~= one;
 	}
 
@@ -364,39 +362,39 @@ void main(string[] args)
 	// マクロに初期値を設定
 	set_default_data!(MACROKEY, DEFAULT_VALUE)( macros );
 	// コマンドライン引数の解析
-	set_args_data!MACROKEY( macros, args, output );
+	set_args_data!MACROKEY( macros, args );
 
-	output.logln(header);
+	Output.logln(header);
 	// -style.xml ファイルの読み込み。
 	auto str = macros[MACROKEY.STYLE_FILE].read.to!string;
-	output.logln("success to open ", macros[MACROKEY.STYLE_FILE] );
+	Output.logln("success to open ", macros[MACROKEY.STYLE_FILE] );
 	parser = new StyleParser( str, macros );
-	output.logln( "parser is ready" );
+	Output.logln( "parser is ready" );
 
 	// -style.xml ファイルのヘッダだけは読み込んでおく。
 	parser.parseHead();
-	output.logln( "<head> is parsed successfully" );
+	Output.logln( "<head> is parsed successfully" );
 
 	// マクロを準備する。
-	ready_data!MACROKEY( macros, output );
-	output.logln( "macros are ready" );
+	ready_data!MACROKEY( macros );
+	Output.logln( "macros are ready" );
 
 	// 依存関係を解決
-	set_deps_data!MACROKEY(macros, output);
-	output.logln( "dependencies are whole resolved." );
+	set_deps_data!MACROKEY(macros);
+	Output.logln( "dependencies are whole resolved." );
 
 	// 準備完了
 	// -style.xml ファイルのボディを処理する。
-	output.logln("parse start.");
+	Output.logln("parse start.");
 	auto makefile_cont = parser.parseBody();
-	output.logln("parse success.");
+	Output.logln("parse success.");
 
 	enforce( 0 < makefile_cont.length, "failed to generate Makefile with " ~ macros[MACROKEY.STYLE_FILE] );
 
 	// Makefile が既存で、footer が見つかった場合、それ以降は残す。
 	if( exists(macros[MACROKEY.MAKEFILE]) && macros.have(MACROKEY.FOOTER) )
 	{
-		output.logln("old makefile is detected.");
+		Output.logln("old makefile is detected.");
 		auto old_makefile_cont = to!string(read(macros[MACROKEY.MAKEFILE]));
 		int i = old_makefile_cont.lastIndexOf(macros[MACROKEY.FOOTER]);
 		if( 0 < i )
@@ -404,7 +402,7 @@ void main(string[] args)
 			string post_footer = old_makefile_cont[ i+macros[MACROKEY.FOOTER].length .. $];
 			if( 0 < post_footer.length )
 			{
-				output.logln("post-footers are detected.");
+				Output.logln("post-footers are detected.");
 				makefile_cont ~= post_footer;
 			}
 		}
@@ -412,8 +410,8 @@ void main(string[] args)
 
 	// Makefile を出力。
 	write( macros[MACROKEY.MAKEFILE], makefile_cont );
-	output.logln("output the makefile, success.");
+	Output.logln("output the makefile, success.");
 
-	output.logln("complete.");
+	Output.logln("complete.");
 }
 
