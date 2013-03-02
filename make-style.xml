@@ -136,9 +136,6 @@
 				<tab /><get id="release_command"/> <ifdef id="rc">$(RES_FILE)</ifdef> $(FLAG)<br />
 			</ifdef>
 
-			run : <br />
-			<tab />$(TARGET) $(FLAG)<br />
-
 			clean : <br />
 			<tab />del $(TARGET) $(TO_LINK)<br />
 

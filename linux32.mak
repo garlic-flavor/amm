@@ -26,41 +26,41 @@ $(TARGET) : $(TO_LINK) $(EXT_LIB)
 $(TO_LINK) : $(MAKEFILE) $(EXT_LIB)
 src/sworks/compo/util/output.o : src/sworks/compo/util/output.d
 src/sworks/compo/util/strutil.o : src/sworks/compo/util/strutil.d
-src/sworks/amm/deps_data.o : src/sworks/amm/deps_data.d src/sworks/compo/util/output.d src/sworks/compo/stylexml/macro_item.d src/sworks/compo/stylexml/macros.d src/sworks/compo/util/search.d
+src/sworks/amm/deps_data.o : src/sworks/amm/deps_data.d
 src/sworks/compo/stylexml/macro_item.o : src/sworks/compo/stylexml/macro_item.d
-src/sworks/amm/default_data.o : src/sworks/amm/default_data.d src/sworks/compo/stylexml/macros.d
-src/sworks/amm/main.o : src/sworks/compo/util/output.d src/sworks/amm/deps_data.d src/sworks/amm/default_data.d src/sworks/amm/main.d src/sworks/compo/stylexml/macros.d src/sworks/compo/stylexml/parser.d src/sworks/amm/args_data.d src/sworks/amm/ready_data.d
+src/sworks/amm/default_data.o : src/sworks/amm/default_data.d
+src/sworks/amm/main.o : src/sworks/amm/main.d
 src/sworks/compo/stylexml/macros.o : src/sworks/compo/stylexml/macro_item.d src/sworks/compo/stylexml/macros.d
-src/sworks/compo/stylexml/parser.o : src/sworks/compo/util/strutil.d src/sworks/compo/stylexml/parser.d src/sworks/compo/stylexml/macros.d src/sworks/compo/stylexml/writer.d
-src/sworks/compo/stylexml/writer.o : src/sworks/compo/stylexml/writer.d src/sworks/compo/util/array.d
+src/sworks/compo/stylexml/parser.o : src/sworks/compo/stylexml/parser.d
+src/sworks/compo/stylexml/writer.o : src/sworks/compo/stylexml/writer.d
 src/sworks/compo/util/array.o : src/sworks/compo/util/array.d
-src/sworks/amm/args_data.o : src/sworks/compo/util/output.d src/sworks/compo/stylexml/macros.d src/sworks/amm/args_data.d src/sworks/compo/util/search.d
+src/sworks/amm/args_data.o : src/sworks/amm/args_data.d
 src/sworks/compo/util/search.o : src/sworks/compo/util/search.d
-src/sworks/amm/ready_data.o : src/sworks/compo/util/output.d src/sworks/compo/stylexml/macros.d src/sworks/amm/ready_data.d src/sworks/compo/util/search.d
+src/sworks/amm/ready_data.o : src/sworks/amm/ready_data.d
 
 ## PHONY TARGET
 debug-all :
 	$(DC) -g -debug -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)  $(FLAG)
 release :
-	$(DC) -release -O -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)  $(FLAG)
+	$(DC) -release -O -inline -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)  $(FLAG)
 clean :
 	del $(TARGET) $(TO_LINK)
 clean_obj :
 	del $(TO_LINK)
 vwrite :
-	vwrite -ver="0.163(dmd2060)" -prj=$(TARGET) $(TO_COMPILE)
+	vwrite -ver="0.165(dmd2062)" -prj=$(TARGET) -target=$(TARGET) $(TO_COMPILE)
 ddoc :
 	$(DC) -c -o- -op -D -Dd $(COMPILE_FLAG) $(DDOC_FILE) $(TO_COMPILE) $(FLAG)
 show :
 	@echo ROOT = src/sworks/amm/main.d
 	@echo TARGET = $(TARGET)
-	@echo VERSION = 0.163(dmd2060)
+	@echo VERSION = 0.165(dmd2062)
 run :
 	$(TARGET) $(FLAG)
 edit :
 	emacs $(TO_COMPILE)
 remake :
-	amm -ofamm v=0.163(dmd2060) linux32.mak src/sworks/amm/main.d $(FLAG)
+	amm -ofamm "v=0.165(dmd2062)" linux32.mak src/sworks/amm/main.d $(FLAG)
 
 debug :
 	ddbg $(TARGET)
@@ -70,4 +70,4 @@ debug :
 INSTALL =
 install :
 	cp ./amm $(INSTALL)
-	cp ./amm $(INSTALL)
+	cp ./make-style.xml $(INSTALL)

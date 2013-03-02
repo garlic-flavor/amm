@@ -1,6 +1,6 @@
 /** 入力されたディレクトリの順にファイルを検索します。
- * Version:      0.164(dmd2.060)
- * Date:         2012-Oct-28 23:54:38
+ * Version:      0.165(dmd2062)
+ * Date:         2013-Mar-02 19:53:41
  * Authors:      KUMA
  * License:      CC0
  */
@@ -103,7 +103,7 @@ class Search
 	}
 
 
-	string toString( )
+	override string toString( )
 	{
 		return to!string(joiner( _path, dirSeparator ));
 	}

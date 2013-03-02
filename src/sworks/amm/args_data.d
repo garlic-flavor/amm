@@ -1,6 +1,6 @@
 /** コマンドライン引数を解析します.
- * Version:      0.164(dmd2.060)
- * Date:         2012-Oct-28 23:54:38
+ * Version:      0.165(dmd2062)
+ * Date:         2013-Mar-02 19:53:41
  * Authors:      KUMA
  * License:      CC0
  */
@@ -17,7 +17,7 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args )
 	foreach( one ; args[ 1 .. $ ] )
 	{
 		remake.put(" ");
-		if( 0 <= one.countUntil(" ") ) { remake.put( "\"" ); remake.put( one ); remake.put("\""); }
+		if( 0 <= one.countUntil(" ") || 0 <= one.countUntil("(") || 0 <= one.countUntil(")") ) { remake.put( "\"" ); remake.put( one ); remake.put("\""); }
 		else remake.put(one);
 	}
 	data.fix( MACROKEY.REMAKE_COMMAND, remake.data );
@@ -79,7 +79,8 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args )
 	Search style_search = new Search;
 	style_search.entry(".");
 	style_search.entry(getenv("HOME"));
-	style_search.entry(dirName(args[0]));
+	version(Windows) style_search.entry(dirName(args[0]));
+	version(linux) style_search.entry( dirName( shell( "which amm" ) ) );
 	Output.debln("search is ready");
 
 	data.rewrite(MACROKEY.STYLE_FILE, enforce(style_search.abs(data[MACROKEY.STYLE_FILE])
