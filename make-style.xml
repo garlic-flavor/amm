@@ -103,7 +103,7 @@
 			<ifdef id="is_dll">
 				DEF_FILE = <get id="def_file"/><br/>
 			</ifdef>
-			DDOC_FILE = <get id="ddoc_file"/><br/>
+			DDOC_FILE = <get id="ddoc"/><br/>
 			FLAG = <br/>
 			<br/>
 			## LINK COMMAND<br />
