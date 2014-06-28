@@ -34,7 +34,12 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args )
 			else if( opt.startsWith( "of" ) ) data.rewrite( MACROKEY.TARGET, opt[2..$] );
 			else if( opt.startsWith( "deps=" ) ) data.rewrite( MACROKEY.DEPS_FILE, opt[ 5 .. $ ] );
 			else if( opt.startsWith( "Dd" ) ) data.rewrite( MACROKEY.DDOC_DIRECTORY, opt[ 2 .. $ ] );
-			else data[ MACROKEY.COMPILE_FLAG ] ~= args[i];
+			else
+			{
+				auto a = args[i];
+				data[ MACROKEY.COMPILE_FLAG ] ~= a;
+				if( "-m64" == a ) data[ MACROKEY.LINK_FLAG ] ~= a;
+			}
 		}
 		// マクロへの値つき代入
 		else if( 0 < (j = args[i].countUntil("+=")) ) data.forceConcat( args[i][0..j], args[i][j+2..$] );

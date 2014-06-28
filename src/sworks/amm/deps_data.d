@@ -9,7 +9,7 @@ import std.algorithm, std.process, std.exception, std.file, std.path, std.string
 import sworks.compo.util.search;
 import sworks.compo.util.output;
 import sworks.compo.stylexml.macros;
-import sworks.compo.stylexml.macro_item;;
+import sworks.compo.stylexml.macro_item;
 alias std.string.join join;
 
 // dmd を呼び出し、 data の["dependencies"] に依存関係を記述する。
@@ -120,8 +120,11 @@ bool[string][string] resolve_public_deps( DepsLink[string] dls )
 
 	foreach( key, dl ; dls )
 	{
-		result[key][key] = true;
-		foreach( one ; get_pub_links( dl ) ) result[key][one] = true;
+		bool[string] deps;
+		deps[key] = true;
+		foreach( one ; dl.prv ) deps[one.name] = true;
+		foreach( one ; get_pub_links( dl ) ) deps[one] = true;
+		result[key] = deps;
 	}
 
 	return result;
