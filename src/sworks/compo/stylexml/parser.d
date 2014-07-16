@@ -74,7 +74,7 @@ ParserHandler set_tag( Macros macros )
 			auto ep_id = enstring( ep.tag.attr.get( "id", "" ), "the <set> tag has no 'id' attribute." );
 			ep.parse();
 			auto cont = ep.toString();
-			int i; if( 0 <= ( i = cont.lastIndexOf("</") ) ) cont = cont[ 0 .. i ]; //< これなんとかならんのか
+			sizediff_t i; if( 0 <= ( i = cont.lastIndexOf("</") ) ) cont = cont[ 0 .. i ]; //< これなんとかならんのか
 			m[ep_id] = cont.strip;
 		} )( macros );
 }
@@ -86,7 +86,7 @@ ParserHandler add_tag( Macros macros )
 			auto ep_id = enstring( ep.tag.attr.get( "id", "" ), "the <add> tag has no 'id' attribute." );
 			ep.parse;
 			auto cont = ep.toString();
-			int i; if( 0 <= ( i = cont.lastIndexOf("</") ) ) cont = cont[ 0 .. i ]; //< ここも
+			sizediff_t i; if( 0 <= ( i = cont.lastIndexOf("</") ) ) cont = cont[ 0 .. i ]; //< ここも
 			m[ep_id] ~= cont;
 		} )( macros );
 }

@@ -396,7 +396,7 @@ void main(string[] args)
 	{
 		Output.logln("old makefile is detected.");
 		auto old_makefile_cont = to!string(read(macros[MACROKEY.MAKEFILE]));
-		int i = old_makefile_cont.lastIndexOf(macros[MACROKEY.FOOTER]);
+		auto i = old_makefile_cont.lastIndexOf(macros[MACROKEY.FOOTER]);
 		if( 0 < i )
 		{
 			string post_footer = old_makefile_cont[ i+macros[MACROKEY.FOOTER].length .. $];

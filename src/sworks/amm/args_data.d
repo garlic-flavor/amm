@@ -23,7 +23,7 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args )
 	data.fix( MACROKEY.REMAKE_COMMAND, remake.data );
 
 	string argsext;
-	for(int i=1,j ; i<args.length ; i++)
+	for(sizediff_t i=1,j ; i<args.length ; i++)
 	{
 		// dmd へのオプション
 		if( args[i].startsWith( "-" ) )
@@ -79,13 +79,19 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args )
 		if     ( 0 == target_ext.icmp( data[MACROKEY.DLL_EXT] ) ) data[MACROKEY.TARGET_IS_DLL] = "defined";
 		else if( 0 == target_ext.icmp( data[MACROKEY.LIB_EXT] ) ) data[MACROKEY.TARGET_IS_LIB] = "defined";
 	}
-
 	// -style.xml ファイルの探索
 	Search style_search = new Search;
 	style_search.entry(".");
 	style_search.entry(getenv("HOME"));
 	version(Windows) style_search.entry(dirName(args[0]));
-	version(linux) style_search.entry( dirName( shell( "which amm" ) ) );
+	version(linux)
+	{
+		try
+		{
+			style_search.entry( dirName( shell( "which amm" ) ) );
+		}
+		catch(Exception e) Output.debln("amm not detected.");
+	}
 	Output.debln("search is ready");
 
 	data.rewrite(MACROKEY.STYLE_FILE, enforce(style_search.abs(data[MACROKEY.STYLE_FILE])

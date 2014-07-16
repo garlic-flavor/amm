@@ -20,7 +20,7 @@ $(TARGET) : $(TO_LINK) $(EXT_LIB)
 
 ## COMPILE RULE
 %.o : %.d
-	$(DC) -c -g -op -debug $(COMPILE_FLAG) $(FLAG) $<
+	$(DC) -c -g -gc -op -debug $(COMPILE_FLAG) $(FLAG) $<
 
 ## DEPENDENCE
 $(TO_LINK) : $(MAKEFILE) $(EXT_LIB)
@@ -40,7 +40,7 @@ src/sworks/amm/ready_data.o : src/sworks/amm/ready_data.d
 
 ## PHONY TARGET
 debug-all :
-	$(DC) -g -debug -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)  $(FLAG)
+	$(DC) -g -gc -debug -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)  $(FLAG)
 release :
 	$(DC) -release -O -inline -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)  $(FLAG)
 clean :
@@ -60,7 +60,7 @@ run :
 edit :
 	emacs $(TO_COMPILE)
 remake :
-	amm -ofamm "v=0.165(dmd2062)" linux32.mak src/sworks/amm/main.d $(FLAG)
+	amm -ofamm "v=0.165(dmd2062)" -m64 linux64.mak src/sworks/amm/main.d $(FLAG)
 
 debug :
 	ddbg $(TARGET)

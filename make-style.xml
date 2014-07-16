@@ -59,12 +59,15 @@
 			</set>
 		</ifdef>
 
+		<set id="del_command">del</set>
+
 		<ifdef id="gmake">
 			<set id="make_name">gmake</set>
 			<set id="compile_rule">%<get id="obj_ext"/> : %<get id="src_ext" /></set>
 			<set id="link_command">
 				$(DC) -of$@ $(LINK_FLAG) $(TO_LINK) $(EXT_LIB)
 			</set>
+			<set id="del_command">rm</set>
 		</ifdef>
 	</head>
 
@@ -137,10 +140,10 @@
 			</ifdef>
 
 			clean : <br />
-			<tab />del $(TARGET) $(TO_LINK)<br />
+			<tab /><get id="del_command" /> $(TARGET) $(TO_LINK)<br />
 
 			clean_obj :<br/>
-			<tab/>del $(TO_LINK)<br/>
+			<tab/><get id="del_command" /> $(TO_LINK)<br/>
 
 			vwrite :<br/>
 			<tab/>vwrite -ver=&quot;<get id="v"/>&quot; -prj=$(TARGET) -target=$(TARGET) $(TO_COMPILE)<br/>

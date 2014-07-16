@@ -43,7 +43,7 @@ class Search
 	private string[] _path;
 
 	public string[] pathes() nothrow @property { return _path[]; }
-	public uint length() const nothrow @property { return _path.length; }
+	public size_t length() const nothrow @property { return _path.length; }
 
 	/** サーチパスに加える。
 	 * \param p カレントディレクトリから見えているパスでなければならない。
