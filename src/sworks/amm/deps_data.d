@@ -155,8 +155,9 @@ void set_deps_of(alias MACROKEY)( string root_file, Macros data
         ~ data[MACROKEY.COMPILE_FLAG] ~ " " ~ root_file;
     Output.logln( "generation command is>", command );
     // dmd を実行
-    enforce( 0 == executeShell(command).status && std.file.exists(deps_file)
-           , "fail to generate " ~ deps_file );
+    auto result = executeShell(command);
+    enforce( 0 == result.status && std.file.exists(deps_file)
+           , result.output ~ "\nfail to generate " ~ deps_file );
 
     auto rootl = depslink.get( root_file, new DepsLink(root_file));
     depslink[root_file] = rootl;
