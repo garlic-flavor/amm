@@ -5,7 +5,7 @@
 現在、
 
 - Windows Vista(WoW64) x dmd x (dmdに付属の)make
-- Lubuntu 12.10(x86) x gcc 4.7.2 x dmd x GNU Make
+- Ubuntu 15.10(x64) x gcc 5.2.1 x dmd x GNU Make
 
 の組み合わせで実行を確認しています。
 
@@ -588,6 +588,11 @@ ToDo
 
 履歴
 ------------------------------
+- 2015/12/06 ver. 0.167(dmd2.069.2)
+  
+  std.process がらみの deplication に対応。
+  ソースのインデントをタブからスペースに。(dmdのソースに準拠すべく。)
+
 - 2014/06/28 ver. 0.166(dmd2.065)
 
   バグフィクス

@@ -44,9 +44,9 @@ debug-all :
 release :
 	$(DC) -release -O -inline -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)  $(FLAG)
 clean :
-	del $(TARGET) $(TO_LINK)
+	rm $(TARGET) $(TO_LINK)
 clean_obj :
-	del $(TO_LINK)
+	rm $(TO_LINK)
 vwrite :
 	vwrite -ver="0.165(dmd2062)" -prj=$(TARGET) -target=$(TARGET) $(TO_COMPILE)
 ddoc :
@@ -60,7 +60,7 @@ run :
 edit :
 	emacs $(TO_COMPILE)
 remake :
-	amm -ofamm "v=0.165(dmd2062)" -m64 linux64.mak src/sworks/amm/main.d $(FLAG)
+	amm -ofamm "v=0.165(dmd2062)" -m64 gmake linux64.mak src/sworks/amm/main.d $(FLAG)
 
 debug :
 	ddbg $(TARGET)
