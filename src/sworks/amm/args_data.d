@@ -1,25 +1,25 @@
 /** コマンドライン引数を解析します.
- * Version:      0.165(dmd2062)
- * Date:         2013-Mar-02 19:53:41
- * Authors:      KUMA
- * License:      CC0
+ * Version:    0.167(dmd2.069.2)
+ * Date:       2015-Dec-14 16:39:49
+ * Authors:    KUMA
+ * License:    cc0
  */
 module sworks.amm.args_data;
-import std.algorithm, std.array, std.process, std.exception, std.path, std.file
-     , std.string;
-import sworks.compo.util.search;
-import sworks.compo.util.output;
-import sworks.compo.stylexml.macros;
+import std.algorithm, std.array, std.process, std.exception, std.path, std.file,
+      std.string;
+import sworks.base.search;
+import sworks.base.output;
+import sworks.stylexml.macros;
 
 //
-void set_args_data(alias MACROKEY)(Macros data, string[] args )
+void set_args_data(alias MACROKEY)(Macros data, string[] args)
 {
     auto remake = appender("amm");
-    foreach( one ; args[ 1 .. $ ] )
+    foreach (one ; args[1 .. $])
     {
         remake.put(" ");
-        if ( 0 <= one.countUntil(" ") || 0 <= one.countUntil("(")
-             || 0 <= one.countUntil(")") )
+        if (0 <= one.countUntil(" ") || 0 <= one.countUntil("(")
+             || 0 <= one.countUntil(")"))
         {
             remake.put("\"");
             remake.put(one);
@@ -27,54 +27,54 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args )
         }
         else remake.put(one);
     }
-    data.fix( MACROKEY.REMAKE_COMMAND, remake.data );
+    data.fix(MACROKEY.REMAKE_COMMAND, remake.data);
 
     string argsext;
-    for(sizediff_t i=1,j ; i<args.length ; i++)
+    for (sizediff_t i=1,j ; i<args.length ; i++)
     {
         // dmd へのオプション
-        if( args[i].startsWith( "-" ) )
+        if (args[i].startsWith("-"))
         {
-            auto opt = args[i][ 1 .. $ ];
+            auto opt = args[i][1 .. $];
             if     (opt.startsWith("L"))
-                data[ MACROKEY.LINK_FLAG ] ~= args[i];
-            else if(opt.startsWith("I"))
-                data[ MACROKEY.SRC_DIRECTORY ] ~= opt[1..$];
-            else if(opt.startsWith("of"))
-                data.rewrite( MACROKEY.TARGET, opt[2..$] );
-            else if(opt.startsWith("deps="))
-                data.rewrite( MACROKEY.DEPS_FILE, opt[ 5 .. $ ] );
-            else if(opt.startsWith("Dd"))
-                data.rewrite( MACROKEY.DDOC_DIRECTORY, opt[ 2 .. $ ] );
+                data[MACROKEY.LINK_FLAG] ~= args[i];
+            else if (opt.startsWith("I"))
+                data[MACROKEY.SRC_DIRECTORY] ~= opt[1..$];
+            else if (opt.startsWith("of"))
+                data.rewrite(MACROKEY.TARGET, opt[2..$]);
+            else if (opt.startsWith("deps="))
+                data.rewrite(MACROKEY.DEPS_FILE, opt[5 .. $]);
+            else if (opt.startsWith("Dd"))
+                data.rewrite(MACROKEY.DDOC_DIRECTORY, opt[2 .. $]);
             else
             {
                 auto a = args[i];
-                data[ MACROKEY.COMPILE_FLAG ] ~= a;
-                if( "-m64" == a ) data[ MACROKEY.LINK_FLAG ] ~= a;
+                data[MACROKEY.COMPILE_FLAG] ~= a;
+                if ("-m64" == a) data[MACROKEY.LINK_FLAG] ~= a;
             }
         }
         // マクロへの値つき代入
         else if (0 < (j = args[i].countUntil("+=")))
-            data.forceConcat( args[i][0..j], args[i][j+2..$] );
+            data.forceConcat(args[i][0..j], args[i][j+2..$]);
         else if (0 < (j = args[i].countUntil('=')))
-            data.rewrite( args[i][0..j], args[i][j+1..$] );
+            data.rewrite(args[i][0..j], args[i][j+1..$]);
         // マクロへの値省略代入
         else if (0 == (argsext = args[i].extension).length)
-            data.rewrite( args[i], "defined");
+            data.rewrite(args[i], "defined");
         // ターゲット
         else if (0 == argsext.icmp(data[MACROKEY.EXE_EXT])
-              || 0 == argsext.icmp( data[MACROKEY.DLL_EXT]))
+              || 0 == argsext.icmp(data[MACROKEY.DLL_EXT]))
             data.rewrite(MACROKEY.TARGET, args[i]);
-        else if (0 == argsext.icmp( data[MACROKEY.MAK_EXT]))
+        else if (0 == argsext.icmp(data[MACROKEY.MAK_EXT]))
             data.rewrite(MACROKEY.MAKEFILE, args[i]);
         else
         {
-            enforce( args[i].exists, args[i] ~ " is not found." );
+            enforce(args[i].exists, args[i] ~ " is not found.");
             auto file = args[i].buildNormalizedPath;
 
             // ライブラリ
             if     (0 == argsext.icmp(data[MACROKEY.LIB_EXT])
-                 || 0 == argsext.icmp( data[MACROKEY.OBJ_EXT]))
+                 || 0 == argsext.icmp(data[MACROKEY.OBJ_EXT]))
                 data[MACROKEY.LIB_FILE] ~= file;
             else if (0 == argsext.icmp(data[MACROKEY.SRC_EXT]))
                 data[MACROKEY.ROOT_FILE] ~= file;
@@ -91,8 +91,8 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args )
     }
 
     // この時点で root_file は指定されていなければならない。
-    enforce( data.have(MACROKEY.ROOT_FILE)
-           , " please input root files of the project.");
+    enforce(data.have(MACROKEY.ROOT_FILE),
+            " please input root files of the project.");
     Output.debln("root file detected.");
 
     // ターゲットが lib や、dll かどうか。
@@ -108,20 +108,20 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args )
     Search style_search = new Search;
     style_search.entry(".");
     style_search.entry(environment["HOME"]);
-    version(Windows) style_search.entry(dirName(args[0]));
-    version(linux)
+    version (Windows) style_search.entry(dirName(args[0]));
+    version (linux)
     {
         try
         {
             style_search.entry(dirName(executeShell("which amm").output));
         }
-        catch(Exception e) Output.debln("amm not detected.");
+        catch (Exception e) Output.debln("amm not detected.");
     }
     Output.debln("search is ready");
 
-    data.rewrite( MACROKEY.STYLE_FILE
-                , enforce( style_search.abs(data[MACROKEY.STYLE_FILE])
-                         , data[MACROKEY.STYLE_FILE] ~ " is not found"));
+    data.rewrite(MACROKEY.STYLE_FILE,
+                 enforce(style_search.abs(data[MACROKEY.STYLE_FILE]),
+                          data[MACROKEY.STYLE_FILE] ~ " is not found"));
 
     Output.logln(data[MACROKEY.STYLE_FILE] ~ " is detected.");
 }

@@ -1,53 +1,36 @@
 /**
- * Version:      0.166(dmd2.065)
- * Date:         2014-Jun-28 15:05:35
- * Authors:      KUMA
- * License:      CC0
+ * Version:    0.167(dmd2.069.2)
+ * Date:       2015-Dec-16 19:58:02
+ * Authors:    KUMA
+ * License:    cc0
  */
 
 /**
-Notice:
-  with -version=IN_ENGLISH, help messages will be english.(Under Construction.)
+   Notice:
+     with -version=InJapanese, help messages will be in Japanese.
 **/
 module sworks.amm.main;
-import std.file, std.string, std.exception, std.conv;
-import sworks.compo.util.output;
-import sworks.compo.stylexml.macros;
-import sworks.compo.stylexml.parser;
+
+import sworks.base.output;
+import sworks.stylexml;
 import sworks.amm.default_data;
 import sworks.amm.args_data;
 import sworks.amm.ready_data;
 import sworks.amm.deps_data;
 debug import std.stdio : writeln;
 
-string header =
-"Automatic Makefile Maker v0.167(dmd2.069.2)
-";
+enum _VERSION_ = "0.167(dmd2.069.2)";
+enum _AUTHORS_ = "KUMA";
+
+
+enum header =
+    "Automatic Makefile Maker v" ~ _VERSION_ ~ ". Written by " ~ _AUTHORS_ ~
+    ".\n";
 
 // コマンドラインに表示するヘルプメッセージ
-version(IN_ENGLISH)
+version (InJapanese)
 {
-string help = q"HELP
-** HOW TO USE.
-$>amm [target.exe] [make-style.xml] [option for dmd] [options] rootfile.d
-
-** options
-h help ?           : show this message.
-macro_name         : define the macro named macro_name.
-macro_name=value   : define the macro named macro_name as value.
-m=Makefile         : set outputting Makefile's name.
-                     passing a file of '.mak' extension as argument is same.
-root=path          : set the root file of this project.
-                     passing a file of '.d' extension as argument is same.
-v=0.001            : set version description.
-                     for my vwrite.
-
-help macro         : show pre-defined macros.
-HELP";
-}
-else
-{
-string help= q"HELP
+enum help= header ~ r"
 ** 使い方
 $>amm [target.exe] [make-style.xml] [option for dmd] [options] rootfile.d
 
@@ -64,6 +47,26 @@ v=0.001            : ヴァージョン文字列を指定します。数字以�
 
 help macro         : 定義済みマクロを一覧表示します。
 **
+";
+}
+else
+{
+enum help = header ~ q"HELP
+** HOW TO USE.
+$>amm [target.exe] [make-style.xml] [option for dmd] [options] rootfile.d
+
+** options
+h help ?           : show this message.
+macro_name         : define the macro named macro_name.
+macro_name=value   : define the macro named macro_name as value.
+m=Makefile         : set outputting Makefile's name.
+                     passing a file of '.mak' extension as argument is same.
+root=path          : set the root file of this project.
+                     passing a file of '.d' extension as argument is same.
+v=0.001            : set version description.
+                     for my vwrite.
+
+help macro         : show pre-defined macros.
 HELP";
 }
 
@@ -127,21 +130,21 @@ struct DEFAULT_VALUE
     enum DDOC_EXT = ".ddoc";
     enum DLL_EXT = ".dll";
 
-    version( Windows )
-        {
-            enum BRACKET = "rn";
-            enum EXE_EXT = ".exe";
-            enum OBJ_EXT = ".obj";
-            enum LIB_EXT = ".lib";
-        }
-    version( linux )
-        {
-            enum BRACKET = "n";
-            enum EXE_EXT = "";
-            enum OBJ_EXT = ".o";
-            enum LIB_EXT = ".a";
-            enum IS_GMAKE = "defined";
-        }
+    version (Windows)
+    {
+        enum BRACKET = "rn";
+        enum EXE_EXT = ".exe";
+        enum OBJ_EXT = ".obj";
+        enum LIB_EXT = ".lib";
+    }
+    version (linux)
+    {
+        enum BRACKET = "n";
+        enum EXE_EXT = "";
+        enum OBJ_EXT = ".o";
+        enum LIB_EXT = ".a";
+        enum IS_GMAKE = "defined";
+    }
 
     enum GENERATE_DEPS = "dmd -c -op -o- -debug";
     enum DEPS_FILE = "tempdeps";
@@ -156,56 +159,58 @@ struct DEFAULT_VALUE
 
 struct EXPLANATION
 {
-    // ほぼ固定
-    enum GENERATE_DEPS = q"EXP
+    version (InJapanese)
+    {
+        // ほぼ固定
+        enum GENERATE_DEPS = q"EXP
 DMD に依存関係を解決させる為のコマンド。
 >GEN_DEPS_COMMAND ~ "-deps="DEPS_FILE ~ COMPILE_FLAG;
 が実行される。
 EXP";
 
-    enum DEPS_FILE = q"EXP
+        enum DEPS_FILE = q"EXP
 GEN_DEPS_COMMAND により生成される一時ファイル名。
 依存関係の解決後、このファイルは消去される。
 EXP";
 
-    enum FOOTER = q"EXP
+        enum FOOTER = q"EXP
 Makefile の最後に出力される。
 これ以降に手動で付け足された部分は、amm を再実行し、Makefile を作り直しても残る。
 EXP";
 
-    enum STYLE_FILE = q"EXP
+        enum STYLE_FILE = q"EXP
 Makefile の出力を決定する設定ファイル。
 コマンドライン引数に拡張子が ".xml" のファイルを渡すとこのマクロに設定される。
 EXP";
 
-    enum MAK_EXT = q"EXP
+        enum MAK_EXT = q"EXP
 Makefile の拡張子。
 この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "M" の値としてファイルが登録される。
 EXP";
 
-    enum XML_EXT = q"EXP
+        enum XML_EXT = q"EXP
 amm の設定ファイルの持つ拡張子。
 この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "STYLE_FILE" の値としてファイルが登録される。
 EXP";
 
-    enum DEF_EXT = q"EXP
+        enum DEF_EXT = q"EXP
 D言語の module definition file の拡張子。
 この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "DEF" の値としてファイル登録される。
 EXP";
 
-    enum DDOC_EXT = q"EXP
+        enum DDOC_EXT = q"EXP
 DDOCファイルの拡張子
 このマクロの値として設定された拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "DDOC" の値としてファイルが登録される。
 EXP";
 
-    enum DLL_EXT = q"EXP
+        enum DLL_EXT = q"EXP
 Dynamic Link Library ファイルの拡張子。
 この拡張子を持つファイル名をコマンドライン引数として渡すと、amm によって生成される Makefile のターゲットファイルとして、マクロ名 "TARGET" の値にファイルが登録される。
 また、ターゲットファイルが DLL であることを示す、マクロ "IS_DLL" が定義される。
 EXP";
 
-    // 実行環境依存
-    enum BRACKET =q"EXP
+        // 実行環境依存
+        enum BRACKET =q"EXP
 改行文字コードを示す
 マクロの値として、次の文字列を渡すことで改行コードを指定する。
 
@@ -215,204 +220,425 @@ EXP";
 "n"     |  LF
 EXP";
 
-    enum EXE_EXT =q"EXP
+        enum EXE_EXT =q"EXP
 実行形式のファイルの拡張子。
 この拡張子を持つファイル名をコマンドライン引数として渡すと、amm によって生成される Makefile のターゲットファイルとして、マクロ名 "TARGET" の値にファイルが登録される。
 EXP";
 
-    enum OBJ_EXT = q"EXP
+        enum OBJ_EXT = q"EXP
 オブジェクトファイルの拡張子。
 この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "LIBS" の値としてファイルが登録される。
 EXP";
 
-    enum LIB_EXT = q"EXP
+        enum LIB_EXT = q"EXP
 ライブラリファイルの拡張子。
 この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "LIBS" の値としてファイルが登録される。
 また、マクロ名 "TARGET" の値として登録されたファイル名がこの拡張子を持っていた場合、ターゲットがライブラリファイルであること示すマクロ "IS_LIB" が定義される。
 EXP";
 
-    enum SRC_EXT = q"EXP
+        enum SRC_EXT = q"EXP
 ソースファイルの拡張子。
 この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "ROOT" の値としてファイルが登録され、プロジェクトの依存関係を解決するためのルートファイルとして扱われる。
 また、マクロ名 "TARGET" が指定されなかった場合は、ROOT + EXE_EXT がマクロ名 "TARGET" に設定される。
 EXP";
 
-    enum RC_EXT = q"EXP
+        enum RC_EXT = q"EXP
 リソースファイルの拡張子。
 この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "RC" の値としてファイルが登録される。
 EXP";
 
-    enum IS_GMAKE = q"EXP
+        enum IS_GMAKE = q"EXP
 出力する Makefile が GNU Make 向けであるかどうか。
 linux では初期値で "defined"。
 EXP";
 
-    // amm が用意する。
-    enum DEPENDENCE = q"EXP
+        // amm が用意する。
+        enum DEPENDENCE = q"EXP
 DMD により解決された依存関係を表わ文字列が amm により登録される。
 EXP";
 
-    enum REMAKE_COMMAND = q"EXP
+        enum REMAKE_COMMAND = q"EXP
 amm を起動した時のコマンドが登録される。
 EXP";
 
-    enum TO_COMPILE = q"EXP
+        enum TO_COMPILE = q"EXP
 DMD により解決された依存関係のうち、マクロ名 "SRC" に登録されたフォルダ以下に含まれ、マクロ名 "IMP" に登録されたフォルダ以下には含まれなかったものがここに登録される。
 EXP";
 
-    enum TO_LINK = q"EXP
+        enum TO_LINK = q"EXP
 リンクされるべきファイルが登録される。
 EXP";
 
-    // コマンドラインから省略指定で設定する。
-    enum ROOT_FILE = q"EXP
+        // コマンドラインから省略指定で設定する。
+        enum ROOT_FILE = q"EXP
 プロジェクトのルートとなるファイルが登録される。
 コマンドライン引数のうち、マクロ名 "SRC_EXT" に登録された拡張子を持つものがここに登録される。
 EXP";
 
-    enum SRC_DIRECTORY = q"EXP
+        enum SRC_DIRECTORY = q"EXP
 コマンドライン引数のうち、"-Ixxx;yyy;zzz" のような形で指定されたものがここに登録される。
 ソースファイル探索のルートフォルダを決定する。
 EXP";
 
-    enum TARGET = q"EXP
+        enum TARGET = q"EXP
 amm が生成する Makefile のターゲットとなるファイル名。
 省略した場合は、ROOT + EXE_EXT が用いられる。
 EXP";
 
-    enum COMPILE_FLAG =
-        "DMDのコンパイルオプション。\n"
-        "コマンドライン引数のうち、\"-\"(ハイフン)で始まるものがここに登録される。";
+        enum COMPILE_FLAG =
+            "DMDのコンパイルオプション。\n"
+            "コマンドライン引数のうち、\"-\"(ハイフン)で始まるものがここに登録される。";
 
-    enum LINK_FLAG =
-        "DMDのリンクオプション。\n"
-        "コマンドライン引数のうち、\"-L\" で始まるものがここに登録される。";
+        enum LINK_FLAG =
+            "DMDのリンクオプション。\n"
+            "コマンドライン引数のうち、\"-L\" で始まるものがここに登録される。";
 
-    enum LIB_FILE = q"EXP
+        enum LIB_FILE = q"EXP
 ライブラリファイル(リンクされるがコンパイルはされないファイル)が登録される。
 コマンドライン引数のうち、マクロ名 "LIB_EXT" に登録された拡張子を持つファイルがここに登録される。
 EXP";
 
-    enum RC_FILE = q"EXP
+        enum RC_FILE = q"EXP
 リソースファイル。
 コマンドライン引数のうち、マクロ名 "RC_EXT" に登録された拡張子を持つファイルがここに登録される。
 EXP";
 
-    enum DEF_FILE = q"EXP
+        enum DEF_FILE = q"EXP
 module definition file。
 コマンドライン引数のうち、マクロ名 "DEF_EXT" に登録された拡張子を持つファイルがここに登録される。
 EXP";
 
-    enum DDOC_FILE =
-        "DDOCファイル。\n"
-        "コマンドライン引数のうち、マクロ名 \"DDOC_EXT\" に登録された拡張子を持つファイルがここに登録される。";
+        enum DDOC_FILE =
+            "DDOCファイル。\n"
+            "コマンドライン引数のうち、マクロ名 \"DDOC_EXT\" に登録された拡張子を持つファイルがここに登録される。";
 
-    enum DDOC_DIRECTORY = q"EXP
+        enum DDOC_DIRECTORY = q"EXP
 DMD の '-d' オプションにより生成されるドキュメントファイル群の生成先フォルダ。
 コマンドライン引数のうち、"-Ddxxx" という形のものが登録される。
 EXP";
 
-    enum MAKEFILE = q"EXP
+        enum MAKEFILE = q"EXP
 amm が生成する Makefile のファイル名。
 コマンドライン引数のうち、マクロ名 "MAK_EXT" に登録された拡張子を持つファイルがここに登録される。
 EXP";
 
-    enum TARGET_IS_DLL = q"EXP
+        enum TARGET_IS_DLL = q"EXP
 Makefile のターゲットが Dynamic Link Library だった場合に defined となる。
 EXP";
 
-    enum TARGET_IS_LIB = q"EXP
+        enum TARGET_IS_LIB = q"EXP
 Makefile のターゲットが ライブラリファイルだった場合に defined となる。
 EXP";
 
-    // コマンドラインから完全指定で設定する。
-    enum IMPORT_DIRECTORY = q"EXP
+        // コマンドラインから完全指定で設定する。
+        enum IMPORT_DIRECTORY = q"EXP
 DMD の "-I" オプションのパラメタとして引き渡さるが、コンパイルはされないファイルを含むフォルダ名を指定する。
 EXP";
 
-    enum EXT_LIB_DIRECTORY = q"EXP
+        enum EXT_LIB_DIRECTORY = q"EXP
 リンクされるべきライブラリを含むフォルダ名を指定する。
 EXP";
 
-    enum VWRITE = q"EXP
+        enum VWRITE = q"EXP
 vwrite.exe に引き渡されるヴァージョン情報を表わす文字列を登録する。
 EXP";
 
-    enum ENVIRONMENT_ID =
-        "設定ファイル、make-style.xml の <environment>タグのセレクタ。\n"
-        "このマクロに設定された値とマッチする(0==icmp()) id 属性を持つ<environment>要素が評価される。";
+        enum ENVIRONMENT_ID =
+            "設定ファイル、make-style.xml の <environment>タグのセレクタ。\n"
+            "このマクロに設定された値とマッチする(0==icmp()) id 属性を持つ<environment>要素が評価される。";
+    }
+    else
+    {
+        // ほぼ固定
+        enum GENERATE_DEPS = q"EXP
+the command that invokes DMD to resolve dependencies.
+>GEN_DEPS_COMMAND ~ "-deps="DEPS_FILE ~ COMPILE_FLAG;
+EXP";
 
+        enum DEPS_FILE = q"EXP
+the file names of the target of GEN_DEPS_COMMAND.
+after amm exit, this file does not remain.
+EXP";
+
+        enum FOOTER = q"EXP
+the footer of Makefile.
+the part after the footer will remain after the next invocation of amm.
+EXP";
+
+        enum STYLE_FILE = q"EXP
+STYLE_FILE controls the output.
+when a file with '.xml' extension is in the arguments, the file will be regarded
+as STYLE_FILE.
+EXP";
+
+        enum MAK_EXT = q"EXP
+the extension of Makefile.
+when a file with this extension is in the arguments, the file will be regarded
+as Makefile.
+EXP";
+
+        enum XML_EXT = q"EXP
+the extension of STYLE_FILE.
+when a file with this extension is in the arguments, the file will be regarded
+STYLE_FILE.
+EXP";
+
+        enum DEF_EXT = q"EXP
+the extension of a module definition file of D.
+when a file with this extension is in the arguments, the file will be regarded
+as module definition file.
+EXP";
+
+        enum DDOC_EXT = q"EXP
+The extension of a file for ddoc.
+when a file with this extension is in the arguments, the file will be regarded
+as for ddoc.
+EXP";
+
+        enum DLL_EXT = q"EXP
+the extension of a Dynamic Linked Library.
+when a file with this extension is in the arguments, the file will be regarded
+as TARGET, and the macro "IS_DLL" is defined.
+EXP";
+
+        // 実行環境依存
+        enum BRACKET =q"EXP
+specify newline sequence.
+the values on the below are valid.
+
+value   |  newline sequence
+"rn"    |  CR + LF
+"r"     |  CR
+"n"     |  LF
+EXP";
+
+        enum EXE_EXT =q"EXP
+The extension of an executable file.
+when a file with this extension is in the arguments, the file will be regarded
+as TARGET, and will be set to the value of the macro "TARGET".
+EXP";
+
+        enum OBJ_EXT = q"EXP
+The extension of an object file.
+when a file with this extension is in the arguments, the file will be set to the
+value of the macro "LIBS" to link.
+EXP";
+
+        enum LIB_EXT = q"EXP
+The extension of a library file.
+When a file with this extension is in the arguments, the file will be set to the
+value of the macro "LIBS" to link.
+or, if the file name of the value of the macro "TARGET" has this extnesion,
+the target will be regarded as library, and the macro "IS_LIB" will be defined.
+EXP";
+
+        enum SRC_EXT = q"EXP
+The extension of a source file.
+When a file with this extension is in the arguments, the file will be regarded
+the root file of the project. and the file will be set to the value of the macro
+"ROOT".
+When the value of macro "TARGET" is undefined, the value of the macro will be
+set as "ROOT" + "EXE_EXT".
+EXP";
+
+        enum RC_EXT = q"EXP
+The extension of a resource file.
+When a file with this extension is in the arguments, the file will be set to the
+value of the macro "RC".
+Windows only.
+EXP";
+
+        enum IS_GMAKE = q"EXP
+If defined, the Makefile to generate is for GNU Make.
+On linux, default value of this is "defined".
+EXP";
+
+        // amm が用意する。
+        enum DEPENDENCE = q"EXP
+Amm set dependencies of the project to this value.
+EXP";
+
+        enum REMAKE_COMMAND = q"EXP
+The command line arguments that invoked amm is set to the value.
+EXP";
+
+        enum TO_COMPILE = q"EXP
+Amm set filenames to compile to this value.
+EXP";
+
+        enum TO_LINK = q"EXP
+Amm set filenames to link to this value.
+EXP";
+
+        // コマンドラインから省略指定で設定する。
+        enum ROOT_FILE = q"EXP
+Amm set the name of the root file of the project.
+EXP";
+
+        enum SRC_DIRECTORY = q"EXP
+Amm set command line argument that starts with "-I" to this value.
+This value is used to decide that the root directory of source files
+to be compiled.
+EXP";
+
+        enum TARGET = q"EXP
+The target file name that will be generated by the Makefile that will be
+generated by amm.
+EXP";
+
+        enum COMPILE_FLAG = q"EXP
+Compile options for dmd.
+Amm set its command line argument that starts with "-" to this value.
+EXP";
+
+        enum LINK_FLAG = q"EXP
+Link options for dmd.
+Amm set its command line argument that starts with "-L" to this value.
+EXP";
+
+        enum LIB_FILE = q"EXP
+Library files are set to this value.
+EXP";
+
+        enum RC_FILE = q"EXP
+Resource files are set to this value.
+Windows only.
+EXP";
+
+        enum DEF_FILE = q"EXP
+Module definition file is set to this value.
+Windows only.
+EXP";
+
+        enum DDOC_FILE = q"EXP
+A file for ddoc.
+EXP";
+
+        enum DDOC_DIRECTORY = q"EXP
+A destination directory for ddoc.
+Amm set its command line argument that starts with "-Dd" to this vlaue.
+EXP";
+
+        enum MAKEFILE = q"EXP
+The name of the Makefile to be generated by amm.
+EXP";
+
+        enum TARGET_IS_DLL = q"EXP
+If true, the target file that will be generated by Makefile is shared library.
+EXP";
+
+        enum TARGET_IS_LIB = q"EXP
+If true, the target file that will be generated by Makefile is library.
+EXP";
+
+        // コマンドラインから完全指定で設定する。
+        enum IMPORT_DIRECTORY = q"EXP
+A root directory for files to import.
+EXP";
+
+        enum EXT_LIB_DIRECTORY = q"EXP
+A directory for libraries to link.
+EXP";
+
+        enum VWRITE = q"EXP
+for my vwrite.
+EXP";
+
+        enum ENVIRONMENT_ID = q"EXP
+see make-style.xml.
+EXP";
+    }
 }
 
-void output_macro_help( )
+void output_macro_help()
 {
-    Output.ln("定義済みマクロ一覧");
-    Output.ln("--------------------");
-    foreach(KEY ; __traits(allMembers, MACROKEY))
+    version (InJapanese)
     {
-        Output.ln("マクロ名 : '", __traits(getMember, MACROKEY, KEY), "'");
+        enum EXP_1 = "定義済みマクロ一覧";
+        enum EXP_2 = "マクロ名 : '";
+        enum EXP_3 = "初期値   : '";
+        enum EXP_4 = "説明 :";
+    }
+    else
+    {
+        enum EXP_1 = "the list of pre defined macros.";
+        enum EXP_2 = "Name : '";
+        enum EXP_3 = "Default value   : '";
+        enum EXP_4 = "Description :";
+    }
+
+    EXP_1.outln;
+    "--------------------".outln;
+    foreach (KEY ; __traits(allMembers, MACROKEY))
+    {
+        EXP_2.outln(__traits(getMember, MACROKEY, KEY), "'");
         static if (__traits(hasMember, DEFAULT_VALUE, KEY))
-            Output.ln( "初期値 : '"
-                     , __traits(getMember, DEFAULT_VALUE, KEY), "'");
+            EXP_3.outln(__traits(getMember, DEFAULT_VALUE, KEY), "'");
         static if (__traits(hasMember, EXPLANATION, KEY))
         {
-            Output.ln("説明 :");
-            Output.ln(__traits(getMember, EXPLANATION, KEY));
+            EXP_3.outln;
+            __traits(getMember, EXPLANATION, KEY).outln;
         }
-        Output.ln();
+        outln;
     }
 }
 
 void main(string[] args)
 {
+    import std.file : read, exists, write;
+    import std.conv : to;
+    import std.exception : enforce;
+    import std.string : lastIndexOf;
+
     // 引数がない場合はヘルプを出力して終了
-    if( args.length <= 1 ){ Output.ln( header, help ); return; }
+    if (args.length <= 1) return help.outln;
     auto tempargs = args;
     args.length = 0;
-    debug{ Output.mode = Output.MODE.VERBOSE; }
+    debug { Output.mode = Output.MODE.VERBOSE; }
     // ヘルプが必要か、と、出力の冗長性に関しては先に調べておく。
-    foreach( i, one ; tempargs )
+    foreach (i, one ; tempargs)
     {
         // ヘルプが要求されている場合
-        if     (("h" == one) || ("help" == one) || ("?" == one) || ("-h" == one)
-             || ("-help" == one) || ("--help" == one) || "/?" == one )
+        if     (("h" == one) || ("help" == one) || ("?" == one) ||
+                ("-h" == one) || ("-help" == one) || ("--help" == one) ||
+                "/?" == one)
         {
-            if (i+1 < tempargs.length && tempargs[i+1] == "macro" )
+            if (i+1 < tempargs.length && tempargs[i+1] == "macro")
                 output_macro_help();
-            else Output.ln( header, help );
+            else help.outln;
             return;
         }
         // 出力の冗長性の制御
-        else if("verbose" == one) Output.mode = Output.MODE.VERBOSE;
-        else if("q" == one || "quiet" == one) Output.mode = Output.MODE.QUIET;
-        else if(0 < one.length) args ~= one;
+        else if ("verbose" == one) Output.mode = Output.MODE.VERBOSE;
+        else if ("q" == one || "quiet" == one) Output.mode = Output.MODE.QUIET;
+        else if (0 < one.length) args ~= one;
     }
 
     StyleParser parser;
     Macros macros = new Macros;
     // マクロに初期値を設定
-    set_default_data!(MACROKEY, DEFAULT_VALUE)( macros );
+    set_default_data!(MACROKEY, DEFAULT_VALUE)(macros);
     // コマンドライン引数の解析
-    set_args_data!MACROKEY( macros, args );
+    set_args_data!MACROKEY(macros, args);
 
     Output.logln(header);
     // -style.xml ファイルの読み込み。
     auto str = macros[MACROKEY.STYLE_FILE].read.to!string;
-    Output.logln("success to open ", macros[MACROKEY.STYLE_FILE] );
-    parser = new StyleParser( str, macros );
-    Output.logln( "parser is ready" );
+    Output.logln("success to open ", macros[MACROKEY.STYLE_FILE]);
+    parser = new StyleParser(str, macros);
+    Output.logln("parser is ready");
 
     // -style.xml ファイルのヘッダだけは読み込んでおく。
     parser.parseHead();
-    Output.logln( "<head> is parsed successfully" );
+    Output.logln("<head> is parsed successfully");
 
     // マクロを準備する。
-    ready_data!MACROKEY( macros );
-    Output.logln( "macros are ready" );
+    ready_data!MACROKEY(macros);
+    Output.logln("macros are ready");
 
     // 依存関係を解決
     set_deps_data!MACROKEY(macros);
-    Output.logln( "dependencies are whole resolved." );
+    Output.logln("dependencies are whole resolved.");
 
     // 準備完了
     // -style.xml ファイルのボディを処理する。
@@ -420,19 +646,20 @@ void main(string[] args)
     auto makefile_cont = parser.parseBody();
     Output.logln("parse success.");
 
-    enforce( 0 < makefile_cont.length, "failed to generate Makefile with " ~ macros[MACROKEY.STYLE_FILE] );
+    enforce(0 < makefile_cont.length, "failed to generate Makefile with "
+             ~ macros[MACROKEY.STYLE_FILE]);
 
     // Makefile が既存で、footer が見つかった場合、それ以降は残す。
-    if( exists(macros[MACROKEY.MAKEFILE]) && macros.have(MACROKEY.FOOTER) )
+    if (exists(macros[MACROKEY.MAKEFILE]) && macros.have(MACROKEY.FOOTER))
     {
         Output.logln("old makefile is detected.");
         auto old_makefile_cont = to!string(read(macros[MACROKEY.MAKEFILE]));
         auto i = old_makefile_cont.lastIndexOf(macros[MACROKEY.FOOTER]);
-        if( 0 < i )
+        if (0 < i)
         {
             string post_footer
                 = old_makefile_cont[i+macros[MACROKEY.FOOTER].length .. $];
-            if( 0 < post_footer.length )
+            if (0 < post_footer.length)
             {
                 Output.logln("post-footers are detected.");
                 makefile_cont ~= post_footer;
@@ -441,7 +668,7 @@ void main(string[] args)
     }
 
     // Makefile を出力。
-    write( macros[MACROKEY.MAKEFILE], makefile_cont );
+    write(macros[MACROKEY.MAKEFILE], makefile_cont);
     Output.logln("output the makefile, success.");
 
     Output.logln("complete.");
