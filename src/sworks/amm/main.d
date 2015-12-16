@@ -1,4 +1,4 @@
-/**
+/** Automatic Makefile Maker.
  * Version:    0.167(dmd2.069.2)
  * Date:       2015-Dec-16 19:58:02
  * Authors:    KUMA
@@ -585,9 +585,9 @@ void output_macro_help()
 
 void main(string[] args)
 {
-    import std.file : read, exists, write;
     import std.conv : to;
     import std.exception : enforce;
+    import std.file : read, exists, write;
     import std.string : lastIndexOf;
 
     // 引数がない場合はヘルプを出力して終了

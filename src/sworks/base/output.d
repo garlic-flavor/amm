@@ -18,8 +18,8 @@ void logln(T ...)(lazy T msg) { Output.logln(msg); }
 void log(T ...)(lazy T msg) { Output.log(msg); }
 
 /// 現在の冗長度に関係なく debug コンパイル時のみ出力される。
-void debOutln(T ...)(lazy T msg) { Output.debln(msg); }
-void debOut(T ...)(lazy T msg) {Output.deb(msg);}
+void debln(T ...)(lazy T msg) { Output.debln(msg); }
+void deb(T ...)(lazy T msg) {Output.deb(msg);}
 
 /// 現在の冗長度に関係なく必ず出力される。
 void output(T ...)(lazy T msg) {Output(msg);}

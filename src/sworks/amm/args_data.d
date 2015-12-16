@@ -5,8 +5,6 @@
  * License:    cc0
  */
 module sworks.amm.args_data;
-import std.algorithm, std.array, std.process, std.exception, std.path, std.file,
-      std.string;
 import sworks.base.search;
 import sworks.base.output;
 import sworks.stylexml.macros;
@@ -14,12 +12,20 @@ import sworks.stylexml.macros;
 //
 void set_args_data(alias MACROKEY)(Macros data, string[] args)
 {
-    auto remake = appender("amm");
-    foreach (one ; args[1 .. $])
+    import std.algorithm : countUntil, startsWith;
+    import std.array : appender;
+    import std.exception : enforce;
+    import std.file : exists;
+    import std.path : buildNormalizedPath, extension, dirName;
+    import std.process : environment, executeShell;
+    import std.string : icmp;
+
+    auto remake = "amm".appender;
+    foreach (one ; args[1..$])
     {
         remake.put(" ");
-        if (0 <= one.countUntil(" ") || 0 <= one.countUntil("(")
-             || 0 <= one.countUntil(")"))
+        if (0 <= one.countUntil(" ") || 0 <= one.countUntil("(") ||
+            0 <= one.countUntil(")"))
         {
             remake.put("\"");
             remake.put(one);
@@ -30,13 +36,13 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args)
     data.fix(MACROKEY.REMAKE_COMMAND, remake.data);
 
     string argsext;
-    for (sizediff_t i=1,j ; i<args.length ; i++)
+    for (sizediff_t i = 1, j ; i<args.length ; ++i)
     {
         // dmd へのオプション
         if (args[i].startsWith("-"))
         {
             auto opt = args[i][1 .. $];
-            if     (opt.startsWith("L"))
+            if      (opt.startsWith("L"))
                 data[MACROKEY.LINK_FLAG] ~= args[i];
             else if (opt.startsWith("I"))
                 data[MACROKEY.SRC_DIRECTORY] ~= opt[1..$];
@@ -62,8 +68,8 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args)
         else if (0 == (argsext = args[i].extension).length)
             data.rewrite(args[i], "defined");
         // ターゲット
-        else if (0 == argsext.icmp(data[MACROKEY.EXE_EXT])
-              || 0 == argsext.icmp(data[MACROKEY.DLL_EXT]))
+        else if (0 == argsext.icmp(data[MACROKEY.EXE_EXT]) ||
+                 0 == argsext.icmp(data[MACROKEY.DLL_EXT]))
             data.rewrite(MACROKEY.TARGET, args[i]);
         else if (0 == argsext.icmp(data[MACROKEY.MAK_EXT]))
             data.rewrite(MACROKEY.MAKEFILE, args[i]);
@@ -73,8 +79,8 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args)
             auto file = args[i].buildNormalizedPath;
 
             // ライブラリ
-            if     (0 == argsext.icmp(data[MACROKEY.LIB_EXT])
-                 || 0 == argsext.icmp(data[MACROKEY.OBJ_EXT]))
+            if     (0 == argsext.icmp(data[MACROKEY.LIB_EXT]) ||
+                    0 == argsext.icmp(data[MACROKEY.OBJ_EXT]))
                 data[MACROKEY.LIB_FILE] ~= file;
             else if (0 == argsext.icmp(data[MACROKEY.SRC_EXT]))
                 data[MACROKEY.ROOT_FILE] ~= file;
@@ -91,9 +97,9 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args)
     }
 
     // この時点で root_file は指定されていなければならない。
-    enforce(data.have(MACROKEY.ROOT_FILE),
-            " please input root files of the project.");
-    Output.debln("root file detected.");
+    data.have(MACROKEY.ROOT_FILE)
+        .enforce(" please input root files of the project.");
+    debln("root file detected.");
 
     // ターゲットが lib や、dll かどうか。
     if (data.have(MACROKEY.TARGET))
@@ -108,20 +114,13 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args)
     Search style_search = new Search;
     style_search.entry(".");
     style_search.entry(environment["HOME"]);
-    version (Windows) style_search.entry(dirName(args[0]));
-    version (linux)
-    {
-        try
-        {
-            style_search.entry(dirName(executeShell("which amm").output));
-        }
-        catch (Exception e) Output.debln("amm not detected.");
-    }
-    Output.debln("search is ready");
+    style_search.entry(dirName(args[0]));
+
+    debln("search is ready");
 
     data.rewrite(MACROKEY.STYLE_FILE,
-                 enforce(style_search.abs(data[MACROKEY.STYLE_FILE]),
-                          data[MACROKEY.STYLE_FILE] ~ " is not found"));
+                 style_search.abs(data[MACROKEY.STYLE_FILE])
+                 .enforce(data[MACROKEY.STYLE_FILE] ~ " is not found"));
 
-    Output.logln(data[MACROKEY.STYLE_FILE] ~ " is detected.");
+    logln(data[MACROKEY.STYLE_FILE] ~ " is detected.");
 }

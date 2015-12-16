@@ -13,15 +13,19 @@ void set_default_data(alias MACROKEY, alias DEFAULT_VALUE)(Macros data)
 {
     foreach (one ; __traits(allMembers, MACROKEY))
     {
-        if     ("BRACKET" == one) data[__traits(getMember, MACROKEY, one)] = new BracketItem();
+        if      ("BRACKET" == one)
+            data[__traits(getMember, MACROKEY, one)] = new BracketItem();
         else if (0 < one.endsWith("_DIRECTORY"))
-            data[__traits(getMember, MACROKEY, one)] = new MacroItem("", pathSeparator);
-        else data[__traits(getMember, MACROKEY, one)] = new MacroItem();
+            data[__traits(getMember, MACROKEY, one)] =
+                new MacroItem("", pathSeparator);
+        else
+            data[__traits(getMember, MACROKEY, one)] = new MacroItem();
     }
 
     foreach (one ; __traits(allMembers, DEFAULT_VALUE))
     {
-        data[__traits(getMember, MACROKEY, one)] = __traits(getMember, DEFAULT_VALUE, one);
+        data[__traits(getMember, MACROKEY, one)] =
+            __traits(getMember, DEFAULT_VALUE, one);
     }
 }
 
