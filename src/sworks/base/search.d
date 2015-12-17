@@ -1,8 +1,8 @@
 /** 入力されたディレクトリの順にファイルを検索します。
  * Version:    0.167(dmd2.069.2)
- * Date:       2015-Dec-14 16:53:29
+ * Date:       2015-Dec-16 23:46:03.9197215
  * Authors:    KUMA
- * License:    cc0
+ * License:    CC0
  */
 module sworks.base.search;
 /// support only UTF-8

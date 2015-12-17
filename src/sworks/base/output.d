@@ -1,8 +1,8 @@
 /** コンソールへの出力を制御する。
  * Version:    0.167(dmd2.069.2)
- * Date:       2015-Dec-14 16:36:16
+ * Date:       2015-Dec-16 23:46:03.9167215
  * Authors:    KUMA
- * License:    cc0
+ * License:    CC0
  */
 module sworks.base.output;
 

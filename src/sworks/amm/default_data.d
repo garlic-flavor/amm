@@ -1,8 +1,8 @@
 /** マクロに初期値を設定します.
  * Version:    0.167(dmd2.069.2)
- * Date:       2015-Dec-14 16:39:31
+ * Date:       2015-Dec-16 23:46:03.8967215
  * Authors:    KUMA
- * License:    cc0
+ * License:    CC0
  */
 module sworks.amm.default_data;
 import std.path, std.algorithm;

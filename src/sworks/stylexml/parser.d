@@ -1,8 +1,8 @@
 /** -style.xml ファイルのパース
  * Version:    0.167(dmd2.069.2)
- * Date:       2015-Dec-16 19:20:05
+ * Date:       2015-Dec-16 23:46:03.9357215
  * Authors:    KUMA
- * License:    cc0
+ * License:    CC0
  */
 module sworks.stylexml.parser;
 import std.xml, std.array, std.string, std.conv, std.exception;

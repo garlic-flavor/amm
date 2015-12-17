@@ -1,8 +1,8 @@
 /** variantな要素の為の効率のよい(?)動的配列の実装
  * Version:    0.167(dmd2.069.2)
- * Date:       2015-Dec-14 16:55:18
+ * Date:       2015-Dec-16 23:46:03.9137215
  * Authors:    KUMA
- * License:    cc0
+ * License:    CC0
  */
 module sworks.base.array;
 

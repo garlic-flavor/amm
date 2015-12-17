@@ -1,8 +1,8 @@
 /** dmd を呼び出し、プロジェクトの依存関係を解決する.
  * Version:    0.167(dmd2.069.2)
- * Date:       2015-Dec-16 19:25:53
+ * Date:       2015-Dec-16 23:46:03.9017215
  * Authors:    KUMA
- * License:    cc0
+ * License:    CC0
  */
 module sworks.amm.deps_data;
 import std.algorithm, std.process, std.exception, std.file, std.path,
@@ -36,10 +36,11 @@ void set_deps_data(alias MACROKEY)(Macros data)
     foreach (one ; data.get(MACROKEY.ROOT_FILE).toArray)
     {
         auto abs = one.absolutePath.buildNormalizedPath;
-        set_deps_of!MACROKEY(one, data, depslink,
-                             fn=> fn == abs || src_search.contain(fn)
-                                             && !imp_search.contain(fn),
-                             deps_file, obj_ext);
+        set_deps_of!MACROKEY(
+            one, data, depslink,
+            fn => fn == abs || src_search.contain(fn) &&
+                  !imp_search.contain(fn),
+            deps_file, obj_ext);
     }
     auto dependencies = depslink.resolve_public_deps;
 
@@ -58,8 +59,8 @@ void set_deps_data(alias MACROKEY)(Macros data)
 
     // リソースファイルがある場合はそれも追加しておく。
     if (data.have(MACROKEY.RC_FILE))
-        depslines ~= data[MACROKEY.RC_FILE].setExtension("res") ~ " : "
-                   ~ data[MACROKEY.RC_FILE];
+        depslines ~= data[MACROKEY.RC_FILE].setExtension("res") ~ " : " ~
+                     data[MACROKEY.RC_FILE];
 
     data[MACROKEY.DEPENDENCE] = depslines.join(data[MACROKEY.BRACKET]);
 }

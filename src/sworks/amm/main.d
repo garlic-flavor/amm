@@ -1,8 +1,8 @@
 /** Automatic Makefile Maker.
  * Version:    0.167(dmd2.069.2)
- * Date:       2015-Dec-16 19:58:02
+ * Date:       2015-Dec-17 18:18:07.5247485
  * Authors:    KUMA
- * License:    cc0
+ * License:    CC0
  */
 
 /**
@@ -161,191 +161,193 @@ struct EXPLANATION
 {
     version (InJapanese)
     {
-        // ほぼ固定
-        enum GENERATE_DEPS = q"EXP
-DMD に依存関係を解決させる為のコマンド。
->GEN_DEPS_COMMAND ~ "-deps="DEPS_FILE ~ COMPILE_FLAG;
-が実行される。
-EXP";
+        static assert(0, "with dmd2.069.2, Japanese inside of a delimited"
+                      " string will cause compile error.");
+//         // ほぼ固定
+//         enum GENERATE_DEPS = q"EXP
+// DMD に依存関係を解決させる為のコマンド。
+// >GEN_DEPS_COMMAND ~ "-deps="DEPS_FILE ~ COMPILE_FLAG;
+// が実行される。
+// EXP";
 
-        enum DEPS_FILE = q"EXP
-GEN_DEPS_COMMAND により生成される一時ファイル名。
-依存関係の解決後、このファイルは消去される。
-EXP";
+//         enum DEPS_FILE = q"EXP
+// GEN_DEPS_COMMAND により生成される一時ファイル名。
+// 依存関係の解決後、このファイルは消去される。
+// EXP";
 
-        enum FOOTER = q"EXP
-Makefile の最後に出力される。
-これ以降に手動で付け足された部分は、amm を再実行し、Makefile を作り直しても残る。
-EXP";
+//         enum FOOTER = q"EXP
+// Makefile の最後に出力される。
+// これ以降に手動で付け足された部分は、amm を再実行し、Makefile を作り直しても残る。
+// EXP";
 
-        enum STYLE_FILE = q"EXP
-Makefile の出力を決定する設定ファイル。
-コマンドライン引数に拡張子が ".xml" のファイルを渡すとこのマクロに設定される。
-EXP";
+//         enum STYLE_FILE = q"EXP
+// Makefile の出力を決定する設定ファイル。
+// コマンドライン引数に拡張子が ".xml" のファイルを渡すとこのマクロに設定される。
+// EXP";
 
-        enum MAK_EXT = q"EXP
-Makefile の拡張子。
-この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "M" の値としてファイルが登録される。
-EXP";
+//         enum MAK_EXT = q"EXP
+// Makefile の拡張子。
+// この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "M" の値としてファイルが登録される。
+// EXP";
 
-        enum XML_EXT = q"EXP
-amm の設定ファイルの持つ拡張子。
-この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "STYLE_FILE" の値としてファイルが登録される。
-EXP";
+//         enum XML_EXT = q"EXP
+// amm の設定ファイルの持つ拡張子。
+// この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "STYLE_FILE" の値としてファイルが登録される。
+// EXP";
 
-        enum DEF_EXT = q"EXP
-D言語の module definition file の拡張子。
-この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "DEF" の値としてファイル登録される。
-EXP";
+//         enum DEF_EXT = q"EXP
+// D言語の module definition file の拡張子。
+// この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "DEF" の値としてファイル登録される。
+// EXP";
 
-        enum DDOC_EXT = q"EXP
-DDOCファイルの拡張子
-このマクロの値として設定された拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "DDOC" の値としてファイルが登録される。
-EXP";
+//         enum DDOC_EXT = q"EXP
+// DDOCファイルの拡張子
+// このマクロの値として設定された拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "DDOC" の値としてファイルが登録される。
+// EXP";
 
-        enum DLL_EXT = q"EXP
-Dynamic Link Library ファイルの拡張子。
-この拡張子を持つファイル名をコマンドライン引数として渡すと、amm によって生成される Makefile のターゲットファイルとして、マクロ名 "TARGET" の値にファイルが登録される。
-また、ターゲットファイルが DLL であることを示す、マクロ "IS_DLL" が定義される。
-EXP";
+//         enum DLL_EXT = q"EXP
+// Dynamic Link Library ファイルの拡張子。
+// この拡張子を持つファイル名をコマンドライン引数として渡すと、amm によって生成される Makefile のターゲットファイルとして、マクロ名 "TARGET" の値にファイルが登録される。
+// また、ターゲットファイルが DLL であることを示す、マクロ "IS_DLL" が定義される。
+// EXP";
 
-        // 実行環境依存
-        enum BRACKET =q"EXP
-改行文字コードを示す
-マクロの値として、次の文字列を渡すことで改行コードを指定する。
+//         // 実行環境依存
+//         enum BRACKET =q"EXP
+// 改行文字コードを示す
+// マクロの値として、次の文字列を渡すことで改行コードを指定する。
 
-文字列   | 対応する改行コード
-"rn"    |  CR + LF
-"r"     |  CR
-"n"     |  LF
-EXP";
+// 文字列   | 対応する改行コード
+// "rn"    |  CR + LF
+// "r"     |  CR
+// "n"     |  LF
+// EXP";
 
-        enum EXE_EXT =q"EXP
-実行形式のファイルの拡張子。
-この拡張子を持つファイル名をコマンドライン引数として渡すと、amm によって生成される Makefile のターゲットファイルとして、マクロ名 "TARGET" の値にファイルが登録される。
-EXP";
+//         enum EXE_EXT =q"EXP
+// 実行形式のファイルの拡張子。
+// この拡張子を持つファイル名をコマンドライン引数として渡すと、amm によって生成される Makefile のターゲットファイルとして、マクロ名 "TARGET" の値にファイルが登録される。
+// EXP";
 
-        enum OBJ_EXT = q"EXP
-オブジェクトファイルの拡張子。
-この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "LIBS" の値としてファイルが登録される。
-EXP";
+//         enum OBJ_EXT = q"EXP
+// オブジェクトファイルの拡張子。
+// この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "LIBS" の値としてファイルが登録される。
+// EXP";
 
-        enum LIB_EXT = q"EXP
-ライブラリファイルの拡張子。
-この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "LIBS" の値としてファイルが登録される。
-また、マクロ名 "TARGET" の値として登録されたファイル名がこの拡張子を持っていた場合、ターゲットがライブラリファイルであること示すマクロ "IS_LIB" が定義される。
-EXP";
+//         enum LIB_EXT = q"EXP
+// ライブラリファイルの拡張子。
+// この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "LIBS" の値としてファイルが登録される。
+// また、マクロ名 "TARGET" の値として登録されたファイル名がこの拡張子を持っていた場合、ターゲットがライブラリファイルであること示すマクロ "IS_LIB" が定義される。
+// EXP";
 
-        enum SRC_EXT = q"EXP
-ソースファイルの拡張子。
-この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "ROOT" の値としてファイルが登録され、プロジェクトの依存関係を解決するためのルートファイルとして扱われる。
-また、マクロ名 "TARGET" が指定されなかった場合は、ROOT + EXE_EXT がマクロ名 "TARGET" に設定される。
-EXP";
+//         enum SRC_EXT = q"EXP
+// ソースファイルの拡張子。
+// この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "ROOT" の値としてファイルが登録され、プロジェクトの依存関係を解決するためのルートファイルとして扱われる。
+// また、マクロ名 "TARGET" が指定されなかった場合は、ROOT + EXE_EXT がマクロ名 "TARGET" に設定される。
+// EXP";
 
-        enum RC_EXT = q"EXP
-リソースファイルの拡張子。
-この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "RC" の値としてファイルが登録される。
-EXP";
+//         enum RC_EXT = q"EXP
+// リソースファイルの拡張子。
+// この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 "RC" の値としてファイルが登録される。
+// EXP";
 
-        enum IS_GMAKE = q"EXP
-出力する Makefile が GNU Make 向けであるかどうか。
-linux では初期値で "defined"。
-EXP";
+//         enum IS_GMAKE = q"EXP
+// 出力する Makefile が GNU Make 向けであるかどうか。
+// linux では初期値で "defined"。
+// EXP";
 
-        // amm が用意する。
-        enum DEPENDENCE = q"EXP
-DMD により解決された依存関係を表わ文字列が amm により登録される。
-EXP";
+//         // amm が用意する。
+//         enum DEPENDENCE = q"EXP
+// DMD により解決された依存関係を表わ文字列が amm により登録される。
+// EXP";
 
-        enum REMAKE_COMMAND = q"EXP
-amm を起動した時のコマンドが登録される。
-EXP";
+//         enum REMAKE_COMMAND = q"EXP
+// amm を起動した時のコマンドが登録される。
+// EXP";
 
-        enum TO_COMPILE = q"EXP
-DMD により解決された依存関係のうち、マクロ名 "SRC" に登録されたフォルダ以下に含まれ、マクロ名 "IMP" に登録されたフォルダ以下には含まれなかったものがここに登録される。
-EXP";
+//         enum TO_COMPILE = q"EXP
+// DMD により解決された依存関係のうち、マクロ名 "SRC" に登録されたフォルダ以下に含まれ、マクロ名 "IMP" に登録されたフォルダ以下には含まれなかったものがここに登録される。
+// EXP";
 
-        enum TO_LINK = q"EXP
-リンクされるべきファイルが登録される。
-EXP";
+//         enum TO_LINK = q"EXP
+// リンクされるべきファイルが登録される。
+// EXP";
 
-        // コマンドラインから省略指定で設定する。
-        enum ROOT_FILE = q"EXP
-プロジェクトのルートとなるファイルが登録される。
-コマンドライン引数のうち、マクロ名 "SRC_EXT" に登録された拡張子を持つものがここに登録される。
-EXP";
+//         // コマンドラインから省略指定で設定する。
+//         enum ROOT_FILE = q"EXP
+// プロジェクトのルートとなるファイルが登録される。
+// コマンドライン引数のうち、マクロ名 "SRC_EXT" に登録された拡張子を持つものがここに登録される。
+// EXP";
 
-        enum SRC_DIRECTORY = q"EXP
-コマンドライン引数のうち、"-Ixxx;yyy;zzz" のような形で指定されたものがここに登録される。
-ソースファイル探索のルートフォルダを決定する。
-EXP";
+//         enum SRC_DIRECTORY = q"EXP
+// コマンドライン引数のうち、"-Ixxx;yyy;zzz" のような形で指定されたものがここに登録される。
+// ソースファイル探索のルートフォルダを決定する。
+// EXP";
 
-        enum TARGET = q"EXP
-amm が生成する Makefile のターゲットとなるファイル名。
-省略した場合は、ROOT + EXE_EXT が用いられる。
-EXP";
+//         enum TARGET = q"EXP
+// amm が生成する Makefile のターゲットとなるファイル名。
+// 省略した場合は、ROOT + EXE_EXT が用いられる。
+// EXP";
 
-        enum COMPILE_FLAG =
-            "DMDのコンパイルオプション。\n"
-            "コマンドライン引数のうち、\"-\"(ハイフン)で始まるものがここに登録される。";
+//         enum COMPILE_FLAG =
+//             "DMDのコンパイルオプション。\n"
+//             "コマンドライン引数のうち、\"-\"(ハイフン)で始まるものがここに登録される。";
 
-        enum LINK_FLAG =
-            "DMDのリンクオプション。\n"
-            "コマンドライン引数のうち、\"-L\" で始まるものがここに登録される。";
+//         enum LINK_FLAG =
+//             "DMDのリンクオプション。\n"
+//             "コマンドライン引数のうち、\"-L\" で始まるものがここに登録される。";
 
-        enum LIB_FILE = q"EXP
-ライブラリファイル(リンクされるがコンパイルはされないファイル)が登録される。
-コマンドライン引数のうち、マクロ名 "LIB_EXT" に登録された拡張子を持つファイルがここに登録される。
-EXP";
+//         enum LIB_FILE = q"EXP
+// ライブラリファイル(リンクされるがコンパイルはされないファイル)が登録される。
+// コマンドライン引数のうち、マクロ名 "LIB_EXT" に登録された拡張子を持つファイルがここに登録される。
+// EXP";
 
-        enum RC_FILE = q"EXP
-リソースファイル。
-コマンドライン引数のうち、マクロ名 "RC_EXT" に登録された拡張子を持つファイルがここに登録される。
-EXP";
+//         enum RC_FILE = q"EXP
+// リソースファイル。
+// コマンドライン引数のうち、マクロ名 "RC_EXT" に登録された拡張子を持つファイルがここに登録される。
+// EXP";
 
-        enum DEF_FILE = q"EXP
-module definition file。
-コマンドライン引数のうち、マクロ名 "DEF_EXT" に登録された拡張子を持つファイルがここに登録される。
-EXP";
+//         enum DEF_FILE = q"EXP
+// module definition file。
+// コマンドライン引数のうち、マクロ名 "DEF_EXT" に登録された拡張子を持つファイルがここに登録される。
+// EXP";
 
-        enum DDOC_FILE =
-            "DDOCファイル。\n"
-            "コマンドライン引数のうち、マクロ名 \"DDOC_EXT\" に登録された拡張子を持つファイルがここに登録される。";
+//         enum DDOC_FILE =
+//             "DDOCファイル。\n"
+//             "コマンドライン引数のうち、マクロ名 \"DDOC_EXT\" に登録された拡張子を持つファイルがここに登録される。";
 
-        enum DDOC_DIRECTORY = q"EXP
-DMD の '-d' オプションにより生成されるドキュメントファイル群の生成先フォルダ。
-コマンドライン引数のうち、"-Ddxxx" という形のものが登録される。
-EXP";
+//         enum DDOC_DIRECTORY = q"EXP
+// DMD の '-d' オプションにより生成されるドキュメントファイル群の生成先フォルダ。
+// コマンドライン引数のうち、"-Ddxxx" という形のものが登録される。
+// EXP";
 
-        enum MAKEFILE = q"EXP
-amm が生成する Makefile のファイル名。
-コマンドライン引数のうち、マクロ名 "MAK_EXT" に登録された拡張子を持つファイルがここに登録される。
-EXP";
+//         enum MAKEFILE = q"EXP
+// amm が生成する Makefile のファイル名。
+// コマンドライン引数のうち、マクロ名 "MAK_EXT" に登録された拡張子を持つファイルがここに登録される。
+// EXP";
 
-        enum TARGET_IS_DLL = q"EXP
-Makefile のターゲットが Dynamic Link Library だった場合に defined となる。
-EXP";
+//         enum TARGET_IS_DLL = q"EXP
+// Makefile のターゲットが Dynamic Link Library だった場合に defined となる。
+// EXP";
 
-        enum TARGET_IS_LIB = q"EXP
-Makefile のターゲットが ライブラリファイルだった場合に defined となる。
-EXP";
+//         enum TARGET_IS_LIB = q"EXP
+// Makefile のターゲットが ライブラリファイルだった場合に defined となる。
+// EXP";
 
-        // コマンドラインから完全指定で設定する。
-        enum IMPORT_DIRECTORY = q"EXP
-DMD の "-I" オプションのパラメタとして引き渡さるが、コンパイルはされないファイルを含むフォルダ名を指定する。
-EXP";
+//         // コマンドラインから完全指定で設定する。
+//         enum IMPORT_DIRECTORY = q"EXP
+// DMD の "-I" オプションのパラメタとして引き渡さるが、コンパイルはされないファイルを含むフォルダ名を指定する。
+// EXP";
 
-        enum EXT_LIB_DIRECTORY = q"EXP
-リンクされるべきライブラリを含むフォルダ名を指定する。
-EXP";
+//         enum EXT_LIB_DIRECTORY = q"EXP
+// リンクされるべきライブラリを含むフォルダ名を指定する。
+// EXP";
 
-        enum VWRITE = q"EXP
-vwrite.exe に引き渡されるヴァージョン情報を表わす文字列を登録する。
-EXP";
+//         enum VWRITE = q"EXP
+// vwrite.exe に引き渡されるヴァージョン情報を表わす文字列を登録する。
+// EXP";
 
-        enum ENVIRONMENT_ID =
-            "設定ファイル、make-style.xml の <environment>タグのセレクタ。\n"
-            "このマクロに設定された値とマッチする(0==icmp()) id 属性を持つ<environment>要素が評価される。";
+//         enum ENVIRONMENT_ID =
+//             "設定ファイル、make-style.xml の <environment>タグのセレクタ。\n"
+//             "このマクロに設定された値とマッチする(0==icmp()) id 属性を持つ<environment>要素が評価される。";
     }
     else
     {

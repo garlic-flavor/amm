@@ -1,8 +1,8 @@
 /** コマンドライン引数を解析します.
  * Version:    0.167(dmd2.069.2)
- * Date:       2015-Dec-14 16:39:49
+ * Date:       2015-Dec-17 18:53:46.0477485
  * Authors:    KUMA
- * License:    cc0
+ * License:    CC0
  */
 module sworks.amm.args_data;
 import sworks.base.search;
@@ -113,8 +113,15 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args)
     // -style.xml ファイルの探索
     Search style_search = new Search;
     style_search.entry(".");
-    style_search.entry(environment["HOME"]);
-    style_search.entry(dirName(args[0]));
+    if      (auto path = environment.get("HOME"))
+        style_search.entry(path);
+    else if (auto path = environment.get("HOMEPATH"))
+        style_search.entry(path);
+
+    version      (Windows)
+        style_search.entry(args[0].dirName);
+    else version (linux)
+        style_search.entry("where amm".executeShell.output.dirName);
 
     debln("search is ready");
 

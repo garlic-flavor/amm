@@ -1,8 +1,8 @@
 /** macros.d マクロの実装
  * Version:    0.167(dmd2.069.2)
- * Date:       2015-Dec-14 16:51:32
+ * Date:       2015-Dec-16 23:46:03.9307215
  * Authors:    KUMA
- * License:    cc0
+ * License:    CC0
  */
 module sworks.stylexml.macros;
 public import sworks.stylexml.macro_item;
