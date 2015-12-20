@@ -19,7 +19,7 @@ class Macros
         key = key.toLower;
         auto p_data = key in _data;
         if (null !is p_data) return p_data.toString;
-        else return "";
+        else return null;
     }
 
     MacroItem opIndexAssign(string value, const(char)[] key)

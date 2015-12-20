@@ -10,7 +10,7 @@ import sworks.base.output;
 import sworks.stylexml.macros;
 
 //
-void set_args_data(alias MACROKEY)(Macros data, string[] args)
+void set_args_data(alias STORE)(Macros data, string[] args)
 {
     import std.algorithm : countUntil, startsWith;
     import std.array : appender;
@@ -33,7 +33,7 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args)
         }
         else remake.put(one);
     }
-    data.fix(MACROKEY.REMAKE_COMMAND, remake.data);
+    data.fix(STORE.PREDEF.remake_command, remake.data); // 
 
     string argsext;
     for (sizediff_t i = 1, j ; i<args.length ; ++i)
@@ -43,20 +43,20 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args)
         {
             auto opt = args[i][1 .. $];
             if      (opt.startsWith("L"))
-                data[MACROKEY.LINK_FLAG] ~= args[i];
+                data[STORE.PREDEF.link_flag] ~= args[i];
             else if (opt.startsWith("I"))
-                data[MACROKEY.SRC_DIRECTORY] ~= opt[1..$];
+                data[STORE.PREDEF.src] ~= opt[1..$];
             else if (opt.startsWith("of"))
-                data.rewrite(MACROKEY.TARGET, opt[2..$]);
+                data.rewrite(STORE.PREDEF.target, opt[2..$]);
             else if (opt.startsWith("deps="))
-                data.rewrite(MACROKEY.DEPS_FILE, opt[5 .. $]);
+                data.rewrite(STORE.PREDEF.deps_file, opt[5 .. $]);
             else if (opt.startsWith("Dd"))
-                data.rewrite(MACROKEY.DDOC_DIRECTORY, opt[2 .. $]);
+                data.rewrite(STORE.PREDEF.ddoc, opt[2 .. $]);
             else
             {
                 auto a = args[i];
-                data[MACROKEY.COMPILE_FLAG] ~= a;
-                if ("-m64" == a) data[MACROKEY.LINK_FLAG] ~= a;
+                data[STORE.PREDEF.compile_flag] ~= a;
+                if ("-m64" == a) data[STORE.PREDEF.link_flag] ~= a;
             }
         }
         // マクロへの値つき代入
@@ -68,66 +68,67 @@ void set_args_data(alias MACROKEY)(Macros data, string[] args)
         else if (0 == (argsext = args[i].extension).length)
             data.rewrite(args[i], "defined");
         // ターゲット
-        else if (0 == argsext.icmp(data[MACROKEY.EXE_EXT]) ||
-                 0 == argsext.icmp(data[MACROKEY.DLL_EXT]))
-            data.rewrite(MACROKEY.TARGET, args[i]);
-        else if (0 == argsext.icmp(data[MACROKEY.MAK_EXT]))
-            data.rewrite(MACROKEY.MAKEFILE, args[i]);
+        else if (0 == argsext.icmp(data[STORE.PREDEF.exe_ext]) ||
+                 0 == argsext.icmp(data[STORE.PREDEF.dll_ext]))
+            data.rewrite(STORE.PREDEF.target, args[i]);
+        else if (0 == argsext.icmp(data[STORE.PREDEF.mak_ext]))
+            data.rewrite(STORE.PREDEF.m, args[i]);
+        // ファイル
         else
         {
-            enforce(args[i].exists, args[i] ~ " is not found.");
+            args[i].exists.enforce(args[i] ~ " is not found.");
             auto file = args[i].buildNormalizedPath;
 
             // ライブラリ
-            if     (0 == argsext.icmp(data[MACROKEY.LIB_EXT]) ||
-                    0 == argsext.icmp(data[MACROKEY.OBJ_EXT]))
-                data[MACROKEY.LIB_FILE] ~= file;
-            else if (0 == argsext.icmp(data[MACROKEY.SRC_EXT]))
-                data[MACROKEY.ROOT_FILE] ~= file;
-            else if (0 == argsext.icmp(data[MACROKEY.RC_EXT]))
-                data[MACROKEY.RC_FILE] ~= file;
-            else if (0 == argsext.icmp(data[MACROKEY.DEF_EXT]))
-                data[MACROKEY.DEF_FILE] ~= file;
-            else if (0 == argsext.icmp(data[MACROKEY.DDOC_EXT]))
-                data[MACROKEY.DDOC_FILE] ~= file;
-            else if (0 == argsext.icmp(data[MACROKEY.XML_EXT]))
-                data.rewrite(MACROKEY.STYLE_FILE, file);
+            if     (0 == argsext.icmp(data[STORE.PREDEF.lib_ext]) ||
+                    0 == argsext.icmp(data[STORE.PREDEF.obj_ext]))
+                data[STORE.PREDEF.libs] ~= file;
+            else if (0 == argsext.icmp(data[STORE.PREDEF.src_ext]))
+                data[STORE.PREDEF.root] ~= file;
+            else if (0 == argsext.icmp(data[STORE.PREDEF.rc_ext]))
+                data[STORE.PREDEF.rc] ~= file;
+            else if (0 == argsext.icmp(data[STORE.PREDEF.def_ext]))
+                data[STORE.PREDEF.def] ~= file;
+            else if (0 == argsext.icmp(data[STORE.PREDEF.ddoc_ext]))
+                data[STORE.PREDEF.ddoc] ~= file;
+            else if (0 == argsext.icmp(data[STORE.PREDEF.xml_ext]))
+                data.rewrite(STORE.PREDEF.style, file);
             else throw new Exception(args[i] ~ " is an unknown file type.");
         }
     }
 
     // この時点で root_file は指定されていなければならない。
-    data.have(MACROKEY.ROOT_FILE)
+    data.have(STORE.PREDEF.root)
         .enforce(" please input root files of the project.");
-    debln("root file detected.");
+    debln("root file detected : ", data[STORE.PREDEF.root]);
 
     // ターゲットが lib や、dll かどうか。
-    if (data.have(MACROKEY.TARGET))
+    if (data.have(STORE.PREDEF.target))
     {
-        auto target_ext = data[MACROKEY.TARGET].extension;
-        if      (0 == target_ext.icmp(data[MACROKEY.DLL_EXT]))
-            data[MACROKEY.TARGET_IS_DLL] = "defined";
-        else if (0 == target_ext.icmp(data[MACROKEY.LIB_EXT]))
-            data[MACROKEY.TARGET_IS_LIB] = "defined";
+        auto target_ext = data[STORE.PREDEF.target].extension;
+        if      (0 == target_ext.icmp(data[STORE.PREDEF.dll_ext]))
+            data[STORE.PREDEF.is_dll] = "defined";
+        else if (0 == target_ext.icmp(data[STORE.PREDEF.lib_ext]))
+            data[STORE.PREDEF.is_lib] = "defined";
     }
     // -style.xml ファイルの探索
     Search style_search = new Search;
-    style_search.entry(".");
+    style_search.install(".");
     if      (auto path = environment.get("HOME"))
-        style_search.entry(path);
+        style_search.install(path);
     else if (auto path = environment.get("HOMEPATH"))
-        style_search.entry(path);
+        style_search.install(path);
 
     version      (Windows)
-        style_search.entry(args[0].dirName);
+        style_search.install(args[0].dirName);
     else version (linux)
-        style_search.entry("where amm".executeShell.output.dirName);
+        style_search.install("where amm".executeShell.output.dirName);
 
-    debln("search is ready");
+    debln("search is ready : ", style_search.pathes);
 
-    data.rewrite(MACROKEY.STYLE_FILE,
-                 style_search.abs(data[MACROKEY.STYLE_FILE])
-                 .enforce(data[MACROKEY.STYLE_FILE] ~ " is not found"));
+    data.rewrite(STORE.PREDEF.style,
+                 style_search.abs(data[STORE.PREDEF.style])
+                 .enforce(data[STORE.PREDEF.style] ~ " is not found"));
 
-    logln(data[MACROKEY.STYLE_FILE] ~ " is detected.");
+    logln(data[STORE.PREDEF.style] ~ " is detected.");
 }

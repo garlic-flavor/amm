@@ -61,14 +61,29 @@ struct Output
     @property @nogc nothrow
     void mode(MODE m) { debug {} else _mode = m; }
     @property @nogc nothrow
-    int indent() { return _current_indent; }
-    @property @nogc nothrow
-    void indent(int i) { _current_indent = 0 < i ? i : 0; }
-    @nogc nothrow
-    void incIndent() { _current_indent++; }
+    int indent() { return cast(int)_current_indent.length; }
+    @property nothrow
+    void indent(int i)
+    {
+        import std.array;
+        import std.range : repeat, take;
+        _current_indent = ' '.repeat.take(i * TAB_WIDTH).array;
+    }
+    nothrow
+    void incIndent()
+    {
+        import std.array;
+        import std.range : repeat, take;
+        _current_indent ~= ' '.repeat.take(TAB_WIDTH).array;
+    }
     @nogc nothrow
     void decIndent()
-    { _current_indent = 0 < _current_indent ? _current_indent-1 : 0; }
+    {
+        if (TAB_WIDTH <= _current_indent.length)
+            _current_indent = _current_indent[0..$-TAB_WIDTH];
+        else
+            _current_indent = null;
+    }
 
     /// エラー出力
     void errorln(T ...)(lazy T msg)
@@ -120,16 +135,8 @@ private:
     debug MODE _mode = MODE.VERBOSE; // 現在の冗長度
     else MODE _mode = MODE.ERROR;
 
-    int _current_indent = 0;
+    string _current_indent;
     bool _is_newline = true;
-
-    void _outindent()
-    {
-        import std.range : repeat, take;
-        if (_is_newline)
-            _file.write(' '.repeat.take(_current_indent * TAB_WIDTH));
-        _is_newline = false;
-    }
 
     void _outln()
     {
@@ -140,13 +147,21 @@ private:
     void _out(T ...)(T msg)
     {
         import std.conv : to;
-        _outindent;
+        import std.array : replace;
+
+        _file.write(_current_indent);
+        auto temp = "\n" ~ _current_indent;
         if (_file !is stdout && _file !is stderr)
-            foreach (one ; msg) _file.write(one.to!string);
+            foreach (one ; msg)
+                _file.write(one.to!string.replace("\n", temp));
         else
         {
-            version (Windows) foreach (one ; msg) _file.write(one.toMBS.c);
-            else foreach (one ; msg) _file.write(one.to!string);
+            version (Windows)
+                foreach (one ; msg)
+                    _file.write(one.toMBS.c.replace("\n", temp));
+            else
+                foreach (one ; msg)
+                    _file.write(one.to!string.replace("\n", temp));
         }
     }
 

@@ -4,12 +4,12 @@ AUTHORS = KUMA
 LICENSE = CC0
 VERSION = 0.167(dmd2.069.2)
 
-MAKEFILE = win64.mak
+MAKEFILE = win64.jp.mak
 DC = dmd
 MAKE = make
 TO_COMPILE = src\sworks\amm\main.d src\sworks\amm\deps_data.d src\sworks\stylexml\macro_item.d src\sworks\base\strutil.d src\sworks\win32\sjis.d src\sworks\stylexml\writer.d src\sworks\base\output.d src\sworks\amm\ready_data.d src\sworks\stylexml\parser.d src\sworks\stylexml\macros.d src\sworks\base\array.d src\sworks\base\search.d src\sworks\stylexml\package.d src\sworks\amm\args_data.d
 TO_LINK = src\sworks\amm\main.obj src\sworks\amm\deps_data.obj src\sworks\stylexml\macro_item.obj src\sworks\base\strutil.obj src\sworks\win32\sjis.obj src\sworks\stylexml\writer.obj src\sworks\base\output.obj src\sworks\amm\ready_data.obj src\sworks\stylexml\parser.obj src\sworks\stylexml\macros.obj src\sworks\base\array.obj src\sworks\base\search.obj src\sworks\stylexml\package.obj src\sworks\amm\args_data.obj
-COMPILE_FLAG = -m64 -Isrc
+COMPILE_FLAG = -m64 -version=InJapanese -Isrc
 LINK_FLAG = -m64
 EXT_LIB =
 DDOC_FILE =
@@ -25,20 +25,20 @@ $(TARGET) : $(TO_LINK) $(EXT_LIB)
 
 ## DEPENDENCE
 $(TO_LINK) : $(MAKEFILE) $(EXT_LIB)
-src\sworks\amm\main.obj : src\sworks\amm\main.d src\sworks\base\output.d src\sworks\amm\ready_data.d src\sworks\stylexml\package.d src\sworks\amm\args_data.d src\sworks\amm\deps_data.d
-src\sworks\amm\deps_data.obj : src\sworks\base\output.d src\sworks\base\search.d src\sworks\amm\deps_data.d src\sworks\stylexml\macros.d src\sworks\stylexml\macro_item.d
+src\sworks\amm\main.obj : src\sworks\amm\main.d src\sworks\amm\deps_data.d src\sworks\base\strutil.d src\sworks\win32\sjis.d src\sworks\stylexml\writer.d src\sworks\base\output.d src\sworks\amm\ready_data.d src\sworks\stylexml\macro_item.d src\sworks\stylexml\macros.d src\sworks\stylexml\parser.d src\sworks\base\array.d src\sworks\base\search.d src\sworks\stylexml\package.d src\sworks\amm\args_data.d
+src\sworks\amm\deps_data.obj : src\sworks\amm\deps_data.d src\sworks\base\strutil.d src\sworks\win32\sjis.d src\sworks\stylexml\macro_item.d src\sworks\base\output.d src\sworks\stylexml\macros.d src\sworks\base\search.d
 src\sworks\stylexml\macro_item.obj : src\sworks\stylexml\macro_item.d
 src\sworks\base\strutil.obj : src\sworks\base\strutil.d
 src\sworks\win32\sjis.obj : src\sworks\base\strutil.d src\sworks\win32\sjis.d
 src\sworks\stylexml\writer.obj : src\sworks\stylexml\writer.d src\sworks\base\array.d
-src\sworks\base\output.obj : src\sworks\base\output.d src\sworks\win32\sjis.d
-src\sworks\amm\ready_data.obj : src\sworks\base\output.d src\sworks\amm\ready_data.d src\sworks\base\search.d src\sworks\stylexml\macros.d
-src\sworks\stylexml\parser.obj : src\sworks\stylexml\writer.d src\sworks\stylexml\parser.d src\sworks\stylexml\macros.d
+src\sworks\base\output.obj : src\sworks\base\output.d src\sworks\base\strutil.d src\sworks\win32\sjis.d
+src\sworks\amm\ready_data.obj : src\sworks\base\strutil.d src\sworks\win32\sjis.d src\sworks\stylexml\macro_item.d src\sworks\base\output.d src\sworks\amm\ready_data.d src\sworks\stylexml\macros.d src\sworks\base\search.d
+src\sworks\stylexml\parser.obj : src\sworks\stylexml\writer.d src\sworks\stylexml\parser.d src\sworks\stylexml\macros.d src\sworks\stylexml\macro_item.d src\sworks\base\array.d
 src\sworks\stylexml\macros.obj : src\sworks\stylexml\macros.d src\sworks\stylexml\macro_item.d
 src\sworks\base\array.obj : src\sworks\base\array.d
 src\sworks\base\search.obj : src\sworks\base\search.d
-src\sworks\stylexml\package.obj : src\sworks\stylexml\package.d src\sworks\stylexml\parser.d src\sworks\stylexml\macros.d
-src\sworks\amm\args_data.obj : src\sworks\base\output.d src\sworks\base\search.d src\sworks\amm\args_data.d src\sworks\stylexml\macros.d
+src\sworks\stylexml\package.obj : src\sworks\stylexml\writer.d src\sworks\stylexml\package.d src\sworks\stylexml\macros.d src\sworks\stylexml\macro_item.d src\sworks\stylexml\parser.d src\sworks\base\array.d
+src\sworks\amm\args_data.obj : src\sworks\base\strutil.d src\sworks\win32\sjis.d src\sworks\stylexml\macro_item.d src\sworks\base\output.d src\sworks\stylexml\macros.d src\sworks\base\search.d src\sworks\amm\args_data.d
 
 ## PHONY TARGET
 debug-all :
@@ -62,7 +62,7 @@ run :
 edit :
 	emacs $(TO_COMPILE)
 remake :
-	amm amm.exe "v=0.167(dmd2.069.2)" -m64 win64.mak .\src\sworks\amm\main.d authors=KUMA license=CC0 $(FLAG)
+	amm amm.exe "v=0.167(dmd2.069.2)" -m64 win64.jp.mak -version=InJapanese authors=KUMA license=CC0 .\src\sworks\amm\main.d $(FLAG)
 
 debug :
 	ddbg $(TARGET)

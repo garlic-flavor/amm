@@ -39,7 +39,7 @@ bool isChildOf(string path, string base)
 
 Notice:
   Windowsのみ
-  検索の順序は entry() を呼び出した順
+  検索の順序は install() を呼び出した順
   最初のヒットで検索は終了します。
 **/
 class Search
@@ -55,7 +55,7 @@ class Search
      Params:
        path = カレントディレクトリから見えているパスでなければならない。
      */
-    bool entry(string path)
+    bool install(string path)
     {
         import std.path : absolutePath, buildNormalizedPath;
         import std.file : exists, isDir;
@@ -106,7 +106,7 @@ class Search
         else return abspath.relativePath;
     }
 
-    /// entry の子孫ディレクトリかどうか
+    /// install の子孫ディレクトリかどうか
     pure
     bool contain(string p)
     {
@@ -144,7 +144,7 @@ void main()
 {
     import std.path : absolutePath;
     Search search = new Search;
-    search.entry("..");
+    search.install("..");
 
     writeln(search);
 

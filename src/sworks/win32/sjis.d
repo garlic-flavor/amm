@@ -38,8 +38,7 @@ jstring toMBS(U : T[], T)(U msg, int codePage = 0)
         return result.j;
 
     }
-    else msg.to!string.toMBS;
-
+    else return msg.to!string.toMBS;
 }
 
 /// ditto
