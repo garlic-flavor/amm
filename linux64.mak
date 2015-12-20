@@ -10,8 +10,8 @@ VERSION = 0.167(dmd2.069.2)
 MAKEFILE = linux64.mak
 DC = dmd
 MAKE = gmake
-TO_COMPILE = src/sworks/stylexml/macro_item.d src/sworks/base/strutil.d src/sworks/base/search.d src/sworks/amm/deps_data.d src/sworks/amm/ready_data.d src/sworks/stylexml/package.d src/sworks/stylexml/writer.d src/sworks/stylexml/parser.d src/sworks/amm/main.d src/sworks/base/output.d src/sworks/stylexml/macros.d src/sworks/base/array.d src/sworks/amm/args_data.d src/sworks/amm/default_data.d
-TO_LINK = src/sworks/stylexml/macro_item.o src/sworks/base/strutil.o src/sworks/base/search.o src/sworks/amm/deps_data.o src/sworks/amm/ready_data.o src/sworks/stylexml/package.o src/sworks/stylexml/writer.o src/sworks/stylexml/parser.o src/sworks/amm/main.o src/sworks/base/output.o src/sworks/stylexml/macros.o src/sworks/base/array.o src/sworks/amm/args_data.o src/sworks/amm/default_data.o
+TO_COMPILE = src/sworks/stylexml/macro_item.d src/sworks/amm/deps_data.d src/sworks/base/search.d src/sworks/amm/ready_data.d src/sworks/stylexml/package.d src/sworks/stylexml/writer.d src/sworks/stylexml/parser.d src/sworks/amm/main.d src/sworks/base/output.d src/sworks/stylexml/macros.d src/sworks/base/array.d src/sworks/amm/args_data.d
+TO_LINK = src/sworks/stylexml/macro_item.o src/sworks/amm/deps_data.o src/sworks/base/search.o src/sworks/amm/ready_data.o src/sworks/stylexml/package.o src/sworks/stylexml/writer.o src/sworks/stylexml/parser.o src/sworks/amm/main.o src/sworks/base/output.o src/sworks/stylexml/macros.o src/sworks/base/array.o src/sworks/amm/args_data.o
 COMPILE_FLAG = -m64 -version=InJapanese -Isrc
 LINK_FLAG = -m64
 EXT_LIB =
@@ -29,19 +29,17 @@ $(TARGET) : $(TO_LINK) $(EXT_LIB)
 ## DEPENDENCE
 $(TO_LINK) : $(MAKEFILE) $(EXT_LIB)
 src/sworks/stylexml/macro_item.o : src/sworks/stylexml/macro_item.d
-src/sworks/base/strutil.o : src/sworks/base/strutil.d
-src/sworks/base/search.o : src/sworks/base/search.d
 src/sworks/amm/deps_data.o : src/sworks/amm/deps_data.d src/sworks/stylexml/macros.d src/sworks/base/search.d src/sworks/base/output.d src/sworks/stylexml/macro_item.d
+src/sworks/base/search.o : src/sworks/base/search.d
 src/sworks/amm/ready_data.o : src/sworks/stylexml/macros.d src/sworks/base/search.d src/sworks/base/output.d src/sworks/amm/ready_data.d
 src/sworks/stylexml/package.o : src/sworks/stylexml/macros.d src/sworks/stylexml/parser.d src/sworks/stylexml/package.d
 src/sworks/stylexml/writer.o : src/sworks/base/array.d src/sworks/stylexml/writer.d
-src/sworks/stylexml/parser.o : src/sworks/base/strutil.d src/sworks/stylexml/parser.d src/sworks/stylexml/macros.d src/sworks/stylexml/writer.d
-src/sworks/amm/main.o : src/sworks/amm/deps_data.d src/sworks/amm/ready_data.d src/sworks/stylexml/package.d src/sworks/amm/main.d src/sworks/base/output.d src/sworks/amm/args_data.d src/sworks/amm/default_data.d
+src/sworks/stylexml/parser.o : src/sworks/stylexml/parser.d src/sworks/stylexml/macros.d src/sworks/stylexml/writer.d
+src/sworks/amm/main.o : src/sworks/amm/deps_data.d src/sworks/amm/args_data.d src/sworks/amm/main.d src/sworks/base/output.d src/sworks/amm/ready_data.d src/sworks/stylexml/package.d
 src/sworks/base/output.o : src/sworks/base/output.d
 src/sworks/stylexml/macros.o : src/sworks/stylexml/macro_item.d src/sworks/stylexml/macros.d
 src/sworks/base/array.o : src/sworks/base/array.d
 src/sworks/amm/args_data.o : src/sworks/amm/args_data.d src/sworks/base/search.d src/sworks/base/output.d src/sworks/stylexml/macros.d
-src/sworks/amm/default_data.o : src/sworks/stylexml/macros.d src/sworks/amm/default_data.d
 
 ## PHONY TARGET
 debug-all :

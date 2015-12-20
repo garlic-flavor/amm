@@ -122,7 +122,7 @@ void set_args_data(alias STORE)(Macros data, string[] args)
     version      (Windows)
         style_search.install(args[0].dirName);
     else version (linux)
-        style_search.install("where amm".executeShell.output.dirName);
+        style_search.install("whereis amm".executeShell.output[5..$].dirName);
 
     debln("search is ready : ", style_search.pathes);
 
