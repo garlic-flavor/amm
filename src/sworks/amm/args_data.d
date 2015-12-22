@@ -1,6 +1,6 @@
 /** コマンドライン引数を解析します.
- * Version:    0.167(dmd2.069.2)
- * Date:       2015-Dec-17 18:53:46.0477485
+ * Version:    0.168(dmd2.069.2)
+ * Date:       2015-Dec-22 21:16:52
  * Authors:    KUMA
  * License:    CC0
  */
@@ -15,8 +15,9 @@ void set_args_data(alias STORE)(Macros data, string[] args)
     import std.algorithm : countUntil, startsWith;
     import std.array : appender;
     import std.exception : enforce;
-    import std.file : exists;
-    import std.path : buildNormalizedPath, extension, dirName;
+    import std.file : exists, thisExePath;
+    import std.path : buildPath, buildNormalizedPath, extension,
+        dirName;
     import std.process : environment, executeShell;
     import std.string : icmp;
 
@@ -122,7 +123,11 @@ void set_args_data(alias STORE)(Macros data, string[] args)
     version      (Windows)
         style_search.install(args[0].dirName);
     else version (linux)
-        style_search.install("whereis amm".executeShell.output[5..$].dirName);
+    {
+        auto d = thisExePath.dirName;
+        style_search.install(d);
+        style_search.install(d.dirName.buildPath("etc"));
+    }
 
     debln("search is ready : ", style_search.pathes);
 

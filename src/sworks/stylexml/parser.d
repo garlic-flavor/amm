@@ -1,6 +1,6 @@
 /** -style.xml ファイルのパース
- * Version:    0.167(dmd2.069.2)
- * Date:       2015-Dec-16 23:46:03.9357215
+ * Version:    0.168(dmd2.069.2)
+ * Date:       2015-Dec-20 20:43:41
  * Authors:    KUMA
  * License:    CC0
  */
@@ -99,7 +99,7 @@ TagHandler ws_tag(Writer writer)
         int l;
         try
             l = e.tag.attr.get("length", "1").to!int;
-        catch(Exception)
+        catch (Exception)
             throw new Exception("the value of 'length' attribute of <ws> tag"
                                 " can't be parset to int by std.conv.");
 

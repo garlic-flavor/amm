@@ -1,6 +1,6 @@
 /** Automatic Makefile Maker.
- * Version:    0.167(dmd2.069.2)
- * Date:       2015-Dec-17 18:18:07.5247485
+ * Version:    0.168(dmd2.069.2)
+ * Date:       2015-Dec-20 20:43:41
  * Authors:    KUMA
  * License:    CC0
  */
@@ -18,7 +18,7 @@ import sworks.amm.ready_data;
 import sworks.amm.deps_data;
 debug import std.stdio : writeln;
 
-enum _VERSION_ = "0.167(dmd2.069.2)";
+enum _VERSION_ = "0.168(dmd2.069.2)";
 enum _AUTHORS_ = "KUMA";
 
 
@@ -65,7 +65,7 @@ v=0.001            : ヴァージョン文字列を指定します。数字以�
 
 help macro         : 定義済みマクロを一覧表示します。
 "
-    ).sel;
+).sel;
 
 
 struct MACROSTORE
@@ -83,7 +83,7 @@ static:
     DMD に依存関係を解決させる為のコマンド。
     >GENERATEDEPS_COMMAND ~ '-deps=' ~ DEPS_FILE ~ COMPILE_FLAG;
     が実行される。"
-            ).sel
+).sel
     };
 
     enum M deps_file =
@@ -96,7 +96,7 @@ static:
     GEN_DEPS_COMMAND により生成される一時ファイル名。
     依存関係の解決後、このファイルは消去される。
 "
-            ).sel
+).sel
     };
 
     enum M footer =
@@ -110,7 +110,7 @@ static:
     これ以降に手動で付け足された部分は、amm を再実行し、Makefile を作り直しても
     残る。
 "
-            ).sel
+).sel
     };
 
     enum M style =
@@ -125,7 +125,7 @@ static:
     コマンドライン引数に拡張子が '.xml' のファイルを渡すとこのマクロに設定
     される。
 "
-            ).sel
+).sel
     };
 
     enum M mak_ext =
@@ -140,7 +140,7 @@ static:
     この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 'M'
     の値としてファイルが登録される。
 "
-            ).sel
+).sel
     };
 
     enum M xml_ext =
@@ -155,7 +155,7 @@ static:
     この拡張子を持つファイル名をコマンドライン引数として渡すと、
     マクロ名 'STYLE_FILE' の値としてファイルが登録される。
 "
-            ).sel
+).sel
     };
 
     enum M def_ext =
@@ -170,7 +170,7 @@ static:
     この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 'DEF'
     の値としてファイル登録される。
 "
-            ).sel
+).sel
     };
 
     enum M ddoc_ext =
@@ -186,7 +186,7 @@ static:
     このマクロの値として設定された拡張子を持つファイル名をコマンドライン引数
     として渡すと、マクロ名 'DDOC' の値としてファイルが登録される。
 "
-            ).sel
+).sel
 
     };
 
@@ -206,7 +206,7 @@ static:
     また、ターゲットファイルが DLL であることを示す、マクロ 'IS_DLL' が定義
     される。
 "
-            ).sel
+).sel
     };
 
     enum M bracket =
@@ -229,7 +229,7 @@ static:
     'r'     |  CR
     'n'     |  LF
 "
-            ).sel
+).sel
     };
 
     enum M exe_ext =
@@ -245,7 +245,7 @@ static:
     される Makefile のターゲットファイルとして、マクロ名 'TARGET' の値にファイル
     が登録される。
 "
-            ).sel
+).sel
     };
 
     enum M obj_ext =
@@ -260,7 +260,7 @@ static:
     この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 'LIBS'
     の値としてファイルが登録される。
 "
-            ).sel
+).sel
     };
 
     enum M lib_ext =
@@ -281,7 +281,7 @@ static:
     いた場合、ターゲットがライブラリファイルであること示すマクロ 'IS_LIB'
     が定義される。
 "
-            ).sel
+).sel
     };
 
     enum M src_ext =
@@ -302,7 +302,7 @@ static:
     また、マクロ名 'TARGET' が指定されなかった場合は、ROOT + EXE_EXT が
     マクロ名 'TARGET' に設定される。
 "
-            ).sel
+).sel
     };
 
     enum M rc_ext =
@@ -318,7 +318,7 @@ static:
     この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 'RC'
     の値としてファイルが登録される。
 "
-            ).sel
+).sel
     };
 
     enum M gmake =
@@ -331,7 +331,7 @@ static:
     出力する Makefile が GNU Make 向けであるかどうか。
     linux では初期値で 'defined'。
 "
-            ).sel
+).sel
     };
 
     // amm が用意する。
@@ -342,7 +342,7 @@ static:
 ", "
     DMD により解決された依存関係を表わ文字列が amm により登録される。
 "
-        ).sel
+).sel
     };
 
     enum M remake_command =
@@ -352,7 +352,7 @@ static:
 ", "
     amm を起動した時のコマンドが登録される。
 "
-        ).sel
+).sel
     };
     enum M to_compile =
     {
@@ -363,7 +363,7 @@ static:
     に含まれ、マクロ名 'IMP' に登録されたフォルダ以下には含まれなかったものが
     ここに登録される。
 "
-        ).sel
+).sel
     };
 
     enum M to_link =
@@ -373,7 +373,7 @@ static:
 ", "
     リンクされるべきファイルが登録される。
 "
-            ).sel
+).sel
     };
 
     // コマンドラインから省略指定で設定する。
@@ -389,7 +389,7 @@ static:
     ここに登録される。
     ソースファイル探索のルートフォルダを決定する。
 "
-            ).sel
+).sel
     };
 
     enum M root =
@@ -401,7 +401,7 @@ static:
     コマンドライン引数のうち、マクロ名 'SRC_EXT' に登録された拡張子を持つものが
     ここに登録される。
 "
-            ).sel
+).sel
     };
 
     enum M target =
@@ -413,7 +413,7 @@ static:
     amm が生成する Makefile のターゲットとなるファイル名。
     省略した場合は、ROOT + EXE_EXT が用いられる。
 "
-            ).sel
+).sel
     };
 
     enum M compile_flag =
@@ -425,7 +425,7 @@ static:
     DMDのコンパイルオプション。
     コマンドライン引数のうち、\"-\"(ハイフン)で始まるものがここに登録される。
 "
-        ).sel
+).sel
     };
 
     enum M link_flag =
@@ -437,7 +437,7 @@ static:
     DMDのリンクオプション。
     コマンドライン引数のうち、\"-L\" で始まるものがここに登録される。
 "
-            ).sel
+).sel
     };
 
     enum M libs =
@@ -449,7 +449,7 @@ static:
     コマンドライン引数のうち、マクロ名 'LIB_EXT' に登録された拡張子を持つ
     ファイルがここに登録される。
 "
-        ).sel
+).sel
     };
 
     enum M rc =
@@ -462,7 +462,7 @@ static:
     コマンドライン引数のうち、マクロ名 'RC_EXT' に登録された拡張子を持つファイル
     がここに登録される。
 "
-            ).sel
+).sel
     };
 
     enum M def =
@@ -475,7 +475,7 @@ static:
     コマンドライン引数のうち、マクロ名 'DEF_EXT' に登録された拡張子を持つ
     ファイルがここに登録される。
 "
-        ).sel
+).sel
     };
 
     enum M ddoc =
@@ -487,7 +487,7 @@ static:
     コマンドライン引数のうち、マクロ名 'DDOC_EXT' に登録された拡張子を持つ
     ファイルがここに登録される。
 "
-            ).sel
+).sel
     };
 
     enum M dd =
@@ -501,7 +501,7 @@ static:
     フォルダ。
     コマンドライン引数のうち、'-Ddxxx' という形のものが登録される。
 "
-            ).sel
+).sel
     };
 
     enum M m =
@@ -514,7 +514,7 @@ static:
     コマンドライン引数のうち、マクロ名 'MAK_EXT' に登録された拡張子を持つ
     ファイルがここに登録される。
 "
-            ).sel
+).sel
     };
 
     enum M is_dll =
@@ -525,7 +525,7 @@ static:
 ", "
     Makefile のターゲットが Dynamic Link Library だった場合に defined となる。
 "
-             ).sel
+).sel
     };
     enum M is_lib =
     {
@@ -534,7 +534,7 @@ static:
 ", "
     Makefile のターゲットが ライブラリファイルだった場合に defined となる。
 "
-            ).sel
+).sel
     };
 
     // コマンドラインから完全指定で設定する。
@@ -547,7 +547,7 @@ static:
     DMD の '-I' オプションのパラメタとして引き渡さるが、コンパイルはされない
     ファイルを含むフォルダ名を指定する。
 "
-            ).sel
+).sel
     };
 
     enum M lib =
@@ -558,7 +558,7 @@ static:
 ", "
     リンクされるべきライブラリを含むフォルダ名を指定する。
 "
-            ).sel
+).sel
     };
     enum M v =
     {
@@ -567,7 +567,7 @@ static:
 ", "
     vwrite.exe に引き渡されるヴァージョン情報を表わす文字列を登録する。
 "
-            ).sel
+).sel
     };
 
     enum M env =
@@ -579,7 +579,7 @@ static:
     このマクロに設定された値とマッチする(0==icmp()) id 属性を持つ<environment>
     要素が評価される。
 "
-            ).sel
+).sel
     };
 
     auto PREDEF()
@@ -706,8 +706,8 @@ Macros default_macros()
                      "imp" == one ||
                      "lib" == one)
                 data[one] = new MacroItem(
-                    __traits(getMember, MACROSTORE, one).value
-                    , pathSeparator);
+                    __traits(getMember, MACROSTORE, one).value,
+                     pathSeparator);
             else
                 data[one] = new MacroItem(
                     __traits(getMember, MACROSTORE, one).value);

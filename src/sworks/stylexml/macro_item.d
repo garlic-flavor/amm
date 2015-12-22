@@ -1,6 +1,6 @@
 /** 追記の可不可を変更できる文字列
- * Version:    0.167(dmd2.069.2)
- * Date:       2015-Dec-16 23:46:03.9267215
+ * Version:    0.168(dmd2.069.2)
+ * Date:       2015-Dec-20 20:43:02
  * Authors:    KUMA
  * License:    CC0
  */

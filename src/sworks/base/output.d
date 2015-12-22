@@ -1,6 +1,6 @@
 /** コンソールへの出力を制御する。
- * Version:    0.167(dmd2.069.2)
- * Date:       2015-Dec-16 23:46:03.9167215
+ * Version:    0.168(dmd2.069.2)
+ * Date:       2015-Dec-20 20:43:41
  * Authors:    KUMA
  * License:    CC0
  */
