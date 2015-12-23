@@ -44,6 +44,7 @@ void set_deps_data(alias MACROSTORE)(Macros data)
             deps_file, obj_ext);
     }
     depslink.resolve_public_deps;
+    logln("resolving public dependencies done.");
 
     // マクロの値をセットする。
     import std.array : Appender;
@@ -59,14 +60,20 @@ void set_deps_data(alias MACROSTORE)(Macros data)
         data[MACROSTORE.PREDEF.to_compile] ~= one.name;
         data[MACROSTORE.PREDEF.to_link] ~= obj_name;
     }
+    logln("all resolving of dependencies done.");
 
     // リソースファイルがある場合はそれも追加しておく。
     if (data.have(MACROSTORE.PREDEF.rc))
+    {
         depslines.put(data[MACROSTORE.PREDEF.rc].setExtension("res") ~ " : " ~
                       data[MACROSTORE.PREDEF.rc]);
+        logln("a resource file is detected: ", data[MACROSTORE.PREDEF.rc]);
+    }
 
     data[MACROSTORE.PREDEF.dependencies] =
         depslines.data.join(data[MACROSTORE.PREDEF.bracket]);
+
+    logln("dependencies macro is ready.");
 }
 
 private: //#####################################################################
@@ -94,9 +101,11 @@ void set_deps_of(alias MACROSTORE)(string root_file, Macros data,
     auto result = executeShell(command);
     enforce(0 == result.status && deps_file.exists,
             "\n" ~ result.output ~ "\nfail to generate " ~ deps_file);
+    logln("command succeeded.");
 
     depslink[root_file] = depslink.get(root_file, new DepsLink(root_file));
 
+    logln("read tempdeps");
     deps_file.read.to!string.parse_depsfile(depslink, isMemberFile);
 }
 
@@ -109,6 +118,8 @@ class DepsLink
 {
     string name;
     DepsLink[] deps;
+
+    bool resolvedAboutThis;
     string[] allDeps;
 
     this(string n) { this.name = n; }
@@ -121,10 +132,13 @@ void parse_depsfile(string filecont, ref DepsLink[string] depslink,
     import std.array : replace;
     import std.path : absolutePath, buildNormalizedPath;
 
+    log("start parsing tempdeps.");
+
     enum REG = ctRegex!(
         `^\S+\s+\(([^\)]+)\)\s+:\s+\S+\s+:\s+\S+\s+\(([^\)]+)\)`, "gm");
     auto m = filecont.match(REG);
 
+    size_t counter;
     foreach (one; m)
     {
         auto c = one.captures;
@@ -142,32 +156,55 @@ void parse_depsfile(string filecont, ref DepsLink[string] depslink,
         depslink[df] = dl;
 
         fl.deps ~= dl;
+
+        log(++counter, ".");
     }
+    logln("done.");
 }
 
 /** public import を解決する。
 **/
 void resolve_public_deps(DepsLink[string] dls)
 {
+    logln("start resolving of public dependencies.");
+
     // 間接的依存関係を解決
     void fill_indirect_dependencies(DepsLink dl)
     {
-        if (0 < dl.allDeps.length) return;
+        assert(dl);
+        if (dl.resolvedAboutThis || 0 < dl.allDeps.length) return;
+        dl.resolvedAboutThis = true;
 
+        logln("start with: ", dl.name);
+        Output.incIndent;
         bool[string] allDeps;
         allDeps[dl.name] = true;
         foreach (d; dl.deps)
         {
+            if (d.name == dl.name) continue;
+
+            assert(d);
+            logln("about: ", d.name);
+
             allDeps[d.name] = true;
             if (auto pd = d.name in dls)
             {
+                assert((*pd).name != dl.name);
                 fill_indirect_dependencies(*pd);
                 foreach (one; (*pd).allDeps)
                     allDeps[one] = true;
             }
         }
         dl.allDeps = allDeps.keys;
+        Output.decIndent;
     }
-    foreach (dl; dls) fill_indirect_dependencies(dl);
+    foreach (key, dl; dls)
+    {
+        logln("about :", key);
+        Output.incIndent;
+        fill_indirect_dependencies(dl);
+        logln("done.");
+        Output.decIndent;
+    }
 }
 
