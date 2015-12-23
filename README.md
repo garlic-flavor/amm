@@ -1,18 +1,33 @@
 Automatic Makefile Maker
 ========================
-This is a program that makes a Makefile from the source code wirtten in D programmming language, automatically.
+This is a program that makes a Makefile from the source code wirtten in
+D programmming language, automatically.
+
+
+ACKNOWLEDGEMENTS
+----------------
+amm is written by D.
+
+[Digital Mars D Programming Language](http://dlang.org/ "D PROGRAMMING LANGUAGE")
+
 
 !!! BUG !!!
 -----------
-- An error will occur when any Japanese are in a delimited string.
+- An error will occur when any Japanese are in a delimited string.(on windows)
 
 
 HOW TO BUILD
 ------------
 ### ON WINDOWS.
-please build with make tool that is distributed with dmd.
+Please build with make tool that is distributed with dmd.
 
-    >make -f win64.mak release
+32bit:
+
+    >make -f win.mak release
+
+64bit:
+
+    >make -f win.mak release FLAG=-m64
 
 ### ON LINUX.
 
@@ -28,7 +43,8 @@ Invoke amm from terminal.
 - amm will invoke dmd, ensure that dmd is ready.
 
 - Put make-style.xml to where amm can find.
-  The searching priority is,
+
+    The searching priority is,
 
     1. Current directory.
     2. The directory of the environment variable 'HOME'.
@@ -522,6 +538,11 @@ LICENSE
 -------
 [CC0](http://creativecommons.org/publicdomain/zero/1.0/ "Creative Commons Zero License")
 
+DEVELOPMENT ENVIRONMENT
+-----------------------
+- Windows Vista(x64) x dmd 2.069.2 x make (of Digital Mars)
+- Ubuntu 15.10(x64) x gcc 5.2.1 x dmd 2.069.2 x GNU Make
+
 HISTORY
 -------
 - 2015/12/22 ver. 0.168(dmd2.069.2)
@@ -532,18 +553,20 @@ HISTORY
 
 * * *
 
+
+
+
 はじめにお読み下さい。 - AMM -
 ========================================
 これはD言語で書かれたソースコードから Makefile を自動生成するプログラムです。
 
-現在、
 
-- Windows Vista(WoW64) x dmd x (dmdに付属の)make
-- Ubuntu 15.10(x64) x gcc 5.2.1 x dmd x GNU Make
+謝辞
+----
+amm は D言語で書かれています。
 
-の組み合わせで実行を確認しています。
+[Digital Mars D Programming Language](http://dlang.org/ "D PROGRAMMING LANGUAGE")
 
-付属の amm.exe は x64 Windows 用のバイナリです。
 
 !!! BUG !!!
 -----------
@@ -556,18 +579,17 @@ HISTORY
 ### Windows
 DMDに付属のmakeを使用して下さい。
 
-    >make -f win64.mak release FLAG=-version=InJapanese
+32bit版
+
+    >make -f win.mak release FLAG=-version=InJapanese
+
+64bit版
+
+    >make -f win.mak release FLAG="-version=InJapanese -m64"
 
 ### Linux
 
     >make -f linux64.mak release FLAG=-version=InJapanese
-
-
-謝辞
-----
-amm は D言語で書かれています。
-
-[Digital Mars D Programming Language](http://dlang.org/ "D PROGRAMMING LANGUAGE")
 
 
 使い方
@@ -1122,6 +1144,19 @@ ToDo
 ------------------------------
 - <del>GNU make に対応する。</del>( 2012/10/25 ver. 0.163 にて対応)
 - <del>Linux に対応する。</del>( 2012/10/25 ver. 0.163 にて対応)
+
+
+開発環境
+--------
+現在、
+
+- Windows Vista(WoW64) x dmd x (dmdに付属の)make
+- Ubuntu 15.10(x64) x gcc 5.2.1 x dmd x GNU Make
+
+の組み合わせで実行を確認しています。
+
+付属の amm.exe は x64 Windows 用のバイナリです。
+
 
 
 履歴

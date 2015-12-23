@@ -1,6 +1,6 @@
 /** コマンドライン引数を解析します.
  * Version:    0.168(dmd2.069.2)
- * Date:       2015-Dec-22 21:16:52
+ * Date:       2015-Dec-23 19:01:54.2735255
  * Authors:    KUMA
  * License:    CC0
  */

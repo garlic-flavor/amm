@@ -1,6 +1,6 @@
 /** dmd に依存関係を解決させる為の下準備.
  * Version:    0.168(dmd2.069.2)
- * Date:       2015-Dec-20 20:43:41
+ * Date:       2015-Dec-23 19:01:54.2955255
  * Authors:    KUMA
  * License:    CC0
  */
