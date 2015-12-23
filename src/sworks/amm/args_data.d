@@ -57,7 +57,11 @@ void set_args_data(alias STORE)(Macros data, string[] args)
             {
                 auto a = args[i];
                 data[STORE.PREDEF.compile_flag] ~= a;
-                if ("-m64" == a) data[STORE.PREDEF.link_flag] ~= a;
+                if ("-m64" == a)
+                {
+                    data[STORE.PREDEF.link_flag] ~= a;
+                    data[STORE.PREDEF.lib] ~= "lib64";
+                }
             }
         }
         // マクロへの値つき代入
