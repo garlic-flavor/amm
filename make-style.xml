@@ -30,9 +30,16 @@
 
     <ifdef id="gui">
       <add id="compile_flag">-version=Unicode -version=WindowsVista</add>
-      <set id="release_command">
-        $(DC) -release -O -inline -L/exet:nt/su:windows:6.0 -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
-      </set>
+      <ifndef id="is_vclinker">
+        <set id="release_command">
+          $(DC) -release -O -inline -L/exet:nt/su:windows:6.0 -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
+        </set>
+      </ifndef>
+      <ifdef id="is_vclinker">
+        <set id="release_command">
+          $(DC) -release -O -inline -L/SUBSYSTEM:WINDOWS,6.0 -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
+        </set>
+      </ifdef>
     </ifdef>
 
     <ifdef id="is_dll">

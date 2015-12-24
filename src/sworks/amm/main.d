@@ -64,8 +64,7 @@ v=0.001            : ヴァージョン文字列を指定します。数字以�
                      拙著の vwrite.exe 向けです。
 
 help macro         : 定義済みマクロを一覧表示します。
-"
-).sel;
+").sel;
 
 
 struct MACROSTORE
@@ -82,8 +81,8 @@ static:
 ", "
     DMD に依存関係を解決させる為のコマンド。
     >GENERATEDEPS_COMMAND ~ '-deps=' ~ DEPS_FILE ~ COMPILE_FLAG;
-    が実行される。"
-).sel
+    が実行される。
+").sel
     };
 
     enum M deps_file =
@@ -95,8 +94,7 @@ static:
 ", "
     GEN_DEPS_COMMAND により生成される一時ファイル名。
     依存関係の解決後、このファイルは消去される。
-"
-).sel
+").sel
     };
 
     enum M footer =
@@ -109,8 +107,7 @@ static:
     Makefile の最後に出力される。
     これ以降に手動で付け足された部分は、amm を再実行し、Makefile を作り直しても
     残る。
-"
-).sel
+").sel
     };
 
     enum M style =
@@ -139,8 +136,7 @@ static:
     Makefile の拡張子。
     この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 'M'
     の値としてファイルが登録される。
-"
-).sel
+").sel
     };
 
     enum M xml_ext =
@@ -169,8 +165,7 @@ static:
     D言語の module definition file の拡張子。
     この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 'DEF'
     の値としてファイル登録される。
-"
-).sel
+").sel
     };
 
     enum M ddoc_ext =
@@ -185,8 +180,7 @@ static:
     DDOCファイルの拡張子
     このマクロの値として設定された拡張子を持つファイル名をコマンドライン引数
     として渡すと、マクロ名 'DDOC' の値としてファイルが登録される。
-"
-).sel
+").sel
 
     };
 
@@ -205,8 +199,7 @@ static:
     が登録される。
     また、ターゲットファイルが DLL であることを示す、マクロ 'IS_DLL' が定義
     される。
-"
-).sel
+").sel
     };
 
     enum M bracket =
@@ -228,8 +221,7 @@ static:
     'rn'    |  CR + LF
     'r'     |  CR
     'n'     |  LF
-"
-).sel
+").sel
     };
 
     enum M exe_ext =
@@ -244,8 +236,7 @@ static:
     この拡張子を持つファイル名をコマンドライン引数として渡すと、amm によって生成
     される Makefile のターゲットファイルとして、マクロ名 'TARGET' の値にファイル
     が登録される。
-"
-).sel
+").sel
     };
 
     enum M obj_ext =
@@ -259,8 +250,7 @@ static:
     オブジェクトファイルの拡張子。
     この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 'LIBS'
     の値としてファイルが登録される。
-"
-).sel
+").sel
     };
 
     enum M lib_ext =
@@ -301,8 +291,7 @@ static:
     ルートファイル として扱われる。
     また、マクロ名 'TARGET' が指定されなかった場合は、ROOT + EXE_EXT が
     マクロ名 'TARGET' に設定される。
-"
-).sel
+").sel
     };
 
     enum M rc_ext =
@@ -317,8 +306,7 @@ static:
     リソースファイルの拡張子。
     この拡張子を持つファイル名をコマンドライン引数として渡すと、マクロ名 'RC'
     の値としてファイルが登録される。
-"
-).sel
+").sel
     };
 
     enum M gmake =
@@ -330,8 +318,7 @@ static:
 ", "
     出力する Makefile が GNU Make 向けであるかどうか。
     linux では初期値で 'defined'。
-"
-).sel
+").sel
     };
 
     // amm が用意する。
@@ -341,8 +328,7 @@ static:
     Amm set dependencies of the project to this value.
 ", "
     DMD により解決された依存関係を表わ文字列が amm により登録される。
-"
-).sel
+").sel
     };
 
     enum M remake_command =
@@ -351,8 +337,7 @@ static:
     The command line arguments that invoked amm is set to the value.
 ", "
     amm を起動した時のコマンドが登録される。
-"
-).sel
+").sel
     };
     enum M to_compile =
     {
@@ -362,8 +347,7 @@ static:
     DMD により解決された依存関係のうち、マクロ名 'SRC' に登録されたフォルダ以下
     に含まれ、マクロ名 'IMP' に登録されたフォルダ以下には含まれなかったものが
     ここに登録される。
-"
-).sel
+").sel
     };
 
     enum M to_link =
@@ -372,8 +356,7 @@ static:
     Amm set filenames to link to this value.
 ", "
     リンクされるべきファイルが登録される。
-"
-).sel
+").sel
     };
 
     // コマンドラインから省略指定で設定する。
@@ -388,8 +371,7 @@ static:
     コマンドライン引数のうち、'-Ixxx;yyy;zzz' のような形で指定されたものが
     ここに登録される。
     ソースファイル探索のルートフォルダを決定する。
-"
-).sel
+").sel
     };
 
     enum M root =
@@ -400,8 +382,7 @@ static:
     プロジェクトのルートとなるファイルが登録される。
     コマンドライン引数のうち、マクロ名 'SRC_EXT' に登録された拡張子を持つものが
     ここに登録される。
-"
-).sel
+").sel
     };
 
     enum M target =
@@ -412,8 +393,7 @@ static:
 ", "
     amm が生成する Makefile のターゲットとなるファイル名。
     省略した場合は、ROOT + EXE_EXT が用いられる。
-"
-).sel
+").sel
     };
 
     enum M compile_flag =
@@ -424,8 +404,7 @@ static:
 ", "
     DMDのコンパイルオプション。
     コマンドライン引数のうち、\"-\"(ハイフン)で始まるものがここに登録される。
-"
-).sel
+").sel
     };
 
     enum M link_flag =
@@ -436,8 +415,7 @@ static:
 ", "
     DMDのリンクオプション。
     コマンドライン引数のうち、\"-L\" で始まるものがここに登録される。
-"
-).sel
+").sel
     };
 
     enum M libs =
@@ -448,8 +426,7 @@ static:
     ライブラリファイル(リンクされるがコンパイルはされないファイル)が登録される。
     コマンドライン引数のうち、マクロ名 'LIB_EXT' に登録された拡張子を持つ
     ファイルがここに登録される。
-"
-).sel
+").sel
     };
 
     enum M rc =
@@ -461,8 +438,7 @@ static:
     リソースファイル。
     コマンドライン引数のうち、マクロ名 'RC_EXT' に登録された拡張子を持つファイル
     がここに登録される。
-"
-).sel
+").sel
     };
 
     enum M def =
@@ -474,8 +450,7 @@ static:
     module definition file。
     コマンドライン引数のうち、マクロ名 'DEF_EXT' に登録された拡張子を持つ
     ファイルがここに登録される。
-"
-).sel
+").sel
     };
 
     enum M ddoc =
@@ -486,8 +461,7 @@ static:
     DDOCファイル。
     コマンドライン引数のうち、マクロ名 'DDOC_EXT' に登録された拡張子を持つ
     ファイルがここに登録される。
-"
-).sel
+").sel
     };
 
     enum M dd =
@@ -500,8 +474,7 @@ static:
     DMD の '-d' オプションにより生成されるドキュメントファイル群の生成先
     フォルダ。
     コマンドライン引数のうち、'-Ddxxx' という形のものが登録される。
-"
-).sel
+").sel
     };
 
     enum M m =
@@ -513,8 +486,7 @@ static:
     amm が生成する Makefile のファイル名。
     コマンドライン引数のうち、マクロ名 'MAK_EXT' に登録された拡張子を持つ
     ファイルがここに登録される。
-"
-).sel
+").sel
     };
 
     enum M is_dll =
@@ -524,8 +496,7 @@ static:
     library.
 ", "
     Makefile のターゲットが Dynamic Link Library だった場合に defined となる。
-"
-).sel
+").sel
     };
     enum M is_lib =
     {
@@ -533,9 +504,18 @@ static:
     If true, the target file that will be generated by Makefile is library.
 ", "
     Makefile のターゲットが ライブラリファイルだった場合に defined となる。
-"
-).sel
+").sel
     };
+
+    enum M is_vclinker =
+    {
+        explanation:  Lang("
+    If true, dmd will invoke the linker of Microsoft.
+", "
+    VCのリンカを参照する場合。
+").sel
+    };
+
 
     // コマンドラインから完全指定で設定する。
     enum M imp =
@@ -546,8 +526,7 @@ static:
 ", "
     DMD の '-I' オプションのパラメタとして引き渡さるが、コンパイルはされない
     ファイルを含むフォルダ名を指定する。
-"
-).sel
+").sel
     };
 
     enum M lib =
@@ -557,8 +536,7 @@ static:
     A directory for libraries to link.
 ", "
     リンクされるべきライブラリを含むフォルダ名を指定する。
-"
-).sel
+").sel
     };
     enum M v =
     {
@@ -566,8 +544,7 @@ static:
     for my vwrite.
 ", "
     vwrite.exe に引き渡されるヴァージョン情報を表わす文字列を登録する。
-"
-).sel
+").sel
     };
 
     enum M env =
@@ -578,8 +555,7 @@ static:
     設定ファイル、make-style.xml の <environment>タグのセレクタ。
     このマクロに設定された値とマッチする(0==icmp()) id 属性を持つ<environment>
     要素が評価される。
-"
-).sel
+").sel
     };
 
     auto PREDEF()
