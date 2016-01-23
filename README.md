@@ -49,7 +49,7 @@ Invoke amm from terminal.
     1. Current directory.
     2. The directory of the environment variable 'HOME'.
     3. The directory where the amm is.
-    4. On Linux, `../etc` (related with where the amm is).
+    4. On Linux, `../etc/amm` (related with where the amm is).
 
 
 ### Example
@@ -608,7 +608,7 @@ DMDに付属のmakeを使用して下さい。
     1. amm.exe を実行するフォルダ
     2. 環境変数 HOME のフォルダ
     3. amm.exe と同じフォルダ
-    4. linux上では amm のあるフォルダから見て `../etc`。
+    4. linux上では amm のあるフォルダから見て `../etc/amm`。
 
   の順に探されます。
 

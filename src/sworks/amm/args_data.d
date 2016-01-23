@@ -135,7 +135,7 @@ void set_args_data(alias STORE)(Macros data, string[] args)
     {
         auto d = thisExePath.dirName;
         style_search.install(d);
-        style_search.install(d.dirName.buildPath("etc"));
+        style_search.install(d.dirName.buildPath("etc/amm"));
     }
 
     debln("search is ready : ", style_search.pathes);
