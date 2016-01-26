@@ -19,10 +19,10 @@
       $(DC) -g $(LINK_FLAG) $(FLAG) $(EXT_LIB) -of$@ $**
     </set>
     <set id="debug_all_command">
-      $(DC) -g -debug -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
+      $(DC) -g -debug -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB) $(FLAG)
     </set>
     <set id="release_command">
-      $(DC) -release -O -inline -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
+      $(DC) -release -O -inline -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB) $(FLAG)
     </set>
     <ifndef id="is_lib"><ifndef id="is_dll">
       <set id="run_command">$(TARGET) $(FLAG)</set>
@@ -32,12 +32,12 @@
       <add id="compile_flag">-version=Unicode -version=WindowsVista</add>
       <ifndef id="is_vclinker">
         <set id="release_command">
-          $(DC) -release -O -inline -L/exet:nt/su:windows:6.0 -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
+          $(DC) -release -O -inline -L/exet:nt/su:windows:6.0 -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB) $(FLAG)
         </set>
       </ifndef>
       <ifdef id="is_vclinker">
         <set id="release_command">
-          $(DC) -release -O -inline -L/SUBSYSTEM:WINDOWS,6.0 -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB)
+          $(DC) -release -O -inline -L/SUBSYSTEM:WINDOWS,6.0 -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB) $(FLAG)
         </set>
       </ifdef>
     </ifdef>
@@ -60,7 +60,7 @@
       <set id="compile_command">
         $(DC) -c -g -op $(COMPILE_FLAG) $(FLAG) $&lt;
       </set>
-      <set id="link_command">lib -c $@ $**</set>
+      <set id="link_command">lib -c $(FLAG) $@ $**</set>
       <set id="release_command">
         $(DC) -c -op -release -O -inline -lib -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(EXT_LIB) $(TO_COMPILE) $(FLAG)
       </set>
@@ -72,7 +72,7 @@
       <set id="make_name">gmake</set>
       <set id="compile_rule">%<get id="obj_ext"/> : %<get id="src_ext" /></set>
       <set id="link_command">
-        $(DC) -g -of$@ $(LINK_FLAG) $(TO_LINK) $(EXT_LIB)
+        $(DC) -g -of$@ $(LINK_FLAG) $(TO_LINK) $(EXT_LIB) $(FLAG)
       </set>
       <set id="del_command">rm</set>
     </ifdef>
@@ -117,7 +117,13 @@
       <ifdef id="is_dll">
         DEF_FILE = <get id="def_file"/><br/>
       </ifdef>
-      DDOC_FILE = <get id="ddoc"/><br/>
+      <ifdef id="ddoc">
+        DDOC_FILE = <get id="ddoc" /><br />
+        DOC_FILES = <get id="to_compile" from=".d" to=".html" /><br />
+        DOC_HEADER = <get id="doch" /><br />
+        DOC_FOOTER = <get id="docf" /><br />
+        DOC_TARGET = <get id="dd" />/index.html<br />
+      </ifdef>
       FLAG = <br/>
       <br/>
       ## LINK COMMAND<br />
@@ -143,11 +149,11 @@
       ## PHONY TARGET<br />
       <ifdef id="debug_all_command">
         debug-all : <ifdef id="rc">$(RES_FILE)</ifdef><br />
-        <tab /><get id="debug_all_command" /> <ifdef id="rc">$(RES_FILE)</ifdef> $(FLAG)<br />
+        <tab /><get id="debug_all_command" /> <ifdef id="rc">$(RES_FILE)</ifdef> <br />
       </ifdef>
       <ifdef id="release_command">
         release : <ifdef id="rc">$(RES_FILE)</ifdef><br />
-        <tab /><get id="release_command"/> <ifdef id="rc">$(RES_FILE)</ifdef> $(FLAG)<br />
+        <tab /><get id="release_command"/> <ifdef id="rc">$(RES_FILE)</ifdef> <br />
       </ifdef>
 
       clean : <br />
@@ -160,7 +166,9 @@
       <tab/>vwrite --setversion &quot;$(VERSION)&quot; --project &quot;$(TARGET)&quot; --authors &quot;$(AUTHORS)&quot; --license &quot;$(LICENSE)&quot; $(TO_COMPILE)<br/>
 
       ddoc :<br/>
-      <tab/>$(DC) -c -o- -op -D -Dd<get id="dd"/> $(COMPILE_FLAG) $(DDOC_FILE) $(TO_COMPILE) $(FLAG)<br/>
+      <tab/>$(DC) -c -o- -op -D $(COMPILE_FLAG) $(DDOC_FILE) $(TO_COMPILE) $(FLAG)<br/>
+      <tab/>@type $(DOC_HEADER) $(DOC_FILES) $(DOC_FOOTER) > $(DOC_TARGET) 2>nul
+      <tab/>@del $(DOC_FILES)<br />
 
       show :<br />
       <tab />@echo ROOT = <get id="root"/><br/>

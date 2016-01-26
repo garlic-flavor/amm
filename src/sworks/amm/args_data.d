@@ -1,6 +1,6 @@
 /** コマンドライン引数を解析します.
- * Version:    0.168(dmd2.069.2)
- * Date:       2015-Dec-23 19:01:54.2735255
+ * Version:    0.169(dmd2.069.2)
+ * Date:       2016-Jan-27 01:45:45.4721903
  * Authors:    KUMA
  * License:    CC0
  */
@@ -80,9 +80,9 @@ void set_args_data(alias STORE)(Macros data, string[] args)
         // ターゲット
         else if (0 == argsext.icmp(data[STORE.PREDEF.exe_ext]) ||
                  0 == argsext.icmp(data[STORE.PREDEF.dll_ext]))
-            data.rewrite(STORE.PREDEF.target, args[i]);
+            data.rewrite(STORE.PREDEF.target, args[i].buildNormalizedPath);
         else if (0 == argsext.icmp(data[STORE.PREDEF.mak_ext]))
-            data.rewrite(STORE.PREDEF.m, args[i]);
+            data.rewrite(STORE.PREDEF.m, args[i].buildNormalizedPath);
         // ファイル
         else
         {
@@ -92,17 +92,17 @@ void set_args_data(alias STORE)(Macros data, string[] args)
             // ライブラリ
             if     (0 == argsext.icmp(data[STORE.PREDEF.lib_ext]) ||
                     0 == argsext.icmp(data[STORE.PREDEF.obj_ext]))
-                data[STORE.PREDEF.libs] ~= file;
+                data[STORE.PREDEF.libs] ~= file.buildNormalizedPath;
             else if (0 == argsext.icmp(data[STORE.PREDEF.src_ext]))
-                data[STORE.PREDEF.root] ~= file;
+                data[STORE.PREDEF.root] ~= file.buildNormalizedPath;
             else if (0 == argsext.icmp(data[STORE.PREDEF.rc_ext]))
-                data[STORE.PREDEF.rc] ~= file;
+                data[STORE.PREDEF.rc] ~= file.buildNormalizedPath;
             else if (0 == argsext.icmp(data[STORE.PREDEF.def_ext]))
-                data[STORE.PREDEF.def] ~= file;
+                data[STORE.PREDEF.def] ~= file.buildNormalizedPath;
             else if (0 == argsext.icmp(data[STORE.PREDEF.ddoc_ext]))
-                data[STORE.PREDEF.ddoc] ~= file;
+                data[STORE.PREDEF.ddoc] ~= file.buildNormalizedPath;
             else if (0 == argsext.icmp(data[STORE.PREDEF.xml_ext]))
-                data.rewrite(STORE.PREDEF.style, file);
+                data.rewrite(STORE.PREDEF.style, file.buildNormalizedPath);
             else throw new Exception(args[i] ~ " is an unknown file type.");
         }
     }

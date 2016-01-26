@@ -1,6 +1,6 @@
 /** dmd を呼び出し、プロジェクトの依存関係を解決する.
- * Version:    0.168(dmd2.069.2)
- * Date:       2015-Dec-23 19:01:54.2825255
+ * Version:    0.169(dmd2.069.2)
+ * Date:       2016-Jan-27 01:56:28.7651903
  * Authors:    KUMA
  * License:    CC0
  */
@@ -17,6 +17,8 @@ void set_deps_data(alias MACROSTORE)(Macros data)
 {
     import std.exception : enforce;
     import std.path : absolutePath, buildNormalizedPath, setExtension;
+    import std.algorithm : bringToFront, sort, find;
+    import std.range : take;
 
     auto src_search = new Search;
     data.have(MACROSTORE.PREDEF.src).enforce("src directory is not detected.");
@@ -51,8 +53,13 @@ void set_deps_data(alias MACROSTORE)(Macros data)
     import std.string : join;
     auto depslines = Appender!(string[])();
     depslines.reserve(depslink.length);
-    foreach (one ; depslink)
+    auto keys = depslink.keys.sort;
+    foreach (one; data.get(MACROSTORE.PREDEF.root).toArray)
+        keys.bringToFront(keys.find(one).take(1));
+
+    foreach (key ; keys)
     {
+        auto one = depslink[key];
         auto obj_name = one.name.setExtension(obj_ext);
         if (0 < one.allDeps.length)
             depslines.put([obj_name, " : ", one.allDeps.join(" ")].join);
