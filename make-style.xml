@@ -16,7 +16,7 @@
       $(DC) -c -g -op -debug $(COMPILE_FLAG) $(FLAG) $&lt;
     </set>
     <set id="link_command">
-      $(DC) -g $(LINK_FLAG) $(FLAG) $(EXT_LIB) -of$@ $**
+      $(DC) -g $(LINK_FLAG) $(FLAG) -of$@ $**
     </set>
     <set id="debug_all_command">
       $(DC) -g -debug -of$(TARGET) $(COMPILE_FLAG) $(LINK_FLAG) $(TO_COMPILE) $(EXT_LIB) $(FLAG)
@@ -72,7 +72,7 @@
       <set id="make_name">gmake</set>
       <set id="compile_rule">%<get id="obj_ext"/> : %<get id="src_ext" /></set>
       <set id="link_command">
-        $(DC) -g -of$@ $(LINK_FLAG) $(TO_LINK) $(EXT_LIB) $(FLAG)
+        $(DC) -g -of$@ $(LINK_FLAG) $(TO_LINK) $(FLAG)
       </set>
       <set id="del_command">rm</set>
     </ifdef>
