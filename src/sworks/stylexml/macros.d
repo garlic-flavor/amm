@@ -1,6 +1,6 @@
 /** macros.d マクロの実装
- * Version:    0.168(dmd2.069.2)
- * Date:       2015-Dec-23 19:01:54.3205255
+ * Dmd:        2.070.0
+ * Date:       2016-Feb-28 23:43:01
  * Authors:    KUMA
  * License:    CC0
  */

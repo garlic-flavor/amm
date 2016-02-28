@@ -1,6 +1,6 @@
 /** SHIFT-JIS の扱いに。
- * Version:    0.167(dmd2.069.2)
- * Date:       2015-Dec-17 20:02:43.2277485
+ * Dmd:        2.070.0
+ * Date:       2016-Feb-28 23:43:38
  * Authors:    KUMA
  * License:    CC0
  */

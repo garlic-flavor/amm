@@ -1,6 +1,6 @@
 /** dmd を呼び出し、プロジェクトの依存関係を解決する.
- * Version:    0.169(dmd2.069.2)
- * Date:       2016-Jan-27 01:56:28.7651903
+ * Version:    0.169(dmd2.070.0)
+ * Date:       2016-Feb-28 23:41:33
  * Authors:    KUMA
  * License:    CC0
  */
@@ -13,7 +13,7 @@ import sworks.stylexml.macro_item;
 debug import std.stdio : writeln;
 
 // dmd を呼び出し、 data の["dependencies"] に依存関係を記述する。
-void set_deps_data(alias MACROSTORE)(Macros data)
+void set_deps_data(alias PREDEF)(Macros data)
 {
     import std.exception : enforce;
     import std.path : absolutePath, buildNormalizedPath, setExtension;
@@ -21,25 +21,25 @@ void set_deps_data(alias MACROSTORE)(Macros data)
     import std.range : take;
 
     auto src_search = new Search;
-    data.have(MACROSTORE.PREDEF.src).enforce("src directory is not detected.");
-    foreach (one ; data.get(MACROSTORE.PREDEF.src).toArray)
+    data.have(PREDEF.src).enforce("src directory is not detected.");
+    foreach (one ; data.get(PREDEF.src).toArray)
         src_search.install(one);
     auto imp_search = new Search;
-    if (data.have(MACROSTORE.PREDEF.imp))
-        foreach (one ; data.get(MACROSTORE.PREDEF.imp).toArray)
+    if (data.have(PREDEF.imp))
+        foreach (one ; data.get(PREDEF.imp).toArray)
             imp_search.install(one);
     logln("file filters are ready");
 
     DepsLink[string] depslink;
-    string obj_ext = data[MACROSTORE.PREDEF.obj_ext];
+    string obj_ext = data[PREDEF.obj_ext];
     // dmd を呼び出した結果として生成されるファイル名
-    string deps_file = data[MACROSTORE.PREDEF.deps_file];
+    string deps_file = data[PREDEF.deps_file];
 
     // それぞれのルートファイルに対し、依存関係を解決する。
-    foreach (one ; data.get(MACROSTORE.PREDEF.root).toArray)
+    foreach (one ; data.get(PREDEF.root).toArray)
     {
         auto abs = one.absolutePath.buildNormalizedPath;
-        set_deps_of!MACROSTORE(
+        set_deps_of!PREDEF(
             one, data, depslink,
             fn => fn == abs || src_search.contain(fn) &&
                   !imp_search.contain(fn),
@@ -54,7 +54,7 @@ void set_deps_data(alias MACROSTORE)(Macros data)
     auto depslines = Appender!(string[])();
     depslines.reserve(depslink.length);
     auto keys = depslink.keys.sort;
-    foreach (one; data.get(MACROSTORE.PREDEF.root).toArray)
+    foreach (one; data.get(PREDEF.root).toArray)
         keys.bringToFront(keys.find(one).take(1));
 
     foreach (key ; keys)
@@ -64,21 +64,21 @@ void set_deps_data(alias MACROSTORE)(Macros data)
         if (0 < one.allDeps.length)
             depslines.put([obj_name, " : ", one.allDeps.join(" ")].join);
 
-        data[MACROSTORE.PREDEF.to_compile] ~= one.name;
-        data[MACROSTORE.PREDEF.to_link] ~= obj_name;
+        data[PREDEF.to_compile] ~= one.name;
+        data[PREDEF.to_link] ~= obj_name;
     }
     logln("all resolving of dependencies done.");
 
     // リソースファイルがある場合はそれも追加しておく。
-    if (data.have(MACROSTORE.PREDEF.rc))
+    if (data.have(PREDEF.rc))
     {
-        depslines.put(data[MACROSTORE.PREDEF.rc].setExtension("res") ~ " : " ~
-                      data[MACROSTORE.PREDEF.rc]);
-        logln("a resource file is detected: ", data[MACROSTORE.PREDEF.rc]);
+        depslines.put(data[PREDEF.rc].setExtension("res") ~ " : " ~
+                      data[PREDEF.rc]);
+        logln("a resource file is detected: ", data[PREDEF.rc]);
     }
 
-    data[MACROSTORE.PREDEF.dependencies] =
-        depslines.data.join(data[MACROSTORE.PREDEF.bracket]);
+    data[PREDEF.dependencies] =
+        depslines.data.join(data[PREDEF.bracket]);
 
     logln("dependencies macro is ready.");
 }
@@ -86,7 +86,7 @@ void set_deps_data(alias MACROSTORE)(Macros data)
 private: //#####################################################################
 
 /// 一つのファイルの依存関係を解決する。
-void set_deps_of(alias MACROSTORE)(string root_file, Macros data,
+void set_deps_of(alias PREDEF)(string root_file, Macros data,
                                    ref DepsLink[string] depslink,
                                    bool delegate(string) isMemberFile,
                                    string deps_file, string obj_ext)
@@ -100,8 +100,8 @@ void set_deps_of(alias MACROSTORE)(string root_file, Macros data,
     // 終了時に dmd に生成させたファイルを削除する。
     scope(exit) if (deps_file.exists) deps_file.remove;
 
-    auto command = [data[MACROSTORE.PREDEF.gen_deps_command], " -deps=",
-                    deps_file, " ", data[MACROSTORE.PREDEF.compile_flag], " ",
+    auto command = [data[PREDEF.gen_deps_command], " -deps=",
+                    deps_file, " ", data[PREDEF.compile_flag], " ",
                     root_file].join;
     logln("generation command is>", command);
     // dmd を実行

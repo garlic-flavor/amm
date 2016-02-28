@@ -163,7 +163,7 @@
       <tab/><get id="del_command" /> $(TO_LINK)<br/>
 
       vwrite :<br/>
-      <tab/>vwrite --setversion &quot;$(VERSION)&quot; --project &quot;$(TARGET)&quot; --authors &quot;$(AUTHORS)&quot; --license &quot;$(LICENSE)&quot; $(TO_COMPILE)<br/>
+      <tab/>vwrite --setversion &quot;$(VERSION)&quot; $(TO_COMPILE)<br/>
 
       ddoc :<br/>
       <tab/>$(DC) -c -o- -op -D $(COMPILE_FLAG) $(DDOC_FILE) $(TO_COMPILE) $(FLAG)<br/>
