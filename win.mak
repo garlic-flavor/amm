@@ -53,7 +53,7 @@ vwrite :
 ddoc :
 	$(DC) -c -o- -op -D $(COMPILE_FLAG) $(DDOC_FILE) $(TO_COMPILE) $(FLAG)
 	@type $(DOC_HEADER) $(DOC_FILES) $(DOC_FOOTER) > $(DOC_TARGET) 2>nul
-      	@del $(DOC_FILES)
+	@del $(DOC_FILES)
 show :
 	@echo ROOT = src\sworks\amm\main.d
 	@echo TARGET = $(TARGET)

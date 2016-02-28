@@ -167,7 +167,7 @@
 
       ddoc :<br/>
       <tab/>$(DC) -c -o- -op -D $(COMPILE_FLAG) $(DDOC_FILE) $(TO_COMPILE) $(FLAG)<br/>
-      <tab/>@type $(DOC_HEADER) $(DOC_FILES) $(DOC_FOOTER) > $(DOC_TARGET) 2>nul
+      <tab/>@type $(DOC_HEADER) $(DOC_FILES) $(DOC_FOOTER) > $(DOC_TARGET) 2>nul<br/>
       <tab/>@del $(DOC_FILES)<br />
 
       show :<br />
