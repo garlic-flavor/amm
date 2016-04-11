@@ -1,6 +1,6 @@
 /** dmd を呼び出し、プロジェクトの依存関係を解決する.
- * Version:    0.169(dmd2.070.0)
- * Date:       2016-Feb-28 23:41:33
+ * Version:    0.170(dmd2.071.0)
+ * Date:       2016-Apr-11 21:03:50
  * Authors:    KUMA
  * License:    CC0
  */
@@ -60,6 +60,7 @@ void set_deps_data(alias PREDEF)(Macros data)
     foreach (key ; keys)
     {
         auto one = depslink[key];
+        if (!one.needsCompile) continue;
         auto obj_name = one.name.setExtension(obj_ext);
         if (0 < one.allDeps.length)
             depslines.put([obj_name, " : ", one.allDeps.join(" ")].join);
@@ -124,12 +125,14 @@ void set_deps_of(alias PREDEF)(string root_file, Macros data,
 class DepsLink
 {
     string name;
+    // 文字列インポートにより依存関係に上っているものは false になる。
+    bool needsCompile;
     DepsLink[] deps;
 
     bool resolvedAboutThis;
     string[] allDeps;
 
-    this(string n) { this.name = n; }
+    this(string n, bool nc = true) { this.name = n; needsCompile = nc; }
 }
 
 void parse_depsfile(string filecont, ref DepsLink[string] depslink,
@@ -142,24 +145,25 @@ void parse_depsfile(string filecont, ref DepsLink[string] depslink,
     log("start parsing tempdeps.");
 
     enum REG = ctRegex!(
-        `^\S+\s+\(([^\)]+)\)\s+:\s+\S+\s+:\s+\S+\s+\(([^\)]+)\)`, "gm");
+        `^\S+\s+\(([^\)]+)\)\s+:\s+(\S+)\s+:\s+\S+\s+\(([^\)]+)\)`, "gm");
     auto m = filecont.match(REG);
 
     size_t counter;
     foreach (one; m)
     {
         auto c = one.captures;
-        assert(3 == c.length);
+        assert(4 == c.length);
 
         auto fn = c[1].replace("\\\\", "\\");
         if (!isMemberFile(fn.absolutePath.buildNormalizedPath)) continue;
-        auto df = c[2].replace("\\\\", "\\");
+        auto type = c[2];
+        auto df = c[3].replace("\\\\", "\\");
         if (!isMemberFile(df.absolutePath.buildNormalizedPath)) continue;
 
         auto fl = depslink.get(fn, new DepsLink(fn));
         depslink[fn] = fl;
 
-        auto dl = depslink.get(df, new DepsLink(df));
+        auto dl = depslink.get(df, new DepsLink(df, type != "string"));
         depslink[df] = dl;
 
         fl.deps ~= dl;

@@ -1,6 +1,6 @@
 /**
- * Dmd:        2.070.0
- * Date:       2016-Feb-28 23:43:25
+ * Dmd:        2.071.0
+ * Date:       2016-Apr-11 20:53:05
  * Authors:    KUMA
  * License:    CC0
 */
@@ -35,9 +35,10 @@ class Writer
         import std.algorithm : countUntil;
         import std.array : replace;
         import std.range : retro;
+        import std.uni : isWhite;
         if (!_newline)
         {
-            auto c = _arr.data.retro.countUntil!"!std.uni.isWhite(a)";
+            auto c = _arr.data.retro.countUntil!(x=>!isWhite(x));
             _arr.replace(_arr.length - c, _arr.length, bracket);
         }
         else _arr.replace(_arr.length, _arr.length, bracket);

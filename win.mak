@@ -2,7 +2,7 @@
 TARGET = amm.exe
 AUTHORS = KUMA
 LICENSE = CC0
-VERSION = 0.169
+VERSION = 0.170
 
 MAKEFILE = win.mak
 DC = dmd
@@ -24,10 +24,10 @@ $(TARGET) : $(TO_LINK) $(EXT_LIB)
 
 ## DEPENDENCE
 $(TO_LINK) : $(MAKEFILE) $(EXT_LIB)
-src\sworks\amm\main.obj : src\sworks\amm\main.d src\sworks\amm\deps_data.d src\sworks\base\strutil.d src\sworks\win32\sjis.d src\sworks\stylexml\writer.d src\sworks\base\output.d src\sworks\amm\ready_data.d src\sworks\stylexml\macro_item.d src\sworks\stylexml\macros.d src\sworks\stylexml\parser.d src\sworks\base\array.d src\sworks\base\search.d src\sworks\stylexml\package.d src\sworks\amm\args_data.d
-src\sworks\amm\args_data.obj : src\sworks\base\strutil.d src\sworks\win32\sjis.d src\sworks\stylexml\macro_item.d src\sworks\base\output.d src\sworks\stylexml\macros.d src\sworks\base\search.d src\sworks\amm\args_data.d
-src\sworks\amm\deps_data.obj : src\sworks\amm\deps_data.d src\sworks\base\strutil.d src\sworks\win32\sjis.d src\sworks\stylexml\macro_item.d src\sworks\base\output.d src\sworks\stylexml\macros.d src\sworks\base\search.d
-src\sworks\amm\ready_data.obj : src\sworks\base\strutil.d src\sworks\win32\sjis.d src\sworks\stylexml\macro_item.d src\sworks\base\output.d src\sworks\amm\ready_data.d src\sworks\stylexml\macros.d src\sworks\base\search.d
+src\sworks\amm\main.obj : src\sworks\amm\deps_data.d src\sworks\base\strutil.d src\sworks\stylexml\macro_item.d src\sworks\base\array.d src\sworks\stylexml\writer.d src\sworks\base\search.d src\sworks\stylexml\parser.d src\sworks\stylexml\macros.d src\sworks\amm\args_data.d src\sworks\amm\main.d src\sworks\win32\sjis.d src\sworks\base\output.d src\sworks\amm\ready_data.d src\sworks\stylexml\package.d
+src\sworks\amm\args_data.obj : src\sworks\base\strutil.d src\sworks\stylexml\macro_item.d src\sworks\base\search.d src\sworks\amm\args_data.d src\sworks\stylexml\macros.d src\sworks\win32\sjis.d src\sworks\base\output.d
+src\sworks\amm\deps_data.obj : src\sworks\amm\deps_data.d src\sworks\base\strutil.d src\sworks\stylexml\macro_item.d src\sworks\base\search.d src\sworks\stylexml\macros.d src\sworks\win32\sjis.d src\sworks\base\output.d
+src\sworks\amm\ready_data.obj : src\sworks\base\strutil.d src\sworks\stylexml\macro_item.d src\sworks\base\search.d src\sworks\stylexml\macros.d src\sworks\win32\sjis.d src\sworks\base\output.d src\sworks\amm\ready_data.d
 src\sworks\base\array.obj : src\sworks\base\array.d
 src\sworks\base\output.obj : src\sworks\base\output.d src\sworks\base\strutil.d src\sworks\win32\sjis.d
 src\sworks\base\search.obj : src\sworks\base\search.d
@@ -57,13 +57,13 @@ ddoc :
 show :
 	@echo ROOT = src\sworks\amm\main.d
 	@echo TARGET = $(TARGET)
-	@echo VERSION = 0.169
+	@echo VERSION = 0.170
 run :
 	$(TARGET) $(FLAG)
 edit :
 	emacs $(TO_COMPILE)
 remake :
-	amm -J. amm.exe v=0.169 win.mak authors=KUMA license=CC0 .\src\sworks\amm\main.d $(FLAG)
+	amm -J. amm.exe v=0.170 win.mak authors=KUMA license=CC0 .\src\sworks\amm\main.d $(FLAG)
 
 debug :
 	ddbg $(TARGET)

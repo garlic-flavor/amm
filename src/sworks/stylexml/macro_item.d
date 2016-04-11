@@ -1,5 +1,5 @@
 /** 追記の可不可を変更できる文字列
- * Dmd:        2.070.0
+ * Dmd:        2.071.0
  * Date:       2016-Feb-28 23:42:52
  * Authors:    KUMA
  * License:    CC0

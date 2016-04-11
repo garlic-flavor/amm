@@ -1,5 +1,5 @@
 /** コマンドライン引数を解析します.
- * Version:    0.169(dmd2.070.0)
+ * Version:    0.170(dmd2.071.0)
  * Date:       2016-Feb-28 23:41:39
  * Authors:    KUMA
  * License:    CC0
