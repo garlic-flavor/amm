@@ -1,6 +1,6 @@
 /** dmd に依存関係を解決させる為の下準備.
- * Version:    0.170(dmd2.071.0)
- * Date:       2016-Feb-28 23:29:44
+ * Version:    0.171(dmd2.085.0)
+ * Date:       2019-Mar-21 14:53:26
  * Authors:    KUMA
  * License:    CC0
  */
@@ -15,9 +15,8 @@ void ready_data(alias PREDEF)(Macros data)
     import std.array : appender;
     import std.algorithm : splitter;
     import std.exception : enforce;
-    import std.path : baseName, buildNormalizedPath, isFile, dirEntries,
-        extension, relativePath;
-    import std.file : exists, SpanMode;
+    import std.path : baseName, buildNormalizedPath, extension, relativePath;
+    import std.file : exists, SpanMode, isFile, dirEntries;
     import std.string : icmp;
 
     // ターゲット名の決定
@@ -98,7 +97,4 @@ void ready_data(alias PREDEF)(Macros data)
     // この時点で Makefile の名前は決定されていなければならない。
     data.have(PREDEF.m).enforce("please specify Makefile's name.");
 }
-
-
-
 

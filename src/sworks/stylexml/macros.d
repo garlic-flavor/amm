@@ -1,6 +1,6 @@
 /** macros.d マクロの実装
- * Dmd:        2.071.0
- * Date:       2016-Feb-28 23:43:01
+ * Dmd:        2.085.0
+ * Date:       2019-Mar-21 15:09:49
  * Authors:    KUMA
  * License:    CC0
  */
@@ -105,6 +105,11 @@ class Macros
         return (null is p_data) ? false : !(p_data.isEmpty);
     }
 
+    const bool exists(in const(char)[] key)
+    {
+        return (key.toLower in _data) !is null;
+    }
+
     /**
     make the value to be unrewritable.
     if the key does not exists, new key with an unrewritable null value is
@@ -121,6 +126,13 @@ class Macros
         }
         else _data[key] = new MacroItem(value, " ", false);
     }
+
+    void fixAll()
+    {
+        foreach (val ; _data)
+            val.isMutable = false;
+    }
+
 
     void rewrite(const(char)[] key, string value="")
     {
@@ -153,9 +165,23 @@ class Macros
         }
     }
 
-    void forEach(scope bool delegate(string, string) prog)
+    int opApply(scope int delegate(string, string) prog)
     {
-        foreach (key, val ; _data) if (!prog(key, val.toString)) break;
+        int result = 0;
+        foreach (key, val ; _data)
+        {
+            result = prog(key, val.toString);
+            if (result)
+                break;
+        }
+        return result;
+    }
+
+
+    @property
+    string[] keys() const
+    {
+        return _data.keys;
     }
 
 private:

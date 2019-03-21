@@ -12,6 +12,10 @@
       <set id="make_name">nmake</set>
     </ifdef>
 
+    <ifdef id="is_vclinker">
+      <set id="resource_compile_command">rc $&lt;</set>
+    </ifdef>
+
     <set id="compile_command">
       $(DC) -c -g -op -debug $(COMPILE_FLAG) $(FLAG) $&lt;
     </set>
@@ -96,10 +100,16 @@
       AUTHORS = <get id="authors" /><br />
       LICENSE = <get id="license" /><br />
       VERSION = <get id="v" /><br />
+
       <br />
       MAKEFILE = <get id="m" /><br />
       DC = dmd<br />
       MAKE = <get id="make_name" /><br />
+      <ifdef id="gettext">
+        XGETTEXT = xgettext<br />
+        MSGINIT = msginit<br />
+        MSGFMT = msgfmt<br />
+      </ifdef>
       TO_COMPILE = <get id="to_compile" /><br />
       <ifdef id="rc">
         TO_LINK = <get id="to_link" /> <get id="rc" from=".rc" to=".res" /><br />
@@ -134,10 +144,10 @@
       <get id="compile_rule"/><br />
       <tab /><get id="compile_command"/><br />
 
-      <ifdef id="gui"><ifdef id="rc">
+      <ifdef id="rc">
         .rc.res :<br/>
         <tab/><get id="resource_compile_command"/><br/>
-      </ifdef></ifdef>
+      </ifdef>
 
       <br />
 
@@ -189,7 +199,20 @@
       debug :<br />
       <tab />ddbg $(TARGET)<br />
       <br />
-    <get id="footer"/></body>
+      <br />
+      l10n-init:
+      <tab />xgettext -k_ --from-code=UTF-8 --language=C $(TO_COMPILE) -o <get id="target" setExtension="pot" /><br />
+      <tab />msginit --locale=ja -i <get id="target" setExtension="pot"/> -o <get id="target" setExtension="po" /> --no-translator<br />
+      <br />
+      l10n-update:
+      <tab />xgettext -j -k_ --from-code=UTF-8 --language=C $(TO_COMPILE) -o <get id="target" setExtension="pot" /><br />
+      <tab />msgmerge --update <get id="target" setExtension="po" /> <get id="target" setExtension="pot" /><br />
+      <br />
+      l10n:
+      <tab />msgfmt <get id="target" setExtension="po" /> <get id="target" setExtension="mo" /><br />
+      <br />
+      
+      <get id="footer"/></body>
   </environment>
 
 </style>

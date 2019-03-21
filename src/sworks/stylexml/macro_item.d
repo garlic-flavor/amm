@@ -1,6 +1,6 @@
 /** 追記の可不可を変更できる文字列
- * Dmd:        2.071.0
- * Date:       2016-Feb-28 23:42:52
+ * Dmd:        2.085.0
+ * Date:       2019-Jan-26 02:59:33
  * Authors:    KUMA
  * License:    CC0
  */
@@ -74,10 +74,10 @@ class BracketItem : MacroItem
 {
     this(string value = "n") { super(); opAssign(value); }
 
-    @disable @property @nogc nothrow override
-    string[] toArray() { return _value[]; }
-    @disable @nogc nothrow override
-    MacroItem opOpAssign(string OP : "~")(string){ return this; }
+    @property @nogc nothrow override
+    string[] toArray() { assert(0); return _value[]; }
+    @nogc nothrow override
+    MacroItem opOpAssign(string OP : "~")(string) { assert(0); return this; }
 
     override
     BracketItem opAssign(string v)

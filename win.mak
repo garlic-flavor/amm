@@ -2,14 +2,14 @@
 TARGET = amm.exe
 AUTHORS = KUMA
 LICENSE = CC0
-VERSION = 0.170
+VERSION = 0.171
 
 MAKEFILE = win.mak
 DC = dmd
 MAKE = make
-TO_COMPILE = src\sworks\amm\main.d src\sworks\amm\args_data.d src\sworks\amm\deps_data.d src\sworks\amm\ready_data.d src\sworks\base\array.d src\sworks\base\output.d src\sworks\base\search.d src\sworks\base\strutil.d src\sworks\stylexml\macro_item.d src\sworks\stylexml\macros.d src\sworks\stylexml\package.d src\sworks\stylexml\parser.d src\sworks\stylexml\writer.d src\sworks\win32\sjis.d
-TO_LINK = src\sworks\amm\main.obj src\sworks\amm\args_data.obj src\sworks\amm\deps_data.obj src\sworks\amm\ready_data.obj src\sworks\base\array.obj src\sworks\base\output.obj src\sworks\base\search.obj src\sworks\base\strutil.obj src\sworks\stylexml\macro_item.obj src\sworks\stylexml\macros.obj src\sworks\stylexml\package.obj src\sworks\stylexml\parser.obj src\sworks\stylexml\writer.obj src\sworks\win32\sjis.obj
-COMPILE_FLAG = -J. -Isrc
+TO_COMPILE = src\sworks\amm\main.d src\sworks\amm\args_data.d submodule\mofile\source\mofile.d src\sworks\amm\deps_data.d src\sworks\amm\ready_data.d src\sworks\base\array.d src\sworks\base\getopt.d src\sworks\base\mo.d src\sworks\base\output.d src\sworks\base\search.d src\sworks\base\strutil.d src\sworks\stylexml\macro_item.d src\sworks\stylexml\macros.d src\sworks\stylexml\package.d src\sworks\stylexml\parser.d src\sworks\stylexml\writer.d src\sworks\win32\sjis.d
+TO_LINK = src\sworks\amm\main.obj src\sworks\amm\args_data.obj submodule\mofile\source\mofile.obj src\sworks\amm\deps_data.obj src\sworks\amm\ready_data.obj src\sworks\base\array.obj src\sworks\base\getopt.obj src\sworks\base\mo.obj src\sworks\base\output.obj src\sworks\base\search.obj src\sworks\base\strutil.obj src\sworks\stylexml\macro_item.obj src\sworks\stylexml\macros.obj src\sworks\stylexml\package.obj src\sworks\stylexml\parser.obj src\sworks\stylexml\writer.obj src\sworks\win32\sjis.obj
+COMPILE_FLAG = -J. -Isrc;src;submodule\mofile\source
 LINK_FLAG =
 EXT_LIB =
 FLAG =
@@ -24,18 +24,21 @@ $(TARGET) : $(TO_LINK) $(EXT_LIB)
 
 ## DEPENDENCE
 $(TO_LINK) : $(MAKEFILE) $(EXT_LIB)
-src\sworks\amm\main.obj : src\sworks\amm\deps_data.d src\sworks\base\strutil.d src\sworks\stylexml\macro_item.d src\sworks\base\array.d src\sworks\stylexml\writer.d src\sworks\base\search.d src\sworks\stylexml\parser.d src\sworks\stylexml\macros.d src\sworks\amm\args_data.d src\sworks\amm\main.d src\sworks\win32\sjis.d src\sworks\base\output.d src\sworks\amm\ready_data.d src\sworks\stylexml\package.d
-src\sworks\amm\args_data.obj : src\sworks\base\strutil.d src\sworks\stylexml\macro_item.d src\sworks\base\search.d src\sworks\amm\args_data.d src\sworks\stylexml\macros.d src\sworks\win32\sjis.d src\sworks\base\output.d
-src\sworks\amm\deps_data.obj : src\sworks\amm\deps_data.d src\sworks\base\strutil.d src\sworks\stylexml\macro_item.d src\sworks\base\search.d src\sworks\stylexml\macros.d src\sworks\win32\sjis.d src\sworks\base\output.d
-src\sworks\amm\ready_data.obj : src\sworks\base\strutil.d src\sworks\stylexml\macro_item.d src\sworks\base\search.d src\sworks\stylexml\macros.d src\sworks\win32\sjis.d src\sworks\base\output.d src\sworks\amm\ready_data.d
+src\sworks\amm\main.obj : src\sworks\base\search.d src\sworks\stylexml\package.d src\sworks\base\array.d src\sworks\amm\ready_data.d src\sworks\stylexml\macros.d src\sworks\stylexml\writer.d src\sworks\base\output.d src\sworks\base\strutil.d src\sworks\win32\sjis.d src\sworks\amm\main.d src\sworks\stylexml\parser.d src\sworks\amm\deps_data.d src\sworks\amm\args_data.d src\sworks\base\mo.d src\sworks\stylexml\macro_item.d submodule\mofile\source\mofile.d src\sworks\base\getopt.d
+src\sworks\amm\args_data.obj : src\sworks\stylexml\macros.d src\sworks\base\strutil.d src\sworks\base\search.d src\sworks\amm\args_data.d src\sworks\win32\sjis.d src\sworks\base\output.d src\sworks\base\mo.d src\sworks\stylexml\macro_item.d submodule\mofile\source\mofile.d src\sworks\base\getopt.d
+submodule\mofile\source\mofile.obj : submodule\mofile\source\mofile.d
+src\sworks\amm\deps_data.obj : src\sworks\stylexml\macros.d src\sworks\base\search.d src\sworks\base\output.d src\sworks\win32\sjis.d src\sworks\base\strutil.d src\sworks\amm\deps_data.d src\sworks\stylexml\macro_item.d
+src\sworks\amm\ready_data.obj : src\sworks\amm\ready_data.d src\sworks\stylexml\macros.d src\sworks\base\strutil.d src\sworks\base\search.d src\sworks\win32\sjis.d src\sworks\base\output.d src\sworks\stylexml\macro_item.d
 src\sworks\base\array.obj : src\sworks\base\array.d
+src\sworks\base\getopt.obj : submodule\mofile\source\mofile.d src\sworks\base\strutil.d src\sworks\base\getopt.d src\sworks\base\mo.d
+src\sworks\base\mo.obj : submodule\mofile\source\mofile.d src\sworks\base\mo.d
 src\sworks\base\output.obj : src\sworks\base\output.d src\sworks\base\strutil.d src\sworks\win32\sjis.d
 src\sworks\base\search.obj : src\sworks\base\search.d
 src\sworks\base\strutil.obj : src\sworks\base\strutil.d
 src\sworks\stylexml\macro_item.obj : src\sworks\stylexml\macro_item.d
 src\sworks\stylexml\macros.obj : src\sworks\stylexml\macros.d src\sworks\stylexml\macro_item.d
-src\sworks\stylexml\package.obj : src\sworks\stylexml\writer.d src\sworks\stylexml\package.d src\sworks\stylexml\macros.d src\sworks\stylexml\macro_item.d src\sworks\stylexml\parser.d src\sworks\base\array.d
-src\sworks\stylexml\parser.obj : src\sworks\stylexml\writer.d src\sworks\stylexml\parser.d src\sworks\stylexml\macros.d src\sworks\stylexml\macro_item.d src\sworks\base\array.d
+src\sworks\stylexml\package.obj : src\sworks\stylexml\macros.d src\sworks\stylexml\macro_item.d src\sworks\stylexml\parser.d src\sworks\stylexml\package.d src\sworks\stylexml\writer.d src\sworks\base\array.d
+src\sworks\stylexml\parser.obj : src\sworks\stylexml\macros.d src\sworks\stylexml\parser.d src\sworks\stylexml\writer.d src\sworks\stylexml\macro_item.d src\sworks\base\array.d
 src\sworks\stylexml\writer.obj : src\sworks\stylexml\writer.d src\sworks\base\array.d
 src\sworks\win32\sjis.obj : src\sworks\base\strutil.d src\sworks\win32\sjis.d
 
@@ -57,21 +60,27 @@ ddoc :
 show :
 	@echo ROOT = src\sworks\amm\main.d
 	@echo TARGET = $(TARGET)
-	@echo VERSION = 0.170
+	@echo VERSION = 0.171
 run :
 	$(TARGET) $(FLAG)
 edit :
 	emacs $(TO_COMPILE)
 remake :
-	amm -J. amm.exe v=0.170 win.mak authors=KUMA license=CC0 .\src\sworks\amm\main.d $(FLAG)
+	amm.exe -J. amm.exe v=0.171 win.mak authors=KUMA license=CC0 -Isrc;submodule\mofile\source .\src\sworks\amm\main.d $(FLAG)
 
 debug :
 	ddbg $(TARGET)
 
+
+l10n-init:
+      	xgettext -k_ --from-code=UTF-8 --language=C $(TO_COMPILE) -o amm.pot
+	msginit --locale=ja -i amm.pot -o amm.po --no-translator
+
+l10n-update:
+      	xgettext -j -k_ --from-code=UTF-8 --language=C $(TO_COMPILE) -o amm.pot
+	msgmerge --update amm.po amm.pot
+
+l10n:
+      	msgfmt amm.po amm.mo
+
 ## generated by amm.
-
-readme :
-	dmd -c -o- -D -DfREADME.md $(COMPILE_FLAG) doc\src\readme.ddoc src\sworks\amm\main.d
-
-helpdoc :
-	dmd -c -o- -D -Dfhelp.d $(COMPILE_FLAG) doc\src\help.ddoc src\sworks\amm\main.d

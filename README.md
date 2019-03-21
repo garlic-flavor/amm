@@ -1,75 +1,67 @@
 # Automatic Makefile Maker.
 
-
-__Version:__ 0.170(dmd2.071.0)
-
-__Date:__ 2016-Apr-11 21:08:01
-
+__Version:__ 0.170(dmd2.084.0)
+__Date:__ 2019-Jan-27 23:42:58
 __Authors:__ KUMA
-
 __License:__ CC0
 
-
-## Description:
+## Description
 This is a program that makes a Makefile from the source code wirtten in
 D programmming language, automatically.
 
 
 
-
-## Acknowledgements:
+## Acknowledgements
 amm is written by D.
+
 [Digital Mars D Programming Language(http://dlang.org/)](http://dlang.org/)
 
-
 ## BUGS:
-- An error will occur when any Japanese are in a delimited string.
-  (on windows)
+  
+  - An error will occur when any Japanese are in a delimited string.
+         (on windows)
+       
+  
 
 
-
-## How to build:
+## How to build
 ### on Windows
-Please build with make tool that is distributed with dmd.
+  Please build with make tool that is distributed with dmd.
+  
 
 
 #### 32bit
-
-    >make -f win.mak release
+  
+    >make -f win.mak release 
 
 
 #### 64bit
-
-    >make -f win.mak release FLAG=-m64
+  
+    >make -f win.mak release FLAG=-m64 
 
 
 ### on linux
+  
+    >make -f linux64.mak release 
 
-    >make -f linux64.mak release
 
-
-## How to use:
+## How to use
 
     >amm [target.exe] [make-style.xml] [option for dmd] [options] rootfile.d
 options             | description
 --------------------|--------------------
 h help ?            | show this message.
-macro_name          | define the macro named macro_name.
+macro_name          | define the macro named macro_name. 
 macro_name=value    | define the macro named macro_name as value.
-m=Makefile          | set outputting Makefile's name.
-                    | passing a file of '.mak' extension as argument is same.
-root=path           | set the root file of this project.
-                    | passing a file of '.d' extension as argument is same.
-v=0.001             | set version description.
-                    | for my vwrite.
+m=Makefile          | set outputting Makefile's name. passing a file of '.mak' extension as argument is same.
+root=path           | set the root file of this project. passing a file of '.d' extension as argument is same.
+v=0.001             | set version description. for my vwrite.
 help macro          | show pre-defined macros.
 
 
-
-## Previous Notice:
+## Previous Notice
 - amm will invoke dmd, ensure that dmd is ready.
-- Put make-style.xml to where amm can find.
-    The searching priority is,
+- Put make-style.xml to where amm can find. The searching priority is,
     1. Current directory.
     1. The directory of the environment variable 'HOME'.
     1. The directory where the amm is.
@@ -77,41 +69,45 @@ help macro          | show pre-defined macros.
 
 
 
-
-## Example:
+## Example
 
     >amm root_file.d
 
-
 With the above command, a Makefile will be generated in the current directory.
-I assume that 'root_file.d' is a root file of the project, and that has `main()`
+I assume that 'root_file.d' is a root file of the project, and that has `<code class="code">main</code>()`
 function.
 If you want to make the target file name 'hoge.exe', do like this.
 
+
     >amm root_file.d hoge.exe
+
+
 When the argument starts with '-', it will be passed through to dmd.
 
+
     >amm -version=Unicode -L/exet:nt/su:windows:4.0 root_file.d hoge.exe
+
 You can use macro for amm like this.
 
+
     >amm v=1.0 gui root_file.d
-The macro named `'v'` is set as `'1.0'`, and the macro named `'gui'` is set as
-`'defined'`.
+
+The macro named `'v'` is set as `'1.0'`, and the macro named `'gui'` is set as `'defined'`.
 
 
 Delete macro command is
 
+
     >amm gui= root_file.d
 
 
-In the default situation, directories that consist your project are assumed like
-below.
+In the default situation, directories that consist your project are assumed like below.
 
 
     -- project --+                             <- where amm.exe will be invoked in.
                  |
                  |- target.exe                 <- where the target file will be generated to.
-                 |- Makefile                   <-
+                 |- Makefile                   <- 
                  |
                  |-- src    --+
                  |            |- source files  <- files that will be compiled.
@@ -131,9 +127,7 @@ below.
 
 
 
-
-
-## COMMAND LINE ARGUMENTS:
+## COMMAND LINE ARGUMENTS
 - '/?' '-h' '-help'
   show help messages.
 - 'help macro'
@@ -174,7 +168,6 @@ below.
 
 
 
-
 about_make-style.xml:
 `make-style.xml` controls the generation of the Makefile.
 In this file, you can
@@ -184,25 +177,23 @@ In this file, you can
 - use ifdef / ifndef conditioning.
 
 
-
 `make-style.xml` looks like below.
-
 
 ```d
     <style>
         <head>
-            <ifdef id="gui">
-                <add id="compile_flag">-version=Unicode</add>
-                    <add id="link_flag">-L/exet:nt/su:windows:4.0</add>
+            <ifdef id=<span class="string_literal">"gui"</span>>
+                <add id=<span class="string_literal">"compile_flag"</span>>-<span class="keyword">version</span>=Unicode</add>
+                    <add id=<span class="string_literal">"link_flag"</span>>-L/exet:nt/su:windows:4.0</add>
             </ifdef>
         </head>
-        <environment compiler="dmd" id="make">
+        <environment compiler=<span class="string_literal">"dmd"</span> id=<span class="string_literal">"make"</span>>
             <body>
-                TARGET = <get id="target" /><br />
-                TO_COMPILE = <get id="to_compile" />< br />
-                TO_LINK = <get id="to_link" /><br />
-                COMPILE_FLAG = <get id="compile_flag" /><br />
-                LINK_FLAG = <get id="link_flag" /><br />
+                TARGET = <get id=<span class="string_literal">"target"</span> /><br />
+                TO_COMPILE = <get id=<span class="string_literal">"to_compile"</span> />< br />
+                TO_LINK = <get id=<span class="string_literal">"to_link"</span> /><br />
+                COMPILE_FLAG = <get id=<span class="string_literal">"compile_flag"</span> /><br />
+                LINK_FLAG = <get id=<span class="string_literal">"link_flag"</span> /><br />
 
                 $(TARGET) : $(TO_LINK)<br />
                 <tab />dmd  -of$@ $**<br />
@@ -210,14 +201,13 @@ In this file, you can
                 .d.obj :<br />
                 <tab />dmd -c -op $(COMPILE_FLAG) $&lt;<br />
 
-                <get id="dependencies" /><br />
-                <get id="footer" />
+                <get id=<span class="string_literal">"dependencies"</span> /><br />
+                <get id=<span class="string_literal">"footer"</span> />
             </body>
         </environment>
     </style>
 
 ```
-
 
 With above make-style.xml, and with the command below,
 
@@ -227,7 +217,7 @@ the Makefile that is going to be generated will be like below.
     TARGET = hogehoge.exe
     TO_COMPILE = ./test.d
     TO_LINK = ./test.obj
-    COMPILE_FLAG = -version=Unicode
+    COMPILE_FLAG = -<span class="keyword">version</span>=Unicode
     LINK_FLAG = -L/exet:nt/su:windows:4.0
 
     $(TARGET) : $(TO_LINK)
@@ -240,7 +230,6 @@ the Makefile that is going to be generated will be like below.
     ## generated by amm.
 
 ```
-
 
 Valid_elements_in_make-style.xml:
 - `<style>`
@@ -290,11 +279,9 @@ Valid_elements_in_make-style.xml:
     `'id'` is a essential attribute.
 
 
-
-## Predefined macros:
+## Predefined macros
 The values specified by command line have highest priority.
 The name of macro is case IN-sensitive.
-
 
 - `'bracket'`
   The default value is `'rn'` on Windows.
@@ -406,7 +393,7 @@ The name of macro is case IN-sensitive.
   This value is used to decide that the root directory of source files
   to be compiled.
 - `'is_vclinker'`
-  If __true__, dmd will invoke the linker of Microsoft.
+  If <code class="code">true</code>, dmd will invoke the linker of Microsoft.
 - `'dll_ext'`
   The default value is `'.dll'` on Windows.
   The default value is `'.so'` on linux.
@@ -447,17 +434,12 @@ The name of macro is case IN-sensitive.
 
 
 
-
-
-
-## Licensed under:
+## Licensed under
 [Creative Commons Zero License(http://creativecommons.org/publicdomain/zero/1.0/)](http://creativecommons.org/publicdomain/zero/1.0/)
 
-
-## Development environment:
-- Windows Vista(x64) x dmd 2.071.0 x make (of Digital Mars)
-- Ubuntu 15.10(x64) x gcc 5.2.1 x dmd 2.071.0 x GNU Make
-
+## Development environment
+- Windows Vista(x64) x dmd 2.084.0 x make (of Digital Mars)
+- Ubuntu 15.10(x64) x gcc 5.2.1 x dmd 2.084.0 x GNU Make
 
 
 ## History:
@@ -474,151 +456,10 @@ The name of macro is case IN-sensitive.
 
 
 
-
 * * *
 
 
-# はじめにお読み下さい。 - AMM -
-これはD言語で書かれたソースコードから Makefile を自動生成するプログラムです。
-
-
-## 謝辞:
-amm は D言語で書かれています。
-[Digital Mars D Programming Language(http://dlang.org/)](http://dlang.org/)
-
-
-## BUGS:
-- ~~'-inline' オプションで amm をコンパイルすると dmd が無限ループ(?) ( win32 及び linux32 で確認 )</del>(2013/03/02 dmd2.062)~~
-- ヒアドキュメント、q"DELIMITER hoge-hoge...  DELIMITER" である(不明)パターンになると、"Error: Outside Unicode code space"
-
-
-
-## ビルド方法:
-### Windows
-DMDに付属のmakeを使用して下さい。
-
-
-#### 32bit版
-
-    >make -f win.mak release FLAG=-version=InJapanese
-
-
-#### 64bit版
-
-    >make -f win.mak release FLAG="-version=InJapanese -m64"
-
-
-### Linux
-
-    >make -f linux64.mak release FLAG=-version=InJapanese
-
-
-## 使い方:
-
-    >amm [target.exe] [make-style.xml] [option for dmd] [options] rootfile.d
-
-
-options             | description
---------------------|--------------------
-h help ?            | ヘルプを表示します。
-macro_name          | マクロを定義済みとします。
-macro_name=value    | マクロに値を設定します。
-m=Makefile          | 出力される Makefile のファイル名を指定します。
-                    | 拡張子、'.mak' のファイルを渡しても可
-root=path           | ルートとなるソースファイルを指定します。
-                    | 拡張子、'.d' のファイルを渡しても可
-v=0.001             | ヴァージョン文字列を指定します。数字以外も指定できます。
-                    | 拙著の vwrite.exe 向けです。
-help macro          | 定義済みマクロを一覧表示します。
-
-
-
-## 事前に:
-- dmd へパスを通し、使える状態にしておいて下さい。
-- amm.exe へのパスを通して下さい。
-- 同梱の make-style.xml を amm.exe が探せる位置において下さい。
-  make-style.xml は以下の順に探されます。
-    1. amm.exe を実行するフォルダ
-    1. 環境変数 HOME のフォルダ
-    1. amm.exe と同じフォルダ
-    1. linux上では amm のあるフォルダから見て `../etc/amm`。
-
-
-
-
-## 簡単な使い方:
-
-    >amm root_file.d
-
-
-でカレントフォルダに Makefile ができます。
-
-
-ここで、`root_file.d` としているのは、プロジェクトのルートとなるファイル
-(実行形式のファイルがターゲットとなる場合は、一般的に `main()` 関数を含むファイル) です。
-
-
-初期状態では色々と変なことになると思うので、`make-style.xml` をいじって自分の環境に合わせてみて下さい。
-
-
-実行ファイル名を hoge.exe とするには、
-
-    >amm root_file.d hoge.exe
-
-
-とします。
-
-    >amm -version=Unicode -L/exet:nt/su:windows:4.0 root_file.d hoge.exe
-
-
-'-'(ハイフン)で初まる引数は、dmd へそのまま引き渡されます。
-
-
-以降で説明する、make-style.xml 内で使用されるマクロを設定するには、
-
-    >amm v=1.0 gui root_file.d
-
-
-これで、マクロ名 `"v"` に、文字列 `"1.0"` が、マクロ名 `"gui"` に、文字列 `"defined"` が設定されます。
-
-
-既存のマクロを削除するには、
-
-    >amm gui= root_file.d
-
-
-とします。
-
-
-初期状態では、フォルダの構成が以下のような環境が想定されています。
-
-
-    -- project --+                             <- amm.exe はこのフォルダで実行される。
-                 |
-                 |- target.exe                 <- ここに実行ファイルができる。
-                 |- Makefile                   <- Makefile はここに生成される。
-                 |
-                 |-- src    --+
-                 |            |- source files  <- コンパイルされる。
-                 |            |- ...
-                 |
-                 |-- import --+
-                 |            |- import files  <- コンパイルされない。
-                 |            |- ...
-                 |
-                 |-- lib    --+
-                 |            |- libraries     <- リンクされる。
-                 |            |- ...
-                 |
-                 |-- lib64  --+
-                 |            |- libraries
-                 |            |- ...
-
-
-
-
-
-## コマンドライン引数:
+コマンドライン引数:
 - '-h' '-help' '/?'
   ヘルプメッセージを出力します。
 - 'help macro'
@@ -639,7 +480,6 @@ help macro          | 定義済みマクロを一覧表示します。
     - '.lib'
       ターゲットのファイル名として扱われます。
 リンクするライブラリとしては扱われない* ので注意が必要です。
-
 
       リンクするライブラリを指定する場合は、
       `to_link+=hoge.lib`
@@ -662,11 +502,9 @@ help macro          | 定義済みマクロを一覧表示します。
     - `'macro_name='` とすると、マクロを削除できます。
 
 
-
 設定ファイル_make-style.xml:
 設定ファイルは xml で記述されています。
 Makefile の出力を制御します。
-
 
 設定ファイル内では、
 - 文字列をそのまま Makefile へ出力
@@ -675,26 +513,24 @@ Makefile の出力を制御します。
 - マクロの存在による分岐
 
 
-
 が可能です。
-
 
 ファイルはおよそ以下のような構造になっています。
 ```d
     <style>
         <head>
-            <ifdef id="gui">
-                <add id="compile_flag">-version=Unicode</add>
-                    <add id="link_flag">-L/exet:nt/su:windows:4.0</add>
+            <ifdef id=<span class="string_literal">"gui"</span>>
+                <add id=<span class="string_literal">"compile_flag"</span>>-<span class="keyword">version</span>=Unicode</add>
+                    <add id=<span class="string_literal">"link_flag"</span>>-L/exet:nt/su:windows:4.0</add>
             </ifdef>
         </head>
-        <environment compiler="dmd" id="make">
+        <environment compiler=<span class="string_literal">"dmd"</span> id=<span class="string_literal">"make"</span>>
             <body>
-                TARGET = <get id="target" /><br />
-                TO_COMPILE = <get id="to_compile" />< br />
-                TO_LINK = <get id="to_link" /><br />
-                COMPILE_FLAG = <get id="compile_flag" /><br />
-                LINK_FLAG = <get id="link_flag" /><br />
+                TARGET = <get id=<span class="string_literal">"target"</span> /><br />
+                TO_COMPILE = <get id=<span class="string_literal">"to_compile"</span> />< br />
+                TO_LINK = <get id=<span class="string_literal">"to_link"</span> /><br />
+                COMPILE_FLAG = <get id=<span class="string_literal">"compile_flag"</span> /><br />
+                LINK_FLAG = <get id=<span class="string_literal">"link_flag"</span> /><br />
 
                 $(TARGET) : $(TO_LINK)<br />
                 <tab />dmd  -of$@ $**<br />
@@ -702,8 +538,8 @@ Makefile の出力を制御します。
                 .d.obj :<br />
                 <tab />dmd -c -op $(COMPILE_FLAG) $&lt;<br />
 
-                <get id="dependencies" /><br />
-                <get id="footer" />
+                <get id=<span class="string_literal">"dependencies"</span> /><br />
+                <get id=<span class="string_literal">"footer"</span> />
             </body>
         </environment>
     </style>
@@ -717,7 +553,7 @@ Makefile の出力を制御します。
     TARGET = hogehoge.exe
     TO_COMPILE = ./test.d
     TO_LINK = ./test.obj
-    COMPILE_FLAG = -version=Unicode
+    COMPILE_FLAG = -<span class="keyword">version</span>=Unicode
     LINK_FLAG = -L/exet:nt/su:windows:4.0
 
     $(TARGET) : $(TO_LINK)
@@ -732,25 +568,19 @@ Makefile の出力を制御します。
 ```
 というようになります。
 
-
 コマンドライン引数 `'gui'` を設定したことによって、コンパイルオプション、リンクオプションが追加されています。
-
 
 最後の行の `## generated by amm.` はフッタとしてマクロに登録されたものです。
 例えばインストールコマンド等、フッタ以降に手動で記入したものは、amm.exe を再度実行し、
 Makefile を作り直しても残ります。
 
-
 行頭、行末の空白文字は省かれます。
 それ以外の空白文字はそのまま出力されます。
-
 
 行頭にタブを出力する場合は、`<tab />` を使用して下さい。
 
 
-
-
-## 設定ファイルで利用可能なタグ:
+設定ファイルで利用可能なタグ:
 - `<style>`
   ルートタグ。
   `<environment>` が必須要素
@@ -809,11 +639,9 @@ Makefile を作り直しても残ります。
   `'id'` 属性が必須属性です。
 
 
-
-## 定義済みマクロ:
+定義済みマクロ:
 マクロの値は、コマンドラインによる指定が最優先されます。
 大文字と小文字は区別されません。
-
 
 - `'bracket'`
   The default value is `'rn'` on Windows.
@@ -988,27 +816,23 @@ imp_root ~ ';' ~ root
   される。
 
 
-
-## ライセンス:
+ライセンス:
 [Creative Commons Zero License(http://creativecommons.org/publicdomain/zero/1.0/)](http://creativecommons.org/publicdomain/zero/1.0/)
 
-
-## ToDo:
+## ToDo
 - ~~GNU make に対応する。~~( 2012/10/25 ver. 0.163 にて対応)
 - ~~Linux に対応する。~~( 2012/10/25 ver. 0.163 にて対応)
 
 
-
-## 開発環境:
+開発環境:
 現在、
-- Windows Vista(WoW64) x dmd2.071.0 x (dmdに付属の)make
-- Ubuntu 15.10(x64) x gcc 5.2.1 x dmd2.071.0 x GNU Make
+- Windows Vista(WoW64) x dmd2.084.0 x (dmdに付属の)make
+- Ubuntu 15.10(x64) x gcc 5.2.1 x dmd2.084.0 x GNU Make
 
 の組み合わせで実行を確認しています。
 付属の amm.exe は x64 Windows 用のバイナリです。
 
-
-## 履歴:
+履歴:
 - 2016/04/11 ver. 0.170(dmd2.071.0)
     - 文字列インポートに関するバグフィクス
 
@@ -1134,6 +958,3 @@ imp_root ~ ';' ~ root
   std.contractsを使うようにちょっとだけ変更。
 - 2009/08/29 ver. 0.1
   ほんと __とりあえず__ 公開。
-
-
-

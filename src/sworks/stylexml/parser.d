@@ -1,6 +1,6 @@
 /** -style.xml ファイルのパース
- * Dmd:        2.071.0
- * Date:       2016-Feb-28 23:43:16
+ * Dmd:        2.085.0
+ * Date:       2019-Feb-10 23:30:03
  * Authors:    KUMA
  * License:    CC0
  */
@@ -101,7 +101,7 @@ TagHandler ws_tag(Writer writer)
             l = e.tag.attr.get("length", "1").to!int;
         catch (Exception)
             throw new Exception("the value of 'length' attribute of <ws> tag"
-                                " can't be parset to int by std.conv.");
+                                ~ " can't be parset to int by std.conv.");
 
         auto cstr = new char[l];
         cstr[] = ' ';
@@ -116,15 +116,19 @@ TagHandler get_tag(Writer writer, Macros macros)
     {
         import std.exception : enforce;
         import std.array : replace;
+        import std.path: setExtension;
 
         auto e_id = e.tag.attr.get("id", null)
             .enforce("the <get> tag has no 'id' attribute.");
         auto value = m[e_id];
         if (0 == value.length) return;
 
-        auto f = e.tag.attr.get("from", "");
+        auto f = "from" in e.tag.attr;
         auto t = e.tag.attr.get("to", "");
-        if (0 < f.length) value = value.replace(f, t);
+        if (f !is null) value = value.replace(*f, t);
+
+        auto se = "setExtension" in e.tag.attr;
+        if (se !is null) value = value.setExtension(*se);
 
         with (new DocumentParser("<set>" ~ value ~ "</set>"))
         {

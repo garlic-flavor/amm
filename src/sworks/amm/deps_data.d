@@ -1,6 +1,6 @@
 /** dmd を呼び出し、プロジェクトの依存関係を解決する.
- * Version:    0.170(dmd2.071.0)
- * Date:       2016-Apr-11 21:03:50
+ * Version:    0.171(dmd2.085.0)
+ * Date:       2016-Jun-04 00:02:01
  * Authors:    KUMA
  * License:    CC0
  */

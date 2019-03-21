@@ -1,6 +1,6 @@
 /** コンソールへの出力を制御する。
- * Dmd:        2.071.0
- * Date:       2016-Feb-28 23:42:14
+ * Dmd:        2.085.0
+ * Date:       2019-Mar-19 00:51:19
  * Authors:    KUMA
  * License:    CC0
  */
@@ -165,6 +165,26 @@ private:
         }
     }
 
+
+    size_t getTerminalWidth()
+    {
+        version      (Windows)
+        {
+            import core.sys.windows.windows;
+            CONSOLE_SCREEN_BUFFER_INFO csbi;
+            GetConsoleScreenBufferInfo (GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+            return csbi.srWindow.Right - csbi.srWindow.Left + 1;
+        }
+        else version (linux)
+        {
+            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! UNDER CONSTRUCTION
+            // struct winsize w;
+            // ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+            // return w.ws_row;
+        }
+        else
+            static assert (0, "NO IMPLEMENTATION! SORRY!");
+    }
 }
 
 //##############################################################################

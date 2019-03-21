@@ -1,6 +1,6 @@
 /** variantな要素の為の効率のよい(?)動的配列の実装
- * Dmd:        2.071.0
- * Date:       2016-Feb-28 23:41:58
+ * Dmd:        2.085.0
+ * Date:       2016-Jun-04 00:02:01
  * Authors:    KUMA
  * License:    CC0
  */

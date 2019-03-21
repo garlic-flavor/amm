@@ -1,6 +1,6 @@
 /**
- * Dmd:        2.071.0
- * Date:       2016-Feb-28 23:42:35
+ * Dmd:        2.085.0
+ * Date:       2019-Mar-21 15:13:22
  * Authors:    KUMA
  * License:    CC0
  */
@@ -79,3 +79,88 @@ struct TStringAppender(TCHAR)
     { _payload.put(" ".repeat.take(t*4)); return this; }
 
 }
+
+
+///
+string tabular(string[2][] data, string title1, string title2, int w = -1,
+               string separator = "|")
+{
+    import std.range: repeat;
+    import std.array: Appender, join;
+    import std.conv: to;
+    import std.format: format;
+    import std.ascii: isAlpha;
+
+    size_t wL = title1.length, wR = 0;
+    foreach (one; data)
+    {
+        if (wL < one[0].length)
+            wL = one[0].length;
+    }
+
+    if (0 < w && wL + 3 < w)
+        wR = w - wL - 3;
+    else
+        wR = 10;
+
+    Appender!(string[]) app;
+    auto fmt = ["%", wL.to!string, "s " , separator, " %s"].join;
+
+    app.put(fmt.format(title1, title2));
+    app.put(['-'.repeat(wL+1).to!string, separator,
+             '-'.repeat(wR+1).to!string].join);
+    if (0 < w)
+    {
+        assert (0 < wR);
+
+        foreach (one; data)
+        {
+            for (size_t i = 0; i < one[1].length;)
+            {
+                string line;
+                size_t j;
+                if      (one[1].length <= i + wR)
+                {
+                    j = one[1].length;
+                    line = one[1][i .. j];
+                }
+                else if (one[1][i+wR-1] == ' ')
+                {
+                    j = i + wR;
+                    line = one[1][i .. j];
+                }
+                else if (2 <= i + wR && one[1][i+wR-2] == ' ')
+                {
+                    j = i + wR - 1;
+                    line = one[1][i .. j];
+                }
+                else if (one[1][i+wR] == ' ')
+                {
+                    j = i + wR + 1;
+                    line = one[1][i .. j - 1];
+                }
+                else if (one[1][i+wR-1].isAlpha && one[1][i+wR].isAlpha)
+                {
+                    j = i + wR - 1;
+                    line = one[1][i .. j] ~ "-";
+                }
+                else
+                {
+                    j = i + wR;
+                    line = one[1][i .. j];
+                }
+
+                app.put(fmt.format(i == 0 ? one[0] : "", line));
+                i = j;
+            }
+        }
+    }
+    else
+    {
+        foreach (one; data)
+            app.put(fmt.format(one[0], one[1]));
+    }
+
+    return app.data.join("\n");
+}
+
