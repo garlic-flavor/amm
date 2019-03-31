@@ -1,6 +1,6 @@
 /** 追記の可不可を変更できる文字列
  * Dmd:        2.085.0
- * Date:       2019-Jan-26 02:59:33
+ * Date:       2019-Mar-23 02:58:44
  * Authors:    KUMA
  * License:    CC0
  */

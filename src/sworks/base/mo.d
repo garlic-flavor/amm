@@ -6,6 +6,7 @@ Description:
 module sworks.base.mo;
 
 import mofile; // https://github.com/FreeSlave/mofile.git
+debug import std.stdio: writeln;
 
 /**
 
@@ -31,12 +32,6 @@ msgfmt l10n/project/ja_JP.utf8.po -o l10n/project/ja_JP.utf8.mo
 ---
   )
 
-  $(LI ソースコードの編集内容をテンプレートに反映する。
----
-xgettext -j --from-code=UTF-8 --language=C -k_ main.d subroutine.d -o l10n/project/messages.pot
----
-  )
-
   $(LI 更新されたテンプレートをPOファイルに適用する。
 ---
 msgmerge --update l10n/project/ja_JP.utf8.po l10n/project/messages.pot
@@ -46,21 +41,20 @@ msgmerge --update l10n/project/ja_JP.utf8.po l10n/project/messages.pot
 
 $(DDOC_SECTION_H 想定されているフォルダ構成)
 ---
-- root -+- l10n -+- project_name -+- package_name -+- messages.pot
-        |                         |                +- ja_JP.utf8.po
-        |                         |                +- ja_JP.utf8.mo
-        |                         |
-        |                         +- another_pkg -+-messages.pot
-        |                                         +- ja_JP.utf8.po
-        |                                         +- ja_JP.utf8.mo
+- root -+- l10n -+- project_name -+- messages.pot
+        |                         +- ja_JP.utf8.po
+        |                         +- ja_JP.utf8.mo
+        |                         +- ...
         |
         +- src -+- package_name -+- src1.d
-                |                +- src2.d
-                |                +...
-                |
-                +- another_pkg -+- srcA.d
-                                +- srcB.d
-                                +...
+        |       |                +- src2.d
+        |       |                +...
+        |       |
+        |       +- another_pkg -+- srcA.d
+        |                       +- srcB.d
+        |                       +...
+        +- application.exe
+        +- ...
 ---
 
  */
@@ -79,11 +73,17 @@ struct MoUtil
         _basePath = p;
     }
 
+    @property @safe @nogc pure nothrow
+    void projectName(string p)
+    {
+        _projectName = p;
+    }
+
     /// moファイル用のルートディレクトリを "l10n" に設定する。
     @safe @nogc pure nothrow
     void restoreDefaultPath()
     {
-        _basePath = _defaultPath;
+        _basePath = null;
     }
 
     /** ロケールを設定する。
@@ -93,10 +93,10 @@ struct MoUtil
         見つからなかったら false を返す。
      */
     @safe
-    bool setlocale (string M = __MODULE__)(string loc)
+    bool setlocale(string loc)
     {
         string path;
-        if (check!M(loc, path))
+        if (check(loc, path))
         {
             file = MoFile(path);
             return true;
@@ -112,44 +112,66 @@ struct MoUtil
         file = MoFile.init;
     }
 
+    ///
+    enum ExpandMode
+    {
+        Lazily,
+    }
+
     /// gettext を呼び出す。
     pure
-    string opCall(OPT...)(string s, OPT opt) const
+    auto opCall(OPT...)(string s, OPT opt) const
     {
-        static if (0 < OPT.length)
+        static if (0 < OPT.length && is(OPT[$-1] == ExpandMode))
         {
-            import std.format: format;
-            s = s.format(opt);
+            return (){
+                static if (1 < OPT.length)
+                {
+                    import std.format: format;
+                    s = s.format(opt);
+                }
+                return file.gettext(s);
+            };
         }
+        else
+        {
+            static if (0 < OPT.length)
+            {
+                import std.format: format;
+                s = s.format(opt);
+            }
 
-        return file.gettext(s);
+            return file.gettext(s);
+        }
     }
 
 private:
     @safe
-    bool check(string M)(string loc, out string path)
+    bool check(string loc, out string path)
     {
-        // import std.traits: fullyQualifiedName;
         import std.array: split;
-        import std.path: buildPath, setExtension;
-        import std.file: exists, isFile;
-        import std.range: retro, drop, dropBack;
+        import std.path: buildPath, setExtension, dirName;
+        import std.file: exists, isFile, thisExePath;
+        import std.range: retro, drop;
         import std.algorithm: findAmong;
 
-        path = (_basePath ~
-                /*fullyQualifiedName!(mixin(M))*/M.split(".").dropBack(1))
-            .buildPath.setExtension(_moFileExtension);
+        if (0 == _basePath.length)
+            _basePath = thisExePath.dirName.buildPath(_defaultPath);
+
+        path = _basePath.buildPath(_projectName, loc)
+            .setExtension(_moFileExtension);
 
         if      (path.exists && path.isFile)
             return true;
         else if ((loc = loc.retro.findAmong(['_', '.', '@']).drop(1).retro)
                  .length)
-            return check!M(loc, path);
+            return check(loc, path);
         else
             return false;
     }
 
-    string _basePath = _defaultPath;
+    string _basePath;
+    string _projectName;
     MoFile file;
 }
 

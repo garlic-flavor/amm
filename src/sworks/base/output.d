@@ -1,10 +1,12 @@
 /** コンソールへの出力を制御する。
  * Dmd:        2.085.0
- * Date:       2019-Mar-19 00:51:19
+ * Date:       2019-Mar-29 01:53:54
  * Authors:    KUMA
  * License:    CC0
  */
 module sworks.base.output;
+
+debug import std.stdio: writeln;
 
 version (Windows) private import sworks.win32.sjis;
 
@@ -152,13 +154,30 @@ private:
         _file.write(_current_indent);
         auto temp = "\n" ~ _current_indent;
         if (_file !is stdout && _file !is stderr)
+        {
             foreach (one ; msg)
                 _file.write(one.to!string.replace("\n", temp));
+        }
         else
         {
             version (Windows)
+            {
                 foreach (one ; msg)
-                    _file.write(one.toMBS.c.replace("\n", temp));
+                {
+                    try
+                    {
+                        _file.write(one.toMBS.c.replace("\n", temp));
+                    }
+                    catch (Exception e)
+                    {
+                        static if (is(typeof(one): string))
+                        {
+                            writeln(cast(ubyte[])one);
+                        }
+                        throw e;
+                    }
+                }
+            }
             else
                 foreach (one ; msg)
                     _file.write(one.to!string.replace("\n", temp));

@@ -1,0 +1,334 @@
+# Japanese translations for AMM package.
+# Copyright (C) 2019 THE AMM'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the AMM package.
+# Automatically generated, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: AMM 0.172(dmd2.085.0)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-01 01:08+0900\n"
+"PO-Revision-Date: 2019-04-01 01:09+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid ""
+"This is a program that makes a Makefile from source files wirtten in D "
+"programmming language."
+msgstr ""
+"このプログラムはD言語で書かれたソースファイルからMakefileを自動生成する為のも"
+"のです。"
+
+#, c-format
+msgid "%s is not found."
+msgstr "%s は未定義です。"
+
+msgid ""
+"consists of newline characters. `'rn'` means CR+LF. `'n'` means LF. `'r'` "
+"means CR."
+msgstr ""
+"改行文字を指定します。`'rn'`はCR+LFを、`'n'`はLFを、`'r'`はCRを意味します。"
+
+msgid "This macro exists for backward compatibility."
+msgstr "このマクロは後方互換性の為に残されています。"
+
+msgid "consists of an extension of an executable file name."
+msgstr "実行形式ファイルの拡張子を指定します。"
+
+msgid "consists of an extension of a object file name."
+msgstr "オブジェクトファイルの拡張子を指定します。"
+
+msgid "consists of an extension of a statically linked library file name."
+msgstr "静的リンクライブラリファイルの拡張子を指定します。"
+
+msgid ""
+"consists of the command that invokes dmd to resolve your project's "
+"dependencies."
+msgstr "依存関係解決の為に実行される際のコマンドが格納されます。"
+
+msgid "consists of the file name of the target of `'gen_deps_command'`."
+msgstr "`'gen_deps_command'`で生成される一時ファイルのファイル名を指定します。"
+
+msgid "consists of the name of the Makefile."
+msgstr "生成されるMakefileの名前を指定します。"
+
+msgid ""
+"consists of the file name of a root file of your project. When a file name "
+"having `'.d'` as its extension is passed as a command line argument, the "
+"file name will be set to this macro."
+msgstr ""
+"プロジェクトのルートファイルパスを指定します。拡張子が`.d`のパスをコマンドラ"
+"イン引数から指定するとこのマクロに設定されます。"
+
+msgid ""
+"consists of compile flags for dmd. When a command line argument starts with "
+"`'-'`, the argument will be set to this macro."
+msgstr ""
+"dmdのコンパイルフラグを指定します。コマンドライン引数のうち、`-`で始まるもの"
+"がここに格納されます。"
+
+msgid ""
+"consists of link flags for dmd. When a command line argument for amm starts "
+"with `'-L'`, the argument will be set to this macro."
+msgstr ""
+"dmdのリンクフラグを指定します。コマンドライン引数のうち、'-L'で始まるものがこ"
+"こに格納されます。"
+
+msgid ""
+"consists of the target file name of your project. On Windows, when a file "
+"name having `'.exe'` or `'.dll'` as its extension is passed as a command "
+"line argument, the file name will be set to this macro."
+msgstr ""
+"プロジェクトのビルドターゲット名が格納されます。Windowsでは、`.exe`あるいは`."
+"dll'の拡張子を持つパスをコマンドライン引数から指定すると、ここに格納されま"
+"す。"
+
+msgid "Amm will set this value."
+msgstr "AMMが自動で値を設定します。ソースファイルの依存関係が格納されます。"
+
+msgid ""
+"On Windows, when a file that has `'.rc'` as its extension is passed as a "
+"command line argument, the file name will be set to this macro."
+msgstr ""
+"Windows上で、リソースファイルを指定します。拡張子が`.rc`のファイルをコマンド"
+"ライン引数から指定するとここに格納されます。"
+
+msgid ""
+"On Windows, when a file that has `'.def'` as its extension is passed as a "
+"command line argument, the file name will be set to this macro."
+msgstr ""
+"Windowsで、モジュール定義ファイルを指定します。コマンドライン引数から`.def`の"
+"拡張子のファイルを指定するとここに格納されます。"
+
+msgid ""
+"when a file that has `'.ddoc'` as its extension is passed as a command line "
+"argument, the file name will be set to this macro."
+msgstr ""
+"DDOC用ファイルを指定します。コマンドライン引数から`.ddoc`の拡張子を持つファイ"
+"ルを指定するとここに格納されます。"
+
+msgid "consists of the target directory of DDOC."
+msgstr "DDOCの出力用ディレクトリを指定します。"
+
+msgid ""
+"consists of libraries names to link. Amm will gather files form the "
+"directory specified by the macro named `'lib'`."
+msgstr ""
+"静的リンクされるライブラリファイルパスが格納されます。マクロ名`'lib'`で指定さ"
+"れたディレクトリ内にあるファイルがここに格納されます。"
+
+msgid ""
+"consists of the directory that contains files to be imported by your project."
+msgstr ""
+"importされるファイルが含まれているディレクトリを指定します。このディレクトリ"
+"下にあるファイルはコンパイルされないものとみなされます。"
+
+msgid ""
+"consists of the directory that contains the file to be linked by your "
+"project."
+msgstr ""
+"静的リンクされるライブラリファイルが入っているディレクトリを指定します。"
+
+msgid "Amm will set this value. This is same as `-I` option for dmd."
+msgstr "AMMが値を設定します。dmdの`-I`オプションの内容と同じです。"
+
+msgid "mark whether the target of your project is dynamic link library."
+msgstr "プロジェクトのターゲットがDLLの場合に定義します。"
+
+msgid "mark whether the target of your project is static link library."
+msgstr "プロジェクトのターゲットが静的ライブラリの場合に定義します。"
+
+msgid "controls the verboseness of amm."
+msgstr "AMMの標準出力の冗長性を指定します。"
+
+msgid ""
+"consists of the 'footer mark' of the Makefile. Amm will overwrite the "
+"Makefile but, contents after this mark will remain."
+msgstr ""
+"Makefile末尾に追加される「フッターマーク」を格納します。Makefile内でこのマー"
+"クより後に手動で追加された部分は、AMMでMakefileを更新した場合でも残ります。"
+
+msgid "consists of the setting file name."
+msgstr "オブジェクトファイルの拡張子を指定します。"
+
+msgid "specify the description about your project."
+msgstr "プロジェクトの情報を指定します。"
+
+msgid "Amm will set this value as today."
+msgstr "AMMが現在時刻を格納します。"
+
+msgid "consists of the command line arguments that invoked amm."
+msgstr "AMMが起動された時のコマンドが格納されます。"
+
+msgid ""
+"command line arguments that starts with '-I' is set to this value. This "
+"value is used to decide that the root directory of source files to be "
+"compiled."
+msgstr ""
+"コマンドライン引数から`-I`で指定されたディレクトリがここに格納されます。"
+
+msgid "If 'defined', dmd will invoke the linker of Microsoft."
+msgstr "dmdに、マイクロソフトのリンカを使うように設定します。"
+
+msgid ""
+"consists of the extension of a Dynamic Linked Library. when a file with this "
+"extension is in the arguments, the file will be regarded as TARGET, and the "
+"macro 'IS_DLL' is defined."
+msgstr ""
+"DLLライブラリの拡張子を指定します。この拡張子を持つファイルがコマンドライン引"
+"数から指定された場合、プロジェクトのビルドターゲットとしてみなされ、"
+"`'IS_DLL'`マクロが定義済とされます。"
+
+msgid ""
+"consists of the extension of Makefile. when a file with this extension is in "
+"the arguments, the file will be regarded as Makefile."
+msgstr ""
+"Makefileの拡張子を指定します。コマンドライン引数でこの拡張子を持つファイル名"
+"が指定された場合、AMMが出力するMakefileの名前として使われます。"
+
+msgid ""
+"consists of the extension of source file. When a file with this extension is "
+"in the arguments, the file will be regarded the root file of the project. "
+"and the file will be set to the value of the macro 'ROOT'. When the value of "
+"macro 'TARGET' is undefined, the value of the macro will be set as 'ROOT' + "
+"'EXE_EXT'."
+msgstr ""
+"ソースファイルの拡張子を指定します。コマンドライン引数からこの拡張子を持つ"
+"ファイル名が指定された場合、プロジェクトのルートファイルとみなされ、`'ROOT'`"
+"マクロへと設定されます。また、`'TARGET'`マクロが未定義の場合、"
+"``ROOT'+'EXE_EXT'`がプロジェクトターゲット名として設定されます。"
+
+msgid ""
+"consists of the extension of a resource file. When a file with this "
+"extension is in the arguments, the file will be set to the value of the "
+"macro 'RC'. Windows only."
+msgstr ""
+"リソースファイルの拡張子を設定します。コマンドライン引数からこの拡張子を持つ"
+"ファイルが指定された場合、`'RC'`マクロに設定されます。"
+
+msgid "consists of resource files. Windows only."
+msgstr "リソースファイル名が格納されます。"
+
+msgid ""
+"consists of the extension of a module definition file of D. when a file with "
+"this extension is in the arguments, the file will be regarded as module "
+"definition file."
+msgstr ""
+"モジュール定義ファイルの拡張子を指定します。コマンドライン引数からこの拡張子"
+"を持つファイルを指定した場合、モジュール定義ファイルとみなされます。"
+
+msgid ""
+"consists of the extension of a file for ddoc. when a file with this "
+"extension is in the arguments, the file will be regarded as for ddoc."
+msgstr ""
+"DDOCファイルの拡張子を指定します。コマンドライン引数からこの拡張子を持つファ"
+"イルを指定した場合、DDOC用のファイルとみなされます。"
+
+msgid ""
+"consists of the extension of STYLE_FILE. when a file with this extension is "
+"in the arguments, the file will be regarded STYLE_FILE."
+msgstr "AMMが使う設定ファイルに用いられるファイルの拡張子を設定します。"
+
+msgid "STYLE_FILE controls output."
+msgstr "STYLE_FILEはAMMの出力を制御します。"
+
+#, c-format
+msgid "no help message about %s"
+msgstr "%sに関する説明文はありません。"
+
+msgid "name"
+msgstr "名前"
+
+msgid "default value"
+msgstr "初期値"
+
+msgid "description"
+msgstr "説明"
+
+msgid "Predefined macros are bellows."
+msgstr "定義済マクロは以下です。"
+
+msgid "To show more details, invoke with --help TOPICS."
+msgstr "詳細な説明は、--help TOPICS を引数に指定してください。"
+
+msgid "Available TOPICS are bellows."
+msgstr "TOPICSとして指定可能なものは以下です。"
+
+msgid ""
+"Specify the language. The default value is taken from an environment "
+"variable named 'LANG'."
+msgstr "言語を指定します。初期値は環境変数`'LANG'`から取られます。"
+
+msgid "Set output policy as 'VERBOSE'."
+msgstr "AMMの標準出力を'冗長'に設定します。"
+
+msgid "Set output policy as 'quiet'."
+msgstr "AMMの標準出力を'静か'に設定します。"
+
+#, c-format
+msgid "Unknown option: %s"
+msgstr "%s は未定義のオプションです。"
+
+msgid "are passed to dmd."
+msgstr "dmdへと渡されます。"
+
+msgid "Append 'value' to the macro named 'name'."
+msgstr "マクロ名'name'に'value'を追加します。"
+
+msgid "Set 'value' to the macro named 'name'."
+msgstr "マクロ名'name'に'value'を設定します。"
+
+msgid "Set the macro named 'name' as 'defined'."
+msgstr "マクロ名'name'を'defined'(定義済)に設定します。"
+
+#, c-format
+msgid "%s is an unknown file type."
+msgstr "%s は未定義のファイル拡張子です。"
+
+msgid "please input root files of the project.\n"
+msgstr "プロジェクトのルートファイルパスを指定して下さい。\n"
+
+msgid "Hello"
+msgstr ""
+
+msgid "File"
+msgid_plural "Files"
+msgstr[0] ""
+
+msgid "abcd"
+msgstr ""
+
+msgid "Show help messages."
+msgstr "説明文を表示します。"
+
+#, c-format
+msgid "One more target is expected for option '%s'"
+msgstr "%s オプションの処理方法を指定して下さい。"
+
+#, c-format
+msgid "An unknown option: %s"
+msgstr "%s は未定義の引数です。"
+
+#, c-format
+msgid "Option '%s' is required."
+msgstr "引数 %s は必須です。"
+
+msgid "option"
+msgstr "オプション"
+
+#, c-format
+msgid "option %s needs an argument."
+msgstr "引数 %s には追加の引数が必要です。"
+
+msgid "a selector string is needed."
+msgstr "フィルタ文字列が指定されていません。"
+
+#~ msgid ""
+#~ "consists of the setting file name. The default value is `'make-style."
+#~ "xml'`."
+#~ msgstr "AMMのMakefileへの出力を制御する設定ファイルパスを指定します。"

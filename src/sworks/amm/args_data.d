@@ -1,6 +1,6 @@
 /** コマンドライン引数を解析します.
- * Version:    0.170(dmd2.084.0)
- * Date:       2016-Jun-05 23:09:36
+ * Version:    0.172(dmd2.085.0)
+ * Date:       2019-Mar-29 00:44:09
  * Authors:    KUMA
  * License:    CC0
  */
@@ -24,32 +24,31 @@ auto set_args_data(alias ML)(Macros data, string[] args)
     //
     data.fix(ML.remake_command, args.toCommandString);
 
+    alias L = MoUtil.ExpandMode.Lazily;
+
     auto result = Getopt(
         args,
 
-        "lang", "-lang **", _("What language is used. The default value is taken from an environment variable named 'LANG'."),
+        "lang", "-lang **", _("Specify the language. The default value is taken from an environment variable named 'LANG'.", L),
         (string key, string lang) { _.setlocale(lang); },
 
-        "verbose", _("Set output policy as 'VERBOSE'."),
+        "verbose", _("Set output policy as 'VERBOSE'.", L),
         (){ Output.mode = Output.MODE.VERBOSE; },
 
-        "quiet|q", _("Set output policy as 'quiet'."),
+        "quiet|q", _("Set output policy as 'quiet'.", L),
         (){ Output.mode = Output.MODE.QUIET; },
 
         Getopt.Config.notInSummary,
-        "L", _("This will be passed to linker."),
-        (string val) { data[ML.link_flag] ~= val; },
+        "L", (string val) { data[ML.link_flag] ~= val; },
 
         Getopt.Config.notInSummary,
-        "I", _("This will be Passed to dmd. This add a directory to import searching chain."),
-        (string key, string val) { data[ML.src] ~= val; },
+        "I", (string key, string val) { data[ML.src] ~= val; },
 
         Getopt.Config.notInSummary,
-        r"of", "name output file to this",
-        (string key, string val) { data.fix(ML.target, val); },
+        "of", (string key, string val) { data.fix(ML.target, val); },
 
         Getopt.Config.notInSummary,
-        "m32mscoff|m32|m64", _("A linkage option of dmd. -m64/-m32mscoff"),
+        "m32mscoff|m32|m64",
         (string key)
         {
             data[ML.compile_flag] ~= "-" ~ key;
@@ -75,33 +74,33 @@ auto set_args_data(alias ML)(Macros data, string[] args)
         (string key, string val){ data.rewrite(ML.deps_file, val); },
 
         Getopt.Config.notInSummary,
-        "Dd", _("Specify the file for ddoc."),
+        "Dd",
         (string key, string val){ data.rewrite(ML.ddoc, val); },
 
         Getopt.Config.regex,
-        "^-.*$", "other options", _("are handed to dmd."),
+        "^-.*$", "other options", _("are passed to dmd.", L),
         (string key) { data[ML.compile_flag] ~= key; },
 
         Getopt.Config.regex,
         ["^(?P<", Getopt.Key, ">[^-/].*)(?P<", Getopt.Equal, ">\\+=)(?P<",
          Getopt.Value, ">.*)$"].join,
-        "name+=value", _("Append value to the mcaro named name."),
+        "name+=value", _("Append 'value' to the macro named 'name'.", L),
         (string key, string val){ data.forceConcat(key, val); },
 
         Getopt.Config.regex,
         ["^(?P<", Getopt.Key, ">[^-/][^=]*)(?P<", Getopt.Equal, ">=)(?P<",
          Getopt.Value, ">.*)$"].join,
-        "name=value", _("Set value to the macro named name."),
+        "name=value", _("Set 'value' to the macro named 'name'.", L),
         (string key, string val){ data.rewrite(key, val); },
 
         Getopt.Config.regex,
         "^[^-/=\\.][^=\\.]*$", "name",
-        _("Set the macro named name as 'defined'."),
+        _("Set the macro named 'name' as 'defined'.", L),
         (string key){ data.rewrite(key, "defined"); },
 
         Getopt.Config.notInSummary,
         Getopt.Config.filePattern,
-        "*.*", "filename",
+        "*.*",
         (string name, string ext)
         {
             auto nn = name.buildNormalizedPath;
@@ -109,13 +108,13 @@ auto set_args_data(alias ML)(Macros data, string[] args)
 
             if      (data[ML.exe_ext] == lext)
                 data.rewrite(ML.target, nn);
+            else if (data[ML.mak_ext] == lext)
+                data.rewrite(ML.m, nn);
             else
             {
                 nn.exists.enforce(_("%s is not found.", name));
 
-                if      (data[ML.mak_ext] == lext)
-                    data.rewrite(ML.m, nn);
-                else if (data[ML.lib_ext] == lext ||
+                if      (data[ML.lib_ext] == lext ||
                          data[ML.obj_ext] == lext)
                     data[ML.libs] ~= nn;
                 else if (data[ML.src_ext] == lext)
@@ -183,37 +182,6 @@ auto set_args_data(alias ML)(Macros data, string[] args)
                  .enforce(data[ML.style] ~ " is not found"));
 
     logln("a style file is detected: " ~ data[ML.style]);
-
-
-
-    // import std.algorithm : countUntil, startsWith;
-    // import std.array : appender;
-    // import std.exception : enforce;
-    // import std.file : exists, thisExePath;
-    // import std.path : buildPath, buildNormalizedPath, extension,
-    //     dirName;
-    // import std.process : environment, executeShell;
-    // import std.string : icmp;
-    // import std.getopt;
-
-    //
-    // auto remake = "amm".appender;
-    // foreach (ref one ; args[1..$])
-    // {
-    //     if (one == "/?")
-    //         one = "-h";
-
-    //     remake.put(" ");
-    //     if (0 <= one.countUntil(" ") || 0 <= one.countUntil("(") ||
-    //         0 <= one.countUntil(")"))
-    //     {
-    //         remake.put("\"");
-    //         remake.put(one);
-    //         remake.put("\"");
-    //     }
-    //     else remake.put(one);
-    // }
-    // data.fix(PREDEF.remake_command.stringof, remake.data); //
 
     // auto result = getopt (
     //     args,

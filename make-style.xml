@@ -97,6 +97,7 @@
       </ifdef>
       ## MACRO<br/>
       TARGET = <get id="target" /><br />
+      PROJECT = <get id="target" setExtension="" /><br />
       AUTHORS = <get id="authors" /><br />
       LICENSE = <get id="license" /><br />
       VERSION = <get id="v" /><br />
@@ -200,18 +201,21 @@
       <tab />ddbg $(TARGET)<br />
       <br />
       <br />
-      l10n-init:
-      <tab />xgettext -k_ --from-code=UTF-8 --language=C $(TO_COMPILE) -o <get id="target" setExtension="pot" /><br />
-      <tab />msginit --locale=ja -i <get id="target" setExtension="pot"/> -o <get id="target" setExtension="po" /> --no-translator<br />
+      l10n-init:<br />
+      <tab />xgettext -k_ --from-code=UTF-8 --language=C $(TO_COMPILE) -o l10n\$(PROJECT)\message.pot<br />
       <br />
-      l10n-update:
-      <tab />xgettext -j -k_ --from-code=UTF-8 --language=C $(TO_COMPILE) -o <get id="target" setExtension="pot" /><br />
-      <tab />msgmerge --update <get id="target" setExtension="po" /> <get id="target" setExtension="pot" /><br />
+      l10n-init-po:<br />
+      <tab />msginit --locale=ja_JP.UTF-8 -i l10n\$(PROJECT)\message.pot -o l10n\$(PROJECT)\ja.po --no-translator<br />
       <br />
-      l10n:
-      <tab />msgfmt <get id="target" setExtension="po" /> <get id="target" setExtension="mo" /><br />
+      l10n-update:<br />
+      <tab />xgettext -k_ --from-code=UTF-8 --language=C $(TO_COMPILE) -o l10n\$(PROJECT)\message.pot<br />
+      <tab />msgmerge --update l10n\$(PROJECT)\ja.po l10n\$(PROJECT)\message.pot<br />
       <br />
-      
+      l10n:<br />
+      <tab />msgcat --no-location --output l10n\$(PROJECT)\ja.nolocation.po l10n\$(PROJECT)\ja.po
+      <tab />msgfmt l10n\$(PROJECT)\ja.nolocation.po -o l10n\$(PROJECT)\ja.mo<br />
+      <br />
+
       <get id="footer"/></body>
   </environment>
 

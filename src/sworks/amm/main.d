@@ -1,6 +1,6 @@
 /** Automatic Makefile Maker.
-Version:    0.171(dmd2.085.0)
-Date:       2019-Mar-21 15:20:51
+Version:    0.172(dmd2.085.0)
+Date:       2019-Apr-01 01:10:20
 Authors:    KUMA
 License:    CC0
 */
@@ -8,7 +8,7 @@ License:    CC0
 module sworks.amm.main;
 
 ///
-enum _VERSION_ = "0.171(dmd2.085.0)";
+enum _VERSION_ = "0.172(dmd2.085.0)";
 
 ///
 enum header =
@@ -94,7 +94,7 @@ void main(string[] args)
 
     alias ML = PredefinedMacrosList;
 
-    _.basePath = "l10n\\amm";
+    _.projectName = "amm";
     _.setlocale(environment.get("LANG", "en"));
 
     StyleParser parser;
@@ -243,29 +243,29 @@ string getHelpAboutMacro(string ml)
     switch (ml)
     {
     case ML.bracket:
-        return _("specify newline characters. `'rn'` => CR+LF. `'n'` => LF. `'r'` => CR.");
+        return _("consists of newline characters. `'rn'` means CR+LF. `'n'` means LF. `'r'` means CR.");
     case ML.env:
         return _("This macro exists for backward compatibility.");
     case ML.exe_ext:
-        return _("specify a extension of an executable file name.");
+        return _("consists of an extension of an executable file name.");
     case ML.obj_ext:
-        return _("specify a extension of a object file name.");
+        return _("consists of an extension of a object file name.");
     case ML.lib_ext:
-        return _("specify a extension of a statically linked library file name.");
+        return _("consists of an extension of a statically linked library file name.");
     case ML.gen_deps_command:
-        return _("specify the command that invokes dmd to resolve your project's dependencies.");
+        return _("consists of the command that invokes dmd to resolve your project's dependencies.");
     case ML.deps_file:
-        return _("specify the file name of the target of `'gen_deps_command'`.");
+        return _("consists of the file name of the target of `'gen_deps_command'`.");
     case ML.m:
-        return _("specify the name of the Makefile.");
+        return _("consists of the name of the Makefile.");
     case ML.root:
-        return _("specify the file name of root file of your project. When a file that has `'.d'` as its extension is passed as a command line argument, the file name will be set to this macro.");
+        return _("consists of the file name of a root file of your project. When a file name having `'.d'` as its extension is passed as a command line argument, the file name will be set to this macro.");
     case ML.compile_flag:
-        return _("specify compile flags for dmd. When a command line argument for amm starts with `'-'`, the argument will be set to this macro.");
+        return _("consists of compile flags for dmd. When a command line argument starts with `'-'`, the argument will be set to this macro.");
     case ML.link_flag:
-        return _("specify link flags for dmd When a command line argument for amm starts with `'-L'`, the argument will be set to this macro.");
+        return _("consists of link flags for dmd. When a command line argument for amm starts with `'-L'`, the argument will be set to this macro.");
     case ML.target:
-        return _("specify the target file name of your project. On Windows, when a file that has `'.exe'` or `'.dll'` as its extension is passed as a command line argument for amm, the file name will be set to this macro.");
+        return _("consists of the target file name of your project. On Windows, when a file name having `'.exe'` or `'.dll'` as its extension is passed as a command line argument, the file name will be set to this macro.");
     case ML.dependencies:
         return _("Amm will set this value.");
     case ML.to_compile:
@@ -273,33 +273,33 @@ string getHelpAboutMacro(string ml)
     case ML.to_link:
         return _("Amm will set this value.");
     case ML.rc_file:
-        return _("On Windows, when a file that has `'.rc'` as its extension is passed as a command line argument for amm, the file name will be set to this macro.");
+        return _("On Windows, when a file that has `'.rc'` as its extension is passed as a command line argument, the file name will be set to this macro.");
     case ML.def:
-        return _("On Windows, when a file that has `'.def'` as its extension is passed as a command line argument for amm, the file name will be set to this macro.");
+        return _("On Windows, when a file that has `'.def'` as its extension is passed as a command line argument, the file name will be set to this macro.");
     case ML.ddoc:
-        return _("On Windows, when a file that has `'.ddoc'` as its extension is passed as a command line argument for amm, the file name will be set to this macro.");
+        return _("when a file that has `'.ddoc'` as its extension is passed as a command line argument, the file name will be set to this macro.");
     case ML.dd:
-        return _("specify the target directory of DDOC.");
+        return _("consists of the target directory of DDOC.");
     case ML.libs:
-        return _("specify libraries names to link. Amm will gather names form the directory specified by the macro named `'lib'`.");
+        return _("consists of libraries names to link. Amm will gather files form the directory specified by the macro named `'lib'`.");
     case ML.imp:
-        return _("specify the directory that contains the files to be imported by your project. The default value is `'import'`.");
+        return _("consists of the directory that contains files to be imported by your project.");
     case ML.lib:
-        return _("specify the directory that contains the file to be linked by your project. The default value is `'lib'`.");
+        return _("consists of the directory that contains the file to be linked by your project.");
     case ML.i:
-        return _("Amm will set this value. this is same as `-I` option for dmd.");
+        return _("Amm will set this value. This is same as `-I` option for dmd.");
     case ML.is_dll:
-        return _("specify whether the target of your project is dynamic link library.");
+        return _("mark whether the target of your project is dynamic link library.");
     case ML.is_lib:
-        return _("specify whether the target of your project is static link library.");
+        return _("mark whether the target of your project is static link library.");
     case ML.verbose:
         return _("controls the verboseness of amm.");
     case ML.q:
         return _("controls the verboseness of amm.");
     case ML.footer:
-        return _("specify the 'footer mark' of the Makefile. Amm will overwrite the Makefile. but, the contents after this mark will remain.");
+        return _("consists of the 'footer mark' of the Makefile. Amm will overwrite the Makefile but, contents after this mark will remain.");
     case ML.style_file:
-        return _("specify the setting file name. The default value is `'make-style.xml'`.");
+        return _("consists of the setting file name.");
     case ML.v:
         return _("specify the description about your project.");
     case ML.authors:
@@ -309,29 +309,29 @@ string getHelpAboutMacro(string ml)
     case ML.date:
         return _("Amm will set this value as today.");
     case ML.remake_command:
-        return _("The command line arguments that invoked amm is set to the value.");
+        return _("consists of the command line arguments that invoked amm.");
     case ML.src:
-        return _("Amm set command line argument that starts with '-I' to this value. This value is used to decide that the root directory of source files to be compiled.");
+        return _("command line arguments that starts with '-I' is set to this value. This value is used to decide that the root directory of source files to be compiled.");
     case ML.is_vclinker:
-        return _("If true, dmd will invoke the linker of Microsoft.");
+        return _("If 'defined', dmd will invoke the linker of Microsoft.");
     case ML.dll_ext:
-        return _("the extension of a Dynamic Linked Library. when a file with this extension is in the arguments, the file will be regarded as TARGET, and the macro 'IS_DLL' is defined.");
+        return _("consists of the extension of a Dynamic Linked Library. when a file with this extension is in the arguments, the file will be regarded as TARGET, and the macro 'IS_DLL' is defined.");
     case ML.mak_ext:
-        return _("the extension of Makefile. when a file with this extension is in the arguments, the file will be regarded as Makefile.");
+        return _("consists of the extension of Makefile. when a file with this extension is in the arguments, the file will be regarded as Makefile.");
     case ML.src_ext:
-        return _("The extension of a source file. When a file with this extension is in the arguments, the file will be regarded the root file of the project. and the file will be set to the value of the macro 'ROOT'. When the value of macro 'TARGET' is undefined, the value of the macro will be set as 'ROOT' + 'EXE_EXT'.");
+        return _("consists of the extension of source file. When a file with this extension is in the arguments, the file will be regarded the root file of the project. and the file will be set to the value of the macro 'ROOT'. When the value of macro 'TARGET' is undefined, the value of the macro will be set as 'ROOT' + 'EXE_EXT'.");
     case ML.rc_ext:
-        return _("The extension of a resource file. When a file with this extension is in the arguments, the file will be set to the value of the macro 'RC'. Windows only.");
+        return _("consists of the extension of a resource file. When a file with this extension is in the arguments, the file will be set to the value of the macro 'RC'. Windows only.");
     case ML.rc:
-        return _("Resource files are set to this value. Windows only.");
+        return _("consists of resource files. Windows only.");
     case ML.def_ext:
-        return _("the extension of a module definition file of D. when a file with this extension is in the arguments, the file will be regarded as module definition file.");
+        return _("consists of the extension of a module definition file of D. when a file with this extension is in the arguments, the file will be regarded as module definition file.");
     case ML.ddoc_ext:
-        return _(" The extension of a file for ddoc. when a file with this extension is in the arguments, the file will be regarded as for ddoc.");
+        return _("consists of the extension of a file for ddoc. when a file with this extension is in the arguments, the file will be regarded as for ddoc.");
     case ML.xml_ext:
-        return _("the extension of STYLE_FILE. when a file with this extension is in the arguments, the file will be regarded STYLE_FILE.");
+        return _("consists of the extension of STYLE_FILE. when a file with this extension is in the arguments, the file will be regarded STYLE_FILE.");
     case ML.style:
-        return _("STYLE_FILE controls the output. when a file with '.xml' extension is in the arguments, the file will be regarded as STYLE_FILE.");
+        return _("STYLE_FILE controls output.");
 
     default:
         return _("no help message about %s", ml);
@@ -357,7 +357,7 @@ void logout_macros(Macros macros)
             tabs[i][0] = key;
             tabs[i][1] = macros[key];
         }
-        tabs.tabular("name", "value", -1, "=").logln;
+        // tabs.tabular("name", "value", -1, "=").logln;
 
         // foreach (key; macros.keys.sort)
         //     key.logln(" = ", macros[key]);
@@ -370,28 +370,57 @@ void show_help(string about, Getopt.Option[] opts, Macros macros)
 {
     import std.format: format;
     import std.string: toLower;
-    import sworks.base.strutil: tabular;
+    import sworks.base.strutil: Tabular;
+    import std.array: replace;
+    import std.conv: to;
+
+    alias T3 = Tabular!3;
+    alias T3C = T3.Column;
 
     alias ML = PredefinedMacrosList;
 
-    header.outln;
-    description.outln;
-    outln;
+    void macroOut(int w)
+    {
+        auto t = T3(w, T3C(_("name")), T3C(_("default value")),
+                    T3C(_("description")));
+        foreach (one; __traits(allMembers, ML))
+        {
+            if      (one == "bracket")
+            {
+                t(one,
+                  macros[one].replace("\n", "n").replace("\r", "r").to!string,
+                  one.getHelpAboutMacro);
+            }
+            else if (one == "remake_command")
+                t(one, "amm.exe", one.getHelpAboutMacro);
+            else
+                t(one, macros[one], one.getHelpAboutMacro);
+        }
+        t.dump.outln;
+    }
+
+
     switch (about.toLower)
     {
     case "macro":
+    {
         _("Predefined macros are bellows.").outln;
-
-        string[2][__traits(allMembers, ML).length] buf;
-        foreach (i, one; __traits(allMembers, ML))
-        {
-            buf[i][0] = one;
-            buf[i][1] = one.getHelpAboutMacro;
-        }
-        buf.tabular(_("name"), _("description"), 80).outln;
-
+        macroOut(80);
+    }
+        break;
+    case "howtouse":
+        how_to_use.outln;
+        break;
+    case "summary":
+        Getopt.prettyDescriptor(opts, -1).outln;
+        break;
+    case "macro_md":
+        macroOut(-1);
         break;
     default:
+        header.outln;
+        description.outln;
+        outln;
         how_to_use.outln;
         outln;
         Getopt.prettyDescriptor(opts, 80).outln;
@@ -401,29 +430,6 @@ void show_help(string about, Getopt.Option[] opts, Macros macros)
         ("--help macro").outln;
         break;
     }
-}
-
-//
-void output_readme()
-{
-    // "# AMM".outln;
-    // outln;
-    // Lang("## Description", "## 説明").outln;
-    // header.outln;
-    // description.outln;
-    // outln;
-
-    // Lang("## How to use", "## 実行方法").outln;
-    // how_to_use.outln;
-    // summary_of_commandline_options.outln;
-    // outln;
-
-    // Lang("## Command line arguments", "## コマンドライン引数").outln;
-    // foreach (line; about_command_line_arguments)
-    //     line.outln;
-    // outln;
-
-    // output_help_about_macro;
 }
 
 template NamedEnum(ARGS...)

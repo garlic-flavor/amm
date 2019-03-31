@@ -59,10 +59,14 @@ static:
     {
         import std.regex: Regex;
 
+        alias HelpProc = string delegate();
+
+        /// 引数の説明を得る。
+        @property
+        string help() { return _help(); }
+
         @property @safe @nogc pure nothrow
         {
-            /// 引数の説明を得る。
-            string help() const { return _help; }
             /// 引数の表示用名前
             string name() const { return _dispName; }
             /// 必須引数の場合にtrue
@@ -92,9 +96,9 @@ static:
     private:
         Config _config;
         string _dispName;
-        string _help;
+        HelpProc _help;
 
-        this (Config c, string f, string n, string h)
+        this (Config c, string f, string n, HelpProc h)
         {
             import std.regex: regex;
 
@@ -135,7 +139,7 @@ static:
             ob(Config.optionalValue);
             ob(Config.notInSummary);
             ob("help|h|\\?");
-            ob(_("Show help messages."));
+            ob(_("Show help messages.", MoUtil.ExpandMode.Lazily));
             options.put(
                 ob((string key, string value)
                    { r.helpWanted = true; r.helpAbout = value; }));
@@ -228,11 +232,17 @@ static:
     {
         import std.algorithm: filter, fold;
         import std.array: array;
-        import sworks.base.strutil: tabular;
+        import sworks.base.strutil: Tabular;
 
-        return opts.filter!(a=>a.inSummary)
-            .fold!((a, b)=>a ~ [b.name, b.help])(cast(string[2][])null).array
-            .tabular(_("option"), _("description"), w);
+        alias T2 = Tabular!2;
+        alias T2C = T2.Column;
+        auto t = T2(w, T2C(_("option")), T2C(_("description")));
+        foreach (one; opts)
+        {
+            if (one.inSummary)
+                t(one.name, one.help);
+        }
+        return t.dump;
     }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -266,7 +276,7 @@ private:
         alias Proc = void delegate(string);
 
         //----------------------------------------------------------
-        this (Config c, string f, string n, string h, Proc p)
+        this (Config c, string f, string n, HelpProc h, Proc p)
         {
             import std.algorithm: splitter;
             import std.array: join;
@@ -338,7 +348,7 @@ private:
         alias Proc = void delegate(string, string);
 
         //
-        this (Config c, string f, string n, string h, Proc p)
+        this (Config c, string f, string n, HelpProc h, Proc p)
         {
             import std.array: join;
 
@@ -395,7 +405,8 @@ private:
     {
         Config config;
         int phase;
-        string filter, name, help;
+        string filter, name;
+        Option.HelpProc help;
 
         @safe @nogc pure nothrow
         this() { reset; }
@@ -436,15 +447,25 @@ private:
                     name = "-" ~ s.replace("\\", "").replace("|", " -");
                 break;
             case 1:
-                help = s;
+                help = ()=>s;
                 break;
             case 2:
-                name = help;
-                help = s;
+                if (help !is null)
+                    name = help();
+                help = ()=>s;
                 break;
             default:
                 assert (0);
             }
+            ++phase;
+            return null;
+        }
+
+        Option opCall(T : Option.HelpProc)(T s)
+        {
+            if (help !is null)
+                name = help();
+            help = s;
             ++phase;
             return null;
         }
@@ -515,7 +536,8 @@ private:
         {
             phase = 0;
             config &= Mask.remainder;
-            filter = name = help = null;
+            filter = name = null;
+            help = null;
         }
 
         void ready() const

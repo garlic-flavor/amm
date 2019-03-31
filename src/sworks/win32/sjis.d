@@ -1,6 +1,6 @@
 /** SHIFT-JIS の扱いに。
  * Dmd:        2.085.0
- * Date:       2016-Jun-04 00:02:01
+ * Date:       2019-Apr-01 01:18:26
  * Authors:    KUMA
  * License:    CC0
  */
@@ -92,10 +92,12 @@ jstring toMBSz(T)(T msg, int codePage = 0)
 
 // SHIFT-JIS文字列をUTF文字列に
 immutable(CHAR)[] fromMBS(CHAR)(const(jchar)[] msg, int codePage = 0)
-    if (is(T == char) || is(T == wchar) || is(T == dchar) || is(T == jchar))
+    if (is(CHAR == char) || is(CHAR == wchar) || is(CHAR == dchar) ||
+        is(CHAR == jchar))
 {
     import std.conv : to;
     import std.ascii : isASCII;
+    import std.exception: enforce;
     import core.sys.windows.windows : MultiByteToWideChar;
 
     static if (is(CHAR == jchar)) return msg;
@@ -106,11 +108,12 @@ immutable(CHAR)[] fromMBS(CHAR)(const(jchar)[] msg, int codePage = 0)
     if (ASCIIOnly) return msg.c.to!(immutable(CHAR)[]);
 
     auto result = new wchar[
-        MultiByteToWideChar(codePage, 0, msg.ptr, cast(int)msg.length,
-                            null, 0)];
+        MultiByteToWideChar(codePage, 0, cast(const(CHAR)*)msg.ptr,
+                            cast(int)msg.length, null, 0)];
     enforce(0 < result.length &&
             result.length ==MultiByteToWideChar(
-                codePage, 0, msg.ptr, msg.length, result.ptr, result.length));
+                codePage, 0, cast(const(CHAR)*)msg.ptr, msg.length, result.ptr,
+                result.length));
     return result.to!(immutable(CHAR)[]);
 }
 

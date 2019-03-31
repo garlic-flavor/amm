@@ -1,0 +1,576 @@
+# Japanese translations for AMM package.
+# Copyright (C) 2019 THE AMM'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the AMM package.
+# Automatically generated, 2019.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: AMM 0.171(dmd2.085.0)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-01 01:34+0900\n"
+"PO-Revision-Date: 2019-04-01 01:34+0900\n"
+"Last-Translator: Automatically generated\n"
+"Language-Team: none\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Hello"
+msgstr ""
+
+msgid "File"
+msgid_plural "Files"
+msgstr[0] ""
+
+msgid "abcd"
+msgstr ""
+
+msgid "Description"
+msgstr "詳細"
+
+msgid ""
+"This is a program that makes a Makefile from source codes written in D "
+"programming language, automatically."
+msgstr ""
+"このプログラムはD言語で書かれたソースコードからMakefileを自動生成する為のもの"
+"です。"
+
+msgid "Acknowledgements"
+msgstr "謝辞"
+
+msgid "AMM is written with D."
+msgstr "AMMはD言語で記述されています。"
+
+msgid "Digital Mars D Programming Language"
+msgstr "D言語(Digital Mars)"
+
+msgid "AMM depends on Mofile as a submodule."
+msgstr "AMMは Mofile を利用しています。"
+
+msgid "Mofile"
+msgstr "Mofile"
+
+msgid "BUGS"
+msgstr "バグ"
+
+msgid ""
+"An error will occur when any Japanese are in a delimited string. (on windows)"
+msgstr "q\"...\"文字列内に日本語があった場合にエラーが発生します。"
+
+msgid "How to build"
+msgstr "ビルド方法"
+
+msgid "on Windows"
+msgstr "Windowsの場合"
+
+msgid "Please build with the make tool distributed with dmd."
+msgstr "DMDに付属のmakeツールを使用して下さい。"
+
+msgid "on linux"
+msgstr "linuxの場合"
+
+msgid "How to use"
+msgstr "実行方法"
+
+msgid "How files in command line arguments are treated as,"
+msgstr "コマンドライン引数のうち、ファイル名(=拡張子があるもの)の扱い。"
+
+msgid "`.d` is treated as a root file of the project."
+msgstr ""
+"`.d`はプロジェクトのルート(=main()関数を持つ)ファイルであるとみなされます。"
+
+msgid "`.exe` is treated as a target file name of the project. (on Windows)"
+msgstr ""
+"`.exe`はプロジェクトのビルドターゲット名として扱われます(Windowsの場合)。"
+
+msgid ""
+"`.dll` is treated as a target file name of the project, and the project is "
+"assumed that its target is a dynamic link library."
+msgstr ""
+"`.dll`はプロジェクトのビルドターゲット名として扱われます。また、ターゲットは"
+"DLLであるとみなされます(Windowsの場合)。"
+
+msgid ""
+"`.lib` is treated as a static link library to be linked with your project. "
+"(on Windows)"
+msgstr ""
+"`.lib`は、ビルド時にリンクされるライブラリ名として扱われます(Windowsの場合)。"
+
+msgid "`.def` is treated as a module definition file for DLL. (on Windows)"
+msgstr "`.def`はDLL用の定義ファイルとして扱われます(Windowsの場合)。"
+
+msgid "`.rc` is treated as a resource file. (on Windows)"
+msgstr "`.rc`はリソースファイルとして扱われます(Windowsの場合)。"
+
+msgid "`.xml` is treated as a setting file for amm, described below."
+msgstr "`.xml`はAMM用の設定ファイルとして扱われます。"
+
+msgid "`.mak` is treated as a file name of the target Makefile."
+msgstr "`.mak`はMakefileの名前として扱われます。"
+
+msgid "Previous Notice"
+msgstr "準備"
+
+msgid "amm will invoke dmd. Ensure that dmd is ready."
+msgstr ""
+"AMMはDMDを呼び出します。DMD.EXEが利用可能な(=パスが通っている)状態にして下さ"
+"い。"
+
+msgid "Put make-style.xml where amm can find. The searching priority is,"
+msgstr "`make-style.xml`をAMMが探せる位置に置いてください。探索の優先順位は、"
+
+msgid "Current directory."
+msgstr "現在のディレクトリ。"
+
+msgid "The directory of environment variable 'HOME'."
+msgstr "環境変数'HOME'のディレクトリ。"
+
+msgid "The directory where amm is."
+msgstr "AMM.EXEがあるディレクトリ。"
+
+msgid "On Linux, `../etc/amm` (relative path from where amm is)."
+msgstr "linuxでは、`../etc/amm`(AMMのあるディレクトリからの\"相対パス)。"
+
+msgid "Example"
+msgstr "例"
+
+msgid ""
+"With the above command, a Makefile will be generated in the current "
+"directory."
+msgstr "上の例では、Makefileが現在のディレクトリに作られます。"
+
+msgid ""
+"I assumed that 'root_file.d' is a root file of the project, and that has "
+"`main()`function."
+msgstr ""
+"'root_file.d'はプロジェクトのルートとなるファイルであり、通常は`main()`関数を"
+"持つとみなされます。"
+
+msgid "If you want to make the target file name 'hoge.exe', do like this."
+msgstr "プロジェクトのターゲットを'hoge.exe'とするには、次のようにします。"
+
+msgid "When the argument starts with '-', it will be passed to dmd."
+msgstr "引数が'-'で始まる場合は、dmdへの引数だと解釈されます。"
+
+msgid "You can set a macro for amm like this."
+msgstr "AMMのマクロを次のように設定できます。"
+
+msgid ""
+"Now, the macro named `'v'` is set as `'1.0'`, and the macro named `'gui'` is "
+"set as `'defined'`."
+msgstr ""
+"これで、マクロ`'v'`は`'1.0'`に。マクロ`'gui'`は`'defined'`に設定されます。"
+
+msgid "To Delete a macro command, do"
+msgstr "マクロを削除するには次のようにします。"
+
+msgid ""
+"By the default setting, directories that consist your project are assumed "
+"like below."
+msgstr "初期設定では、下記のようなフォルダ構成が想定されています。"
+
+msgid "where amm.exe will be invoked in."
+msgstr "AMM.EXEが実行されるフォルダ。"
+
+msgid "where the target file will be generated to."
+msgstr "ターゲットが出力される場所。"
+
+msgid "files that will be compiled."
+msgstr "コンパイルされるファイル。"
+
+msgid "files that will be imported."
+msgstr "インポートされるファイル。"
+
+msgid "file that will be linked."
+msgstr "静的リンクされるファイル。"
+
+msgid "About make-style.xml"
+msgstr "make-style.xml"
+
+msgid ""
+"`make-style.xml` controls the generation of Makefile. In this file, you can"
+msgstr ""
+"make-style.xmlはMakefileへの出力を制御します。このファイルでは以下のことを行"
+"えます。"
+
+msgid "output strings."
+msgstr "文字列を出力する。"
+
+msgid "set / add a string to a macro."
+msgstr "「マクロ」への値の代入、追加。"
+
+msgid "retrieve a value from a macro, and do a simple replacement."
+msgstr "「マクロ」からの値の取得。及び置換。"
+
+msgid "use ifdef / ifndef conditioning."
+msgstr "`ifdef`、`ifndef`による条件分岐。"
+
+msgid "`make-style.xml` looks like below."
+msgstr "`make-style.xml`の例を次に示します。"
+
+msgid "With above make-style.xml, and with the command below,"
+msgstr "上記のmake-style.xmlと、次のコマンドで、"
+
+msgid "the Makefile that is going to be generated will be like below."
+msgstr "下記のMakefileが出力されます。"
+
+msgid "Valid elements in make-style.xml"
+msgstr "make-style.xmlで使えるタグ。"
+
+msgid "`<style>` is a root element. `<body>` is an essential element in this."
+msgstr "`<style>`は最も外側の要素です。`<body>`要素が必須要素です。"
+
+msgid ""
+"`<head>` is an element for preparation. Nothing is output. You can use "
+"`<set>`, `<add>` and, `<ifdef>`, `<ifndef>`. `<head>` will be followed by a "
+"`<body>` element."
+msgstr ""
+"`<head>`要素は事前準備用です。Makefileへの出力はされません。`<set>`、"
+"`<add>`、`<ifdef>`、`<ifndef>`要素を含めることができます。`<body>`要素の前に"
+"書きます。"
+
+msgid ""
+"`<ifdef>` or `<ifndef>` has an `'id'` attribute. `'id'` specify its "
+"condition. `'id'` is an essential attribute."
+msgstr ""
+"`<ifdef>`と`<ifndef>`は`'id'`属性持ちます。`'id'`属性で指定されたマクロ名が定"
+"義済であるかどうかで条件分岐が発生します。"
+
+msgid ""
+"`<set>`'s contents are set to the macro specified by the `'id'` attribute. "
+"When the macro already exists, the value will be over written. You can use "
+"`<ws>`, `<br>`, `<tab>` and `<get>` in this element. `'id'` is an essential "
+"attribute."
+msgstr ""
+"`<set>`要素の中身は`'id'`属性で指定されたマクロに登録されます。マクロが既に定"
+"義済の場合、値は上書きされます。この要素内では、`<ws>`、`<br>`、`<tab>`、"
+"`<get>`要素を使うことができます。`'id'`属性は必須属性です。"
+
+msgid ""
+"`<add>` adds its contents to the macro. `'id'` is an essential attribute."
+msgstr "`<add>`要素は中身を`'id'`属性で指定されたマクロへと追加します。"
+
+msgid ""
+"`<body>` is an element for output. Strings are simply outputted. Starting/"
+"Trailing spaces of each line are removed. You can use `<ws>`, `<tab>`, "
+"`<br>`, `<get>`, `<ifdef>` and `<ifndef>`. any Character Entity References "
+"are resolved by std.xml."
+msgstr ""
+"`<body>`要素内ではMakefileへの出力が行われます。文字列は単に出力されます。行"
+"頭/\n"
+"行末のスペースは取り除かれます。`<ws>`、`<tab>`、`<br>`、`<get>`、`<ifdef>`、"
+"`<ifndef>`要素を含めることができます。文字実体参照はPhobosによって解決されま"
+"す。"
+
+msgid ""
+"`<ws>` outputs `' '`(space) to the Makefile. With `'length'` attribute, you "
+"can output sequential spaces."
+msgstr ""
+"`<ws>`要素は`' '`(半角スペース)を出力します。`'length'`属性で連続した半角ス"
+"ペースを出力できます。"
+
+msgid "`<tab>` outputs `'\\t'(tab)` to the Makefile."
+msgstr "`<tab>`は`'\\\\t'`(タブ文字)を出力します。"
+
+msgid ""
+"`<br>` outputs `'\\r\\n'(on Windows)`/`'\\n'(on linux)`. The Macro named "
+"`'bracket'` controls this behavior."
+msgstr ""
+"`<br>`要素は改行文字を出力します。Windowsでは、`'\\\\r\\\\n'`で、linuxでは、"
+"`'\\n'`です。後述の`'bracket'`マクロでこの値を変更することができます。"
+
+msgid "`bracket=rn` is `'\\r\\n'`"
+msgstr "`'breacket'`マクロの中身が`'rn'`の場合は`'\\\\r\\\\n'`が出力されます。"
+
+msgid "`bracket=n` is `'\\n'`"
+msgstr "`'bracket'`マクロの中身が`'n'`の場合は`'\\\\n'`が出力されます。"
+
+msgid "`bracket=r` is `'\\r'`"
+msgstr "`'bracket'`マクロの中身が`'r'`の場合は`'\\\\r'`が出力されます。"
+
+msgid ""
+"`<get>` expands the macro specified by `'id'` attribute. With `'from'` and "
+"`'to'` attributes, a replacement will occur when expanding. `<get>` is "
+"evaluated lazily. `'id'` is an essential attribute."
+msgstr ""
+"`<get>`要素は`'id'`属性で指定したマクロの中身を展開します。`'from'`属性と"
+"`'to'`属性を使って置換を行うことができます。展開は遅延評価されます。`'id'`が"
+"必須属性です。"
+
+msgid "Predefined macros"
+msgstr "定義済マクロ一覧"
+
+msgid ""
+"The values specified by command line have highest priority. The name of "
+"macro is case IN-sensitive."
+msgstr ""
+"コマンドライン引数で指定したマクロが最も優先されます。マクロ名は大文字小文字"
+"を区別しません。"
+
+msgid "Licensed under"
+msgstr "ライセンス"
+
+msgid "Creative Commons Zero License"
+msgstr "クリエイティブ・コモンズ・ゼロ ライセンス"
+
+msgid "Development environment"
+msgstr "開発環境"
+
+msgid "History"
+msgstr "履歴"
+
+msgid "Implement japanese l10n."
+msgstr "gettext用、ja.poの実装。"
+
+msgid "Implement i18n."
+msgstr "gettext用の_(\"hogehoge\")の実装"
+
+msgid "add mofile(https://github.com/FreeSlave/mofile.git) as submodule."
+msgstr ""
+"サブモジュールとして、mofile(https://github.com/FreeSlave/mofile.git)を追加し"
+"ました。"
+
+msgid "add sworks.base.mo"
+msgstr "sworks.base.moを追加しました。"
+
+msgid "add sworks.base.getopt"
+msgstr "sworks.base.getoptを追加しました。"
+
+msgid "add sworks.base.readmegen"
+msgstr "sworks.base.readmegenを追加しました。"
+
+msgid "add readme.d"
+msgstr "readme.dを追加しました。"
+
+msgid "bug fix about string import."
+msgstr "文字列インポートに関するバグフィクス"
+
+msgid "README.md is generated by ddoc."
+msgstr "README.md を ddoc で生成するように。"
+
+msgid "Pre-defined macros and its default values are generated by ddoc."
+msgstr "定義済みマクロとその初期値を ddoc で生成するように。"
+
+msgid "English README.md is added."
+msgstr "英語版README.md追加。"
+
+msgid "some bug fix on linux."
+msgstr "linux上でのバグフィクス"
+
+msgid "fix deprecated about std.process."
+msgstr "std.process がらみの deprecation に対応。"
+
+msgid "replace a tab with 4-spaces."
+msgstr "ソースのインデントをタブからスペースに。(dmdのソースに準拠すべく。)"
+
+msgid "some bug fix."
+msgstr "バグフィクス"
+
+msgid "fix a bug that amm can't find a make-style.xml on linux."
+msgstr ""
+"linux 上で make-style.xml を探せないバグを修正。-inline で無限ループするバグ"
+"は根気不足が原因だったかもしれん。"
+
+msgid "refine the style of output."
+msgstr "コンソールへの出力まわりを若干変更"
+
+msgid "Now, amm can build on linux."
+msgstr "linux になんとなく対応。"
+
+msgid "fix a bug about directory evaluation."
+msgstr "ディレクトリの評価まわりのバグフィクス。"
+
+msgid "rewrite make-style.xml."
+msgstr "make-style.xml の修正。"
+
+msgid "Add japanese help messages."
+msgstr "ヘルプを日本語に。"
+
+msgid "`help macro` command line option shows the list of macros."
+msgstr "help macro でマクロの一覧出せるように。"
+
+msgid "A `.lib` file is treated as a library to be linked with the project."
+msgstr ""
+".lib のファイル渡すとリンクするライブラリという判断になりました。やっぱ不便や"
+"からね。"
+
+msgid "`project` macro removed."
+msgstr "マクロ project なくなりました。不便。"
+
+msgid "`install_directory` macro removed."
+msgstr "マクロ install_directory なくなりました。いらん。"
+
+msgid "A `.mak` file is treated as a name of Makefile."
+msgstr ".mak のファイルを渡すと Makefile の名前となるように。"
+
+msgid "Some macros are renamed."
+msgstr "あとちょこちょこマクロの名前変わってます。"
+
+msgid "Amm is on github."
+msgstr "github デビュー。"
+
+msgid "Doxygen were purged."
+msgstr "それにともなって、Doxygen 使うのやめに。"
+
+msgid "`compo.lib` was expanded."
+msgstr "あと、compo.lib にまとめるのはやめて、ソースコード展開しました。"
+
+msgid "fix a bug when the target is a dll."
+msgstr "dll 作成時の出力を変更"
+
+msgid "fix a bug about `public import`"
+msgstr "public import の依存を解決"
+
+msgid "fix some bugs about compo.lib"
+msgstr "compo.lib を若干修正"
+
+msgid "more latter arguments have higher priority."
+msgstr ""
+"コマンドラインからマクロを設定する際、後に書いたものが有効になるように変更。"
+
+msgid ""
+"A `.lib` file is treated as the target name of the project. To add libraries "
+"to be linked, use `to_link+=hoge.lib`."
+msgstr ""
+"拡張子が \".lib\" のファイルを渡した場合、これまではリンクすべきライブラリ"
+"ファイルと判断されていましたが、出力ターゲットがライブラリファイルである。と"
+"認識されるようになりました。リンクすべきライブラリファイルをコマンドラインか"
+"ら指定する場合は、`to_link+=hoge.lib`として下さい。"
+
+msgid "whole brushing up."
+msgstr "ほぼ全面刷新。"
+
+msgid "some modules were integrated as `compo.lib`."
+msgstr ""
+"いくつかのモジュールが、外部ライブラリ compo.lib にまとめられました。だからど"
+"うということもないんですが。"
+
+msgid "Now, amm depends on Doxygen http://www.doxygen.jp."
+msgstr ""
+"このドキュメントが [Doxygen(http://www.doxygen.jp)](http://www.doxygen.jp)を"
+"使うようにかわりました。"
+
+msgid "fix a bug halting when `<!-- -->` is inside style-xml file."
+msgstr "style-xml ファイルにコメント`<!-- -->`入れても落ちなくなりました。"
+
+msgid "fix a bug when some modules depend on `.di`."
+msgstr "依存関係に .di ファイルがあっても大丈夫になりました。"
+
+msgid "Standardize style-xml."
+msgstr "style-xmlの標準化にむけて。"
+
+msgid "`<make>` element was renamed to `<style>`."
+msgstr "`<make>` タグが `<style>` に、"
+
+msgid "`<style>` element was renamed to `<environment>`."
+msgstr "`<style>` タグが、`<environment>` に、"
+
+msgid "`style` macro was renamed to `env`."
+msgstr "`<style>` マクロが、`<env>` に変更されました。"
+
+msgid "Amm is licensed under CC0(http://creativecommons.org/choose/zero)."
+msgstr ""
+"ライセンスが修正BSDから [CreativeCommons Zero License(http://creativecommons."
+"org/choose/zero)](http://creativecommons.org/choose/zero) に変更されました。"
+
+msgid "Some macros name were renamed."
+msgstr "マクロの名前がいくつか変更されました。"
+
+msgid "Amm can treat two or more `.d` files."
+msgstr ""
+"コマンドライン引数として複数のDソースファイルを渡せるようになりました。互いに"
+"依存関係が疎なファイルを一つのライブラリにまとめたい時に使えます。"
+
+msgid "Add `<add>` element."
+msgstr "`<add>` タグが追加されました。"
+
+msgid ""
+"`<get>` element can be in a `<set>` element. `<get>` element is evaluated "
+"lazily."
+msgstr ""
+"`<set>` タグ内で `<get>`タグが使用可能になりました。この時、`<get>`タグは、そ"
+"のマクロが展開される時に評価されます。"
+
+msgid "Add an implementation about building a dll."
+msgstr "dll作成になんとなく対応。"
+
+msgid "`<br>`, `<tab>` and `<ws>` element can be in a `<set>` element."
+msgstr "`<set>` タグ内で `<br>`、`<tab>`、`<ws>` タグが使用可能に。"
+
+msgid "fix a bug halting with absence of `import` declaration."
+msgstr "Dのソースファイルにimport宣言がないとパースに失敗してたバグを修正。"
+
+msgid "for dmd2.041."
+msgstr "dmd2.041対応版。"
+
+msgid "for dmd2.035."
+msgstr "dmd2.035対応版。"
+
+msgid "In make-style.xml, starting and trailing spaces are removed."
+msgstr ""
+"make-sytle.xml内で行頭および行末の空白文字のみ削除されるように変更されまし"
+"た。"
+
+msgid "Add `<footer>` macro."
+msgstr ""
+"`<footer>`マクロを導入。Makefile中で `<get id=\"footer\" />`以降に書かれたも"
+"のはMakefileを作りなおしても残るようになりました。ここに、まあインストールコ"
+"マンドとかを書いてもらえばよいかと。"
+
+msgid "`make` attribute of `<style>` element was renamed to `id`."
+msgstr "`<style>`タグの `'make'` 属性を `'id'` と変更。"
+
+msgid "`<ifndef>` element was added."
+msgstr "`<ifndef>`タグを追加。"
+
+msgid "make-style.xml were brushed up."
+msgstr "make-style.xml を刷新。"
+
+msgid "the way of specifying options was changed."
+msgstr "オプションの指定方法変更。"
+
+msgid "`<switch>` element was removed."
+msgstr "`<switch>` タグのかわりに、`<ifdef>` タグができました。"
+
+msgid "`<ifdef>` element was added."
+msgstr "なんかコロコロ変わるよなあ。"
+
+msgid "fix a bug of my knowledge about Makefile."
+msgstr "色々修正。っていうかMakefileの書き方まちがってました。"
+
+msgid "`<add>` element was remove."
+msgstr "`<add>` タグがなくなりました。"
+
+msgid "now, `id` attribute of macro is case insensitive."
+msgstr "マクロのidは大文字、小文字に関係なくなりました。"
+
+msgid "fix some tiny bugs."
+msgstr "その他ちょっとしたバグとか修正。"
+
+msgid "for dmd2.032"
+msgstr "dmd2.032リリースにあたってのバージョンアップ"
+
+msgid "`altstd.xml` was removed."
+msgstr "std.xmlのバグがなおったので、altstd.xmlは消去。"
+
+msgid "amm doesn't depend on std.getopt."
+msgstr ""
+"std.getoptつかうのやめに。それにともなってオプションのスタイルとか色々変りま"
+"した。"
+
+msgid "fix a bug about make-style.xml"
+msgstr "make-style.xmlのバグ修正。"
+
+msgid "vwrite was introduced."
+msgstr "vwrite に対応。"
+
+msgid "now, end of line characters can be selected."
+msgstr "改行コードが指定可能に。"
+
+msgid "use std.contracts."
+msgstr "std.contractsを使うようにちょっとだけ変更。"
+
+msgid "first release."
+msgstr "ほんと __とりあえず__ 公開。"

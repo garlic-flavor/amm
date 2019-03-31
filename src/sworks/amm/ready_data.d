@@ -1,5 +1,5 @@
 /** dmd に依存関係を解決させる為の下準備.
- * Version:    0.171(dmd2.085.0)
+ * Version:    0.172(dmd2.085.0)
  * Date:       2019-Mar-21 14:53:26
  * Authors:    KUMA
  * License:    CC0
