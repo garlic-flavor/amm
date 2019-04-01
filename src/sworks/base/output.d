@@ -163,20 +163,7 @@ private:
             version (Windows)
             {
                 foreach (one ; msg)
-                {
-                    try
-                    {
-                        _file.write(one.toMBS.c.replace("\n", temp));
-                    }
-                    catch (Exception e)
-                    {
-                        static if (is(typeof(one): string))
-                        {
-                            writeln(cast(ubyte[])one);
-                        }
-                        throw e;
-                    }
-                }
+                    _file.write(one.toMBS.c.replace("\n", temp));
             }
             else
                 foreach (one ; msg)

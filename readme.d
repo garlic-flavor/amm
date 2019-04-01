@@ -21,7 +21,7 @@ void proc(string locale = "")
     //
     h1("Automatic Makefile Maker");
     putln;
-    b("Version:")(_VERSION_).ln;
+    b("Version:")(" " ~ _VERSION_).ln;
     b("Date:")(" 2019-Apr-1").ln;
     b("Authors:")(" KUMA").ln;
     b("License:")(" CC0").ln;

@@ -191,9 +191,6 @@
         <tab/>$(TARGET) $(FLAG)<br/>
       </ifndef>
 
-      edit :<br/>
-      <tab/>emacs $(TO_COMPILE) <ifdef id="rc">$(RC_FILE)</ifdef> <get id="makefile"/><br/>
-
       remake :<br />
       <tab /><get id="remake_command" /> $(FLAG)<br />
       <br/>
@@ -212,7 +209,7 @@
       <tab />msgmerge --update l10n\$(PROJECT)\ja.po l10n\$(PROJECT)\message.pot<br />
       <br />
       l10n:<br />
-      <tab />msgcat --no-location --output l10n\$(PROJECT)\ja.nolocation.po l10n\$(PROJECT)\ja.po
+      <tab />msgcat --no-location --output l10n\$(PROJECT)\ja.nolocation.po l10n\$(PROJECT)\ja.po<br />
       <tab />msgfmt l10n\$(PROJECT)\ja.nolocation.po -o l10n\$(PROJECT)\ja.mo<br />
       <br />
 
