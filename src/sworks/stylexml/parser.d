@@ -1,5 +1,5 @@
 /** -style.xml ファイルのパース
- * Dmd:        2.085.0
+ * Dmd:        2.085.1
  * Date:       2019-Feb-10 23:30:03
  * Authors:    KUMA
  * License:    CC0

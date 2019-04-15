@@ -1,5 +1,5 @@
 /** readme
-Date:       2019-Apr-01 01:41:20
+Date:       2019-Apr-15 19:41:54
 Authors:    KUMA
 License:    CC0
 */
@@ -9,12 +9,12 @@ module readme;
 import sworks.base.readmegen;
 
 ///
-enum _VERSION_ = "0.172(dmd2.085.0)";
+enum _VERSION_ = "0.173(dmd2.085.1)";
+enum _DMD_ = "2.085.1";
+enum _DATE_ = "2019-Apr-15 19:41:54";
 
 void proc(string locale = "")
 {
-    import std.process: execute;
-
     if (0 < locale.length && !_.setlocale(locale))
         return;
 
@@ -22,7 +22,7 @@ void proc(string locale = "")
     h1("Automatic Makefile Maker");
     putln;
     b("Version:")(" " ~ _VERSION_).ln;
-    b("Date:")(" 2019-Apr-1").ln;
+    b("Date:")(" " ~ _DATE_).ln;
     b("Authors:")(" KUMA").ln;
     b("License:")(" CC0").ln;
 
@@ -220,12 +220,15 @@ test.obj : test.d
 
     //
     h2._("Development environment");
-    list(0)("Windows Vista(x64) x dmd 2.084.0 x make (of Digital Mars)");
-    list(0)("Ubuntu 15.10(x64) x gcc 5.2.1 x dmd 2.084.0 x GNU Make");
+    list(0)("Windows 10(x64) x " ~ _DMD_ ~ " x make (of Digital Mars)");
+    list(0)("Ubuntu 18.04(on Windows x64) x gcc 7.3.0 x " ~ _DMD_ ~ " x GNU Make");
 
     //////////////////////////////////////////////////////////////////////
     //
     h2._("History");
+
+    history("2019/04/15 ver. 0.173(dmd2.085.1)")
+        ._("for linux.");
 
     history("2018/04/01 ver. 0.172(dmd2.085.0)")
         ._("Implement japanese l10n.");

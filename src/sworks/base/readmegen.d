@@ -154,7 +154,7 @@ auto list(size_t i = 0)
 auto elist(size_t i = 0)
 {
     import std.range: repeat, take;
-    return MoWrapper((f, s)=>f.writeln(' '.repeat.take(4 * 1), "1. ", s));
+    return MoWrapper((f, s)=>f.writeln(' '.repeat.take(4 * i), "1. ", s));
 }
 
 ///

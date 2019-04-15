@@ -139,7 +139,7 @@ static:
             ob(Config.optionalValue);
             ob(Config.notInSummary);
             ob("help|h|\\?");
-            ob(_("Show help messages.", MoUtil.ExpandMode.Lazily));
+            ob(_._("Show help messages."));
             options.put(
                 ob((string key, string value)
                    { r.helpWanted = true; r.helpAbout = value; }));
@@ -489,7 +489,7 @@ private:
             ready;
             auto o = new ArgOption(
                 config, filter, name, help,
-                (string, string v){ (*target) = v.to!T; });
+                (string, string v){ (*target) = v.to!U; });
             reset;
             return o;
         }

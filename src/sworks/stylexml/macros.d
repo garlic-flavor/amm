@@ -1,6 +1,6 @@
 /** macros.d マクロの実装
- * Dmd:        2.085.0
- * Date:       2019-Mar-21 15:09:49
+ * Dmd:        2.085.1
+ * Date:       2019-Apr-14 23:45:01
  * Authors:    KUMA
  * License:    CC0
  */
@@ -33,7 +33,24 @@ class Macros
         }
         else
         {
-            auto new_item = new MacroItem(value);
+            auto new_item = new SimpleItem(value);
+            _data[key] = new_item;
+            return new_item;
+        }
+    }
+
+    MacroItem opIndexAssign (string[] value, const(char)[] key)
+    {
+        key = key.toLower;
+        auto p_data = key in _data;
+        if (null !is p_data)
+        {
+            (*p_data) = value;
+            return *p_data;
+        }
+        else
+        {
+            auto new_item = new MultiItem(null, value);
             _data[key] = new_item;
             return new_item;
         }
@@ -50,7 +67,7 @@ class Macros
         }
         else
         {
-            auto new_item = new MacroItem(value);
+            auto new_item = new SimpleItem(value);
             _data[key] = new_item;
             return new_item;
         }
@@ -68,7 +85,7 @@ class Macros
         }
         else
         {
-            auto new_item = new MacroItem(value);
+            auto new_item = new SimpleItem(value);
             _data[key] = new_item;
             return new_item;
         }
@@ -124,7 +141,7 @@ class Macros
             (*p_data) = value;
             p_data.isMutable = false;
         }
-        else _data[key] = new MacroItem(value, " ", false);
+        else _data[key] = new SimpleItem(value, null, false);
     }
 
     void fixAll()
@@ -144,7 +161,7 @@ class Macros
             (*p_data) = value;
             (*p_data).isMutable = false;
         }
-        else _data[key] = new MacroItem(value, " ", false);
+        else _data[key] = new SimpleItem(value, null, false);
     }
 
     MacroItem fixAssign(const(char)[] key, string value="")
@@ -159,7 +176,7 @@ class Macros
         }
         else
         {
-            auto new_item = new MacroItem(value, " ", false);
+            auto new_item = new SimpleItem(value, null, false);
             _data[key] = new_item;
             return new_item;
         }

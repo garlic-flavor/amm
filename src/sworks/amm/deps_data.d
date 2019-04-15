@@ -1,6 +1,6 @@
 /** dmd を呼び出し、プロジェクトの依存関係を解決する.
- * Version:    0.172(dmd2.085.0)
- * Date:       2016-Jun-04 00:02:01
+ * Version:    0.173(dmd2.085.1)
+ * Date:       2019-Apr-14 23:42:58
  * Authors:    KUMA
  * License:    CC0
  */
@@ -22,11 +22,11 @@ void set_deps_data(alias PREDEF)(Macros data)
 
     auto src_search = new Search;
     data.have(PREDEF.src).enforce("src directory is not detected.");
-    foreach (one ; data.get(PREDEF.src).toArray)
+    foreach (one ; data.get(PREDEF.src)[])
         src_search.install(one);
     auto imp_search = new Search;
     if (data.have(PREDEF.imp))
-        foreach (one ; data.get(PREDEF.imp).toArray)
+        foreach (one ; data.get(PREDEF.imp)[])
             imp_search.install(one);
     logln("file filters are ready");
 
@@ -36,7 +36,7 @@ void set_deps_data(alias PREDEF)(Macros data)
     string deps_file = data[PREDEF.deps_file];
 
     // それぞれのルートファイルに対し、依存関係を解決する。
-    foreach (one ; data.get(PREDEF.root).toArray)
+    foreach (one ; data.get(PREDEF.root)[])
     {
         auto abs = one.absolutePath.buildNormalizedPath;
         set_deps_of!PREDEF(
@@ -54,7 +54,7 @@ void set_deps_data(alias PREDEF)(Macros data)
     auto depslines = Appender!(string[])();
     depslines.reserve(depslink.length);
     auto keys = depslink.keys.sort;
-    foreach (one; data.get(PREDEF.root).toArray)
+    foreach (one; data.get(PREDEF.root)[])
         keys.bringToFront(keys.find(one).take(1));
 
     foreach (key ; keys)
@@ -78,8 +78,7 @@ void set_deps_data(alias PREDEF)(Macros data)
         logln("a resource file is detected: ", data[PREDEF.rc]);
     }
 
-    data[PREDEF.dependencies] =
-        depslines.data.join(data[PREDEF.bracket]);
+    data[PREDEF.dependencies] = depslines.data;
 
     logln("dependencies macro is ready.");
 }

@@ -1,5 +1,5 @@
 /** SHIFT-JIS の扱いに。
- * Dmd:        2.085.0
+ * Dmd:        2.085.1
  * Date:       2019-Apr-01 01:18:26
  * Authors:    KUMA
  * License:    CC0

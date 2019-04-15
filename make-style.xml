@@ -73,7 +73,6 @@
     <set id="del_command">del</set>
 
     <ifdef id="gmake">
-      <set id="make_name">gmake</set>
       <set id="compile_rule">%<get id="obj_ext"/> : %<get id="src_ext" /></set>
       <set id="link_command">
         $(DC) -g -of$@ $(LINK_FLAG) $(TO_LINK) $(FLAG)
@@ -92,14 +91,12 @@
       <ifdef id="gmake">
         ## for gnu make<br/>
         ## DOT DIRECTIVE<br />
-        .PHONY : release clean show remake install run edit clean_obj vwrite debug-all ddoc <br />
+        .PHONY : release clean show remake install run edit clean_obj vwrite debug-all ddoc debug l10n-init l10n-init-po l10n-update l10n<br />
 
       </ifdef>
       ## MACRO<br/>
       TARGET = <get id="target" /><br />
       PROJECT = <get id="target" setExtension="" /><br />
-      AUTHORS = <get id="authors" /><br />
-      LICENSE = <get id="license" /><br />
       VERSION = <get id="v" /><br />
 
       <br />
